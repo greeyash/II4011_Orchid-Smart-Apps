@@ -1,0 +1,230 @@
+{
+  "version": 2,
+  "area": {
+    "name": "Orchid Forest Cikole",
+    "plusCode": "6P596J9M+XXW",
+    "centerLat": -6.779851,
+    "centerLng": 107.636659
+  },
+  "pois": [
+    {
+      "id": "P01",
+      "qrCode": "ORCHID-P01",
+      "name": "Wood Bridge",
+      "aliases": ["jembatan", "jembatan kayu", "jembatan goyang", "bridge", "flying fox"],
+      "category": "WISATA_ALAM",
+      "lat": -6.779816558347413,
+      "lng": 107.6348980202422,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Jembatan goyang ikonik dari kayu dan tali tambang putih.",
+      "description": "Tahukah Anda? Wood Bridge adalah jembatan goyang yang dibuat dari kayu dan tali tambang putih, dan menjadi spot paling ikonik di Orchid Forest. Dari atas jembatan Anda bisa menikmati pemandangan hutan pinus.",
+      "activities": [
+        "Berjalan menyusuri jembatan goyang",
+        "Mencoba flying fox",
+        "Menikmati pemandangan hutan pinus"
+      ],
+      "safetyNote": "Berpegangan pada tali pengaman, jangan berlari atau mengayunkan jembatan, dan ikuti batas jumlah orang di atas jembatan.",
+      "infoTitle": "Informasi botani",
+      "info": "Pohon di sekitar jembatan adalah pinus (Pinus merkusii).",
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P02",
+      "qrCode": "ORCHID-P02",
+      "name": "Orchid Castle",
+      "aliases": ["castle", "kastil", "istana", "taman bermain", "bermain anak", "ayunan", "perosotan"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.788086818842071,
+      "lng": 107.63930525538409,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Arena bermain anak dengan skuter, sepeda mini, ayunan, dan perosotan.",
+      "description": "Orchid Castle adalah arena bermain anak. Di sini tersedia skuter, sepeda mini, ayunan, dan perosotan.",
+      "activities": [
+        "Bermain di perosotan",
+        "Bermain ayunan",
+        "Mencoba skuter dan sepeda mini"
+      ],
+      "safetyNote": "Orang tua harap tetap mengawasi anak-anaknya selama bermain.",
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P03",
+      "qrCode": "ORCHID-P03",
+      "name": "Aspasia Coffee",
+      "aliases": ["aspasia", "kopi", "coffee", "kafe", "cafe", "pizza", "makan", "resto"],
+      "category": "TEMPAT_MAKAN",
+      "lat": -6.779967172649701,
+      "lng": 107.63693336484559,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Kafe bernuansa rustik yang didominasi kayu.",
+      "description": "Aspasia Coffee adalah kafe bernuansa rustik yang didominasi kayu.",
+      "activities": [
+        "Mencoba pizza",
+        "Menikmati kopi dan camilan"
+      ],
+      "safetyNote": null,
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P04",
+      "qrCode": "ORCHID-P04",
+      "name": "Orchid House (Taman Anggrek)",
+      "aliases": ["orchid house", "taman anggrek", "anggrek", "orchid", "bunga", "museum anggrek"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.7799176817501925,
+      "lng": 107.63494708029958,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Taman dengan berbagai jenis bunga anggrek.",
+      "description": "Tahukah Anda? Orchid House adalah taman anggrek yang menampilkan berbagai jenis bunga anggrek.",
+      "activities": [
+        "Mengabadikan momen dengan berfoto di antara bunga anggrek"
+      ],
+      "safetyNote": null,
+      "infoTitle": "Informasi botani",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P05",
+      "qrCode": "ORCHID-P05",
+      "name": "Golden Pine",
+      "aliases": ["golden pine", "kafe", "cafe", "resto", "makan", "kaca"],
+      "category": "TEMPAT_MAKAN",
+      "lat": -6.779055817402708,
+      "lng": 107.63807541084084,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Kafe bergaya Eropa berdinding kaca dengan dekorasi bunga gantung.",
+      "description": "Golden Pine adalah kafe bergaya Eropa dengan dinding kaca dan dekorasi bunga gantung.",
+      "activities": [
+        "Mencoba menu best seller"
+      ],
+      "safetyNote": null,
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P06",
+      "qrCode": "ORCHID-P06",
+      "name": "Garden of Light",
+      "aliases": ["garden of light", "lampu", "taman lampu", "spot foto"],
+      "category": "WISATA_ALAM",
+      "lat": -6.7799176817501925,
+      "lng": 107.63494708029958,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Area hutan pinus yang dihiasi lampu.",
+      "description": "Tahukah Anda? Garden of Light adalah area di hutan pinus yang dihiasi lampu-lampu.",
+      "activities": [
+        "Mengabadikan momen di spot foto berhias lampu"
+      ],
+      "safetyNote": "Perhatikan langkah Anda di jalur hutan pinus, terutama saat gelap.",
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P07",
+      "qrCode": "ORCHID-P07",
+      "name": "Terrace Paphio",
+      "aliases": ["terrace paphio", "paphio", "amfiteater", "live music", "musik", "panggung"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.780022383836969,
+      "lng": 107.63818702705005,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Area ala amfiteater dengan dek kayu.",
+      "description": "Tahukah Anda? Terrace Paphio adalah area ala amfiteater dengan dek kayu. Namanya diambil dari anggrek Paphiopedilum.",
+      "activities": [
+        "Duduk santai di dek kayu",
+        "Menonton live music"
+      ],
+      "safetyNote": "Awasi anak-anak di area dek dan tangga amfiteater.",
+      "infoTitle": "Informasi tambahan",
+      "info": "Tempat ini sering dijadikan lokasi pertunjukan musik. Paphiopedilum (anggrek kantong semar atau anggrek kasut) dikenali dari bibir bunganya yang berbentuk kantong.",
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P08",
+      "qrCode": "ORCHID-P08",
+      "name": "Rabbit Forest",
+      "aliases": ["rabbit forest", "kelinci", "rabbit", "hewan"],
+      "category": "WISATA_ALAM",
+      "lat": -6.779619387950477,
+      "lng": 107.63753937220194,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Area kelinci untuk belajar, bermain, dan berinteraksi.",
+      "description": "Rabbit Forest adalah area tempat kelinci hidup. Pengunjung bisa belajar, bermain, dan berinteraksi dengan kelinci.",
+      "activities": [
+        "Memberi makan kelinci",
+        "Bermain bersama kelinci"
+      ],
+      "safetyNote": "Awasi anak saat berinteraksi dengan kelinci dan perlakukan kelinci dengan lembut.",
+      "infoTitle": "Jenis kelinci",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P09",
+      "qrCode": "ORCHID-P09",
+      "name": "Food Corner",
+      "aliases": ["food corner", "jajan", "gorengan", "hot dog", "sosis", "kentang", "souvenir"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.780145961869783,
+      "lng": 107.63736469945974,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Tempat jajan ringan.",
+      "description": "Food Corner adalah tempat jajan ringan yang menyajikan gorengan, hot dog, sosis bakar, dan kentang goreng.",
+      "activities": [
+        "Beristirahat sambil jajan",
+        "Membeli souvenir"
+      ],
+      "safetyNote": null,
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P10",
+      "qrCode": "ORCHID-P10",
+      "name": "Pine Kitchen",
+      "aliases": ["pine kitchen", "restoran", "resto", "makan", "piknik", "picnic"],
+      "category": "TEMPAT_MAKAN",
+      "lat": -6.780194701548421,
+      "lng": 107.6370398510664,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Restoran di hutan pinus dengan pilihan picnic basket.",
+      "description": "Pine Kitchen adalah restoran di hutan pinus, berada di jalur kanan dari pintu masuk. Anda bisa makan di tempat atau memesan picnic basket.",
+      "activities": [
+        "Makan di tempat",
+        "Piknik dengan picnic basket"
+      ],
+      "safetyNote": null,
+      "infoTitle": "Menu dan paket piknik",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    }
+  ]
+}
