@@ -35,7 +35,7 @@ data class Poi(
     val source: String,
     /** Tanggal pengecekan ke pengelola (A03), format yyyy-MM-dd. */
     val checkedAt: String? = null,
-    /** Jenis anggrek/bunga di sekitar POI (F03, F08b); terisi untuk Orchid House (P04). */
+    /** Jenis anggrek/bunga di sekitar POI (F03, F08b); terisi untuk Museum Anggrek (P18). */
     val species: List<OrchidSpecies> = emptyList(),
 )
 

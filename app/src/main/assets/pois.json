@@ -79,7 +79,7 @@
       "id": "P04",
       "qrCode": "ORCHID-P04",
       "name": "Orchid House (Taman Anggrek)",
-      "aliases": ["orchid house", "taman anggrek", "anggrek", "orchid", "bunga", "museum anggrek"],
+      "aliases": ["orchid house", "taman anggrek", "anggrek", "orchid", "bunga"],
       "category": "WISATA_TEMPAT",
       "lat": -6.7799511,
       "lng": 107.6384884,
@@ -94,49 +94,7 @@
       "infoTitle": null,
       "info": null,
       "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
-      "checkedAt": null,
-      "species": [
-        {
-          "id": "S01",
-          "qrCode": "ORCHID-P04-S01",
-          "name": "Anggrek Bulan",
-          "latinName": "Phalaenopsis amabilis",
-          "characteristics": "Kelopak bunga putih, lebar, dan membulat seperti ngengat yang sedang terbang. Daunnya tebal, lebar, dan tumbuh berpasangan di dekat pangkal batang. Bunganya bisa mekar cukup lama.",
-          "origin": "Indonesia dan Asia Tenggara hingga Papua dan Australia bagian utara. Anggrek bulan ditetapkan sebagai puspa pesona, salah satu bunga nasional Indonesia.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
-          "checkedAt": null
-        },
-        {
-          "id": "S02",
-          "qrCode": "ORCHID-P04-S02",
-          "name": "Anggrek Vanda Tricolor",
-          "latinName": "Vanda tricolor",
-          "characteristics": "Daunnya berbentuk pita dan tersusun berseling di sepanjang batang. Bunganya berwarna putih kekuningan dengan bintik merah keunguan, bibir bunga ungu, dan beraroma harum.",
-          "origin": "Pulau Jawa dan Bali, tumbuh di lereng gunung yang sejuk.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
-          "checkedAt": null
-        },
-        {
-          "id": "S03",
-          "qrCode": "ORCHID-P04-S03",
-          "name": "Anggrek Dendrobium",
-          "latinName": "Dendrobium sp.",
-          "characteristics": "Batangnya beruas dan menggembung seperti tebu. Dalam satu tangkai tumbuh banyak bunga sekaligus dengan warna beragam, misalnya ungu, putih, atau kuning.",
-          "origin": "Kawasan tropis Asia hingga Australia dan Kepulauan Pasifik. Banyak jenis hibridanya dibudidayakan di Indonesia.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
-          "checkedAt": null
-        },
-        {
-          "id": "S04",
-          "qrCode": "ORCHID-P04-S04",
-          "name": "Anggrek Cattleya",
-          "latinName": "Cattleya sp.",
-          "characteristics": "Bunganya besar dan harum dengan bibir bunga lebar yang bergelombang, sehingga sering dijuluki ratu anggrek.",
-          "origin": "Hutan tropis Amerika Tengah dan Amerika Selatan.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
-          "checkedAt": null
-        }
-      ]
+      "checkedAt": null
     },
     {
       "id": "P05",
@@ -228,7 +186,7 @@
       "id": "P09",
       "qrCode": "ORCHID-P09",
       "name": "Food Corner",
-      "aliases": ["food corner", "jajan", "gorengan", "hot dog", "sosis", "kentang", "souvenir"],
+      "aliases": ["food corner", "food court", "jajan", "gorengan", "hot dog", "sosis", "kentang", "souvenir"],
       "category": "WISATA_TEMPAT",
       "lat": -6.7809009,
       "lng": 107.640193,
@@ -415,6 +373,70 @@
       "info": null,
       "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
       "checkedAt": null
+    },
+    {
+      "id": "P18",
+      "qrCode": "ORCHID-P18",
+      "name": "Museum Anggrek",
+      "aliases": ["museum anggrek", "museum", "koleksi anggrek", "anggrek", "orchid museum"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.779477,
+      "lng": 107.6386336,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Koleksi berbagai jenis anggrek beserta informasinya.",
+      "description": "Museum Anggrek menampilkan koleksi berbagai jenis anggrek. Di papan tiap tanaman terdapat kode QR yang bisa dipindai untuk mendengar informasi spesiesnya.",
+      "activities": [
+        "Melihat koleksi jenis anggrek",
+        "Mendengarkan informasi spesies anggrek"
+      ],
+      "safetyNote": "Jangan memetik atau menyentuh bunga anggrek yang dipajang, dan awasi anak-anak selama berada di dalam museum.",
+      "infoTitle": null,
+      "info": null,
+      "source": "Koordinat dari cek lapangan tim; konten belum tercantum di PRD 4.1",
+      "checkedAt": null,
+      "species": [
+        {
+          "id": "S01",
+          "qrCode": "ORCHID-P18-S01",
+          "name": "Anggrek Bulan",
+          "latinName": "Phalaenopsis amabilis",
+          "characteristics": "Kelopak bunga putih, lebar, dan membulat seperti ngengat yang sedang terbang. Daunnya tebal, lebar, dan tumbuh berpasangan di dekat pangkal batang. Bunganya bisa mekar cukup lama.",
+          "origin": "Indonesia dan Asia Tenggara hingga Papua dan Australia bagian utara. Anggrek bulan ditetapkan sebagai puspa pesona, salah satu bunga nasional Indonesia.",
+          "source": "Literatur umum botani anggrek; keberadaan di Museum Anggrek belum dikonfirmasi ke pengelola",
+          "checkedAt": null
+        },
+        {
+          "id": "S02",
+          "qrCode": "ORCHID-P18-S02",
+          "name": "Anggrek Vanda Tricolor",
+          "latinName": "Vanda tricolor",
+          "characteristics": "Daunnya berbentuk pita dan tersusun berseling di sepanjang batang. Bunganya berwarna putih kekuningan dengan bintik merah keunguan, bibir bunga ungu, dan beraroma harum.",
+          "origin": "Pulau Jawa dan Bali, tumbuh di lereng gunung yang sejuk.",
+          "source": "Literatur umum botani anggrek; keberadaan di Museum Anggrek belum dikonfirmasi ke pengelola",
+          "checkedAt": null
+        },
+        {
+          "id": "S03",
+          "qrCode": "ORCHID-P18-S03",
+          "name": "Anggrek Dendrobium",
+          "latinName": "Dendrobium sp.",
+          "characteristics": "Batangnya beruas dan menggembung seperti tebu. Dalam satu tangkai tumbuh banyak bunga sekaligus dengan warna beragam, misalnya ungu, putih, atau kuning.",
+          "origin": "Kawasan tropis Asia hingga Australia dan Kepulauan Pasifik. Banyak jenis hibridanya dibudidayakan di Indonesia.",
+          "source": "Literatur umum botani anggrek; keberadaan di Museum Anggrek belum dikonfirmasi ke pengelola",
+          "checkedAt": null
+        },
+        {
+          "id": "S04",
+          "qrCode": "ORCHID-P18-S04",
+          "name": "Anggrek Cattleya",
+          "latinName": "Cattleya sp.",
+          "characteristics": "Bunganya besar dan harum dengan bibir bunga lebar yang bergelombang, sehingga sering dijuluki ratu anggrek.",
+          "origin": "Hutan tropis Amerika Tengah dan Amerika Selatan.",
+          "source": "Literatur umum botani anggrek; keberadaan di Museum Anggrek belum dikonfirmasi ke pengelola",
+          "checkedAt": null
+        }
+      ]
     }
   ]
 }

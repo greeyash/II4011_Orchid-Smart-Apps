@@ -25,8 +25,8 @@ class PoiSearchTest {
             "castle" to "P02",
             "aspasia" to "P03",
             "kopi" to "P03",
-            "museum" to "P04",
-            "anggrek" to "P04",
+            "museum" to "P18",
+            "anggrek" to "P18",
         ).forEach { (keyword, id) -> assertTrue("$keyword → $id", id in ids(keyword)) }
     }
 
