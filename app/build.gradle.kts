@@ -13,8 +13,8 @@ android {
         applicationId = "com.orchidapps"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0-sprint1"
+        versionCode = 3
+        versionName = "0.3.0-sprint3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -63,6 +63,10 @@ dependencies {
 
     // Peta (PB04)
     implementation(libs.maplibre.android)
+
+    // Narasi audio + kontrol layar kunci/earphone (PB09)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
 
     // Data POI lokal (JSON di assets)
     implementation(libs.kotlinx.serialization.json)

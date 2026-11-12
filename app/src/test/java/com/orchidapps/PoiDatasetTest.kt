@@ -7,7 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
-/** PB03: dataset POI (PRD 4.1, P01-P17) dapat dibaca aplikasi. */
+/** PB03: dataset POI (PRD 4.1, P01-P17, ditambah P18 Museum Anggrek dari data tim) dapat dibaca aplikasi. */
 class PoiDatasetTest {
 
     private val dataset = PoiRepository.parseDataset(
@@ -16,7 +16,7 @@ class PoiDatasetTest {
 
     @Test
     fun containsAllPrdPois() {
-        assertEquals((1..17).map { "P%02d".format(it) }, dataset.pois.map { it.id })
+        assertEquals((1..18).map { "P%02d".format(it) }, dataset.pois.map { it.id })
     }
 
     @Test
@@ -26,7 +26,7 @@ class PoiDatasetTest {
 
     @Test
     fun poisWithSafetyReminderInPrdHaveSafetyNote() {
-        listOf("P01", "P02", "P06", "P07", "P08", "P11", "P12", "P14", "P15", "P16", "P17").forEach { id ->
+        listOf("P01", "P02", "P06", "P07", "P08", "P11", "P12", "P14", "P15", "P16", "P17", "P18").forEach { id ->
             assertTrue(id, !dataset.pois.first { it.id == id }.safetyNote.isNullOrBlank())
         }
     }
@@ -61,6 +61,22 @@ class PoiDatasetTest {
         listOf("P03", "P05", "P10").forEach { id ->
             assertTrue(id, !dataset.pois.first { it.id == id }.infoTitle.isNullOrBlank())
         }
+    }
+
+    @Test
+    fun orchidMuseumHasAtLeastThreeSpeciesWithSource() {
+        val species = dataset.pois.first { it.id == "P18" }.species
+        assertTrue(species.size >= 3)
+        species.forEach {
+            assertTrue(it.id, it.characteristics.isNotBlank() && it.origin.isNotBlank() && it.source.isNotBlank())
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun duplicateSpeciesQrIsRejected() {
+        val raw = File("src/main/assets/${PoiRepository.ASSET_FILE}").readText()
+            .replace("ORCHID-P18-S02", "ORCHID-P18-S01")
+        PoiRepository.parseDataset(raw)
     }
 
     @Test

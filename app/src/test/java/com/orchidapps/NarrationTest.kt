@@ -25,4 +25,20 @@ class NarrationTest {
     fun narrationMentionsPoiName() {
         pois.forEach { assertTrue(it.id, AudioGuide.narration(it).contains(it.name)) }
     }
+
+    @Test
+    fun orchidMuseumNarrationListsSpecies() {
+        val orchidHouse = pois.first { it.id == "P18" }
+        val text = AudioGuide.narration(orchidHouse)
+        orchidHouse.species.forEach { assertTrue(it.name, text.contains(it.name)) }
+    }
+
+    @Test
+    fun speciesNarrationHasNameCharacteristicsAndOrigin() {
+        val orchidHouse = pois.first { it.id == "P18" }
+        orchidHouse.species.forEach {
+            val text = AudioGuide.speciesNarration(it)
+            assertTrue(it.id, text.contains(it.latinName) && text.contains(it.characteristics) && text.contains(it.origin))
+        }
+    }
 }

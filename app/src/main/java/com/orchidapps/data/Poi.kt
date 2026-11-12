@@ -35,6 +35,22 @@ data class Poi(
     val source: String,
     /** Tanggal pengecekan ke pengelola (A03), format yyyy-MM-dd. */
     val checkedAt: String? = null,
+    /** Jenis anggrek/bunga di sekitar POI (F03, F08b); terisi untuk Museum Anggrek (P18). */
+    val species: List<OrchidSpecies> = emptyList(),
+)
+
+/** Satu jenis anggrek beserta kode QR papan tanamannya (PB11, F08). */
+@Serializable
+data class OrchidSpecies(
+    val id: String,
+    /** Isi kode QR di papan tanaman; dipakai pemindai QR di Sprint 4 (PB14). */
+    val qrCode: String,
+    val name: String,
+    val latinName: String,
+    val characteristics: String,
+    val origin: String,
+    val source: String,
+    val checkedAt: String? = null,
 )
 
 @Serializable

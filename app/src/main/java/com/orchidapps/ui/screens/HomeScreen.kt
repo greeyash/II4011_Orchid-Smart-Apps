@@ -2,37 +2,47 @@ package com.orchidapps.ui.screens
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.location.Geo
 import com.orchidapps.ui.DatasetState
 import com.orchidapps.ui.LocationUiState
@@ -58,6 +68,26 @@ fun HomeScreen(
     val context = LocalContext.current
     val datasetState by vm.dataset.collectAsStateWithLifecycle()
     val locationState by vm.location.collectAsStateWithLifecycle()
+    val explorationActive by vm.explorationActive.collectAsStateWithLifecycle()
+    val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
+    val settings = remember { ExplorationSettings.get(context) }
+    val autoPlay by settings.autoPlay.collectAsStateWithLifecycle()
+
+    // Izin notifikasi (Android 13+) diminta saat "Mulai Jelajah"; sesi tetap jalan bila ditolak
+    // karena getar dan suara tidak membutuhkan izin ini.
+    val notificationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { vm.startExploration() }
+    val startExploration = {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            vm.startExploration()
+        }
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -119,14 +149,79 @@ fun HomeScreen(
                 )
             }
 
+            ExplorationCard(
+                active = explorationActive,
+                visitedCount = visited.size,
+                canStart = locationState.permission == PermissionStatus.GRANTED,
+                onStart = startExploration,
+                onEnd = vm::endExploration,
+                autoPlay = autoPlay,
+                onAutoPlayChange = settings::setAutoPlay,
+            )
+
             Button(onClick = onOpenMap, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Filled.Map, contentDescription = null)
                 Text("  Lihat Peta")
             }
             OutlinedButton(onClick = onOpenPoiList, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
-                Text("  Lihat Semua POI")
+                Icon(Icons.Filled.Search, contentDescription = null)
+                Text("  Cari POI")
             }
+        }
+    }
+}
+
+/** Mulai/Akhiri Jelajah (PB08). */
+@Composable
+private fun ExplorationCard(
+    active: Boolean,
+    visitedCount: Int,
+    canStart: Boolean,
+    onStart: () -> Unit,
+    onEnd: () -> Unit,
+    autoPlay: Boolean,
+    onAutoPlayChange: (Boolean) -> Unit,
+) {
+    SectionCard(
+        title = if (active) "Jelajah aktif" else "Jelajah",
+        containerColor = if (active) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.surfaceVariant,
+    ) {
+        if (active) {
+            Text(
+                "Posisi Anda terus dipantau, juga saat layar mati. Ponsel bergetar dua kali dan " +
+                    "menyebutkan nama lokasi saat Anda tiba di titik wisata."
+            )
+            Text("$visitedCount titik wisata sudah dikunjungi.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = onEnd, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Filled.Stop, contentDescription = null)
+                Text("  Akhiri Jelajah")
+            }
+        } else {
+            Text(
+                "Tekan Mulai Jelajah, lalu simpan ponsel di saku. Aplikasi memberi tahu lewat getar " +
+                    "dan suara saat Anda tiba di titik wisata."
+            )
+            Button(onClick = onStart, enabled = canStart, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Filled.Explore, contentDescription = null)
+                Text("  Mulai Jelajah")
+            }
+            if (!canStart) {
+                Text(
+                    "Butuh izin lokasi. Tanpa izin, Anda tetap bisa memilih POI secara manual.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Auto-Play narasi", style = MaterialTheme.typography.titleSmall)
+                Text(
+                    "Narasi langsung diputar setelah tiba di titik wisata.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            Switch(checked = autoPlay, onCheckedChange = onAutoPlayChange)
         }
     }
 }

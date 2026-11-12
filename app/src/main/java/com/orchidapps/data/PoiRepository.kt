@@ -31,7 +31,8 @@ class PoiRepository(private val context: Context) {
             require(dataset.pois.isNotEmpty()) { "Dataset POI kosong" }
             val duplicateIds = dataset.pois.groupBy { it.id }.filterValues { it.size > 1 }.keys
             require(duplicateIds.isEmpty()) { "ID POI duplikat: $duplicateIds" }
-            val duplicateQr = dataset.pois.groupBy { it.qrCode }.filterValues { it.size > 1 }.keys
+            val qrCodes = dataset.pois.flatMap { poi -> listOf(poi.qrCode) + poi.species.map { it.qrCode } }
+            val duplicateQr = qrCodes.groupBy { it }.filterValues { it.size > 1 }.keys
             require(duplicateQr.isEmpty()) { "Kode QR duplikat: $duplicateQr" }
             dataset.pois.forEach { poi ->
                 require(poi.lat in -90.0..90.0 && poi.lng in -180.0..180.0) {
@@ -41,6 +42,12 @@ class PoiRepository(private val context: Context) {
                     "Radius ${poi.id} harus 20-40 m, tertulis ${poi.radiusMeters} m"
                 }
                 require(poi.activities.isNotEmpty()) { "${poi.id} belum punya daftar kegiatan" }
+                poi.species.forEach { s ->
+                    require(s.name.isNotBlank() && s.characteristics.isNotBlank() && s.origin.isNotBlank()) {
+                        "Data spesies ${poi.id}-${s.id} belum lengkap"
+                    }
+                    require(s.source.isNotBlank()) { "Spesies ${poi.id}-${s.id} belum punya sumber" }
+                }
             }
         }
     }
