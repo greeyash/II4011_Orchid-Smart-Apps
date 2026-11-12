@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -97,6 +99,10 @@ fun PoiDetailScreen(vm: MainViewModel, poiId: String, onBack: () -> Unit) {
                 poi.activities.forEach { Text("• $it") }
             }
 
+            if (poi.species.isNotEmpty()) {
+                SpeciesSection(poi)
+            }
+
             poi.infoTitle?.let { title ->
                 SectionCard(title = title) {
                     Text(poi.info ?: "Belum tersedia.")
@@ -154,6 +160,29 @@ private fun PoiPhoto(poi: Poi) {
                 )
                 Text("Foto belum tersedia", style = MaterialTheme.typography.bodySmall)
             }
+        }
+    }
+}
+
+/** Informasi botani: jenis anggrek di sekitar POI beserta narasinya (PB11, F03, F08b). */
+@Composable
+private fun SpeciesSection(poi: Poi) {
+    SectionCard(title = "Informasi botani · ${poi.species.size} jenis anggrek") {
+        poi.species.forEachIndexed { index, species ->
+            if (index > 0) HorizontalDivider()
+            Text(species.name, style = MaterialTheme.typography.titleSmall)
+            Text(
+                species.latinName,
+                style = MaterialTheme.typography.bodySmall,
+                fontStyle = FontStyle.Italic,
+            )
+            Text("Ciri: ${species.characteristics}", style = MaterialTheme.typography.bodyMedium)
+            Text("Asal: ${species.origin}", style = MaterialTheme.typography.bodyMedium)
+            NarrationControls(AudioGuide.speciesItem(poi, species), playLabel = "Dengarkan info ${species.name}")
+            Text(
+                "Sumber: ${species.source} · Dicek: ${species.checkedAt ?: "belum"}",
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }

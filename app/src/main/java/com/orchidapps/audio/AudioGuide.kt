@@ -1,5 +1,6 @@
 package com.orchidapps.audio
 
+import com.orchidapps.data.OrchidSpecies
 import com.orchidapps.data.Poi
 
 /**
@@ -19,6 +20,10 @@ object AudioGuide {
         append("Kegiatan yang bisa dilakukan: ")
         append(poi.activities.joinToString(". ")).append('.')
         poi.info?.let { append(' ').append(it) }
+        if (poi.species.isNotEmpty()) {
+            append(" Jenis anggrek yang bisa Anda temui di sini antara lain: ")
+            append(poi.species.joinToString { it.name }).append('.')
+        }
     }.trim()
 
     fun item(poi: Poi) = NarrationItem(
@@ -26,6 +31,18 @@ object AudioGuide {
         title = poi.name,
         text = narration(poi),
         recordingAsset = recordingPath(poi),
+    )
+
+    /** Narasi botani satu jenis anggrek (F08b); juga dibuka dari QR papan tanaman di PB14. */
+    fun speciesNarration(species: OrchidSpecies): String =
+        "${species.name}, nama ilmiahnya ${species.latinName}. " +
+            "Ciri-cirinya: ${species.characteristics} Asal: ${species.origin}"
+
+    fun speciesItem(poi: Poi, species: OrchidSpecies) = NarrationItem(
+        id = "${poi.id}-${species.id}",
+        title = species.name,
+        text = speciesNarration(species),
+        recordingAsset = "audio/${poi.id}-${species.id}.mp3",
     )
 
     /** Kalimat singkat saat tiba di POI (F02, F04b). */
