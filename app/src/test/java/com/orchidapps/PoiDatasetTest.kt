@@ -7,7 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
-/** PB03: dataset POI (PRD 4.1, P01-P10) dapat dibaca aplikasi. */
+/** PB03: dataset POI (PRD 4.1, P01-P17) dapat dibaca aplikasi. */
 class PoiDatasetTest {
 
     private val dataset = PoiRepository.parseDataset(
@@ -16,7 +16,7 @@ class PoiDatasetTest {
 
     @Test
     fun containsAllPrdPois() {
-        assertEquals((1..10).map { "P%02d".format(it) }, dataset.pois.map { it.id })
+        assertEquals((1..17).map { "P%02d".format(it) }, dataset.pois.map { it.id })
     }
 
     @Test
@@ -26,7 +26,7 @@ class PoiDatasetTest {
 
     @Test
     fun poisWithSafetyReminderInPrdHaveSafetyNote() {
-        listOf("P01", "P02", "P06", "P07", "P08").forEach { id ->
+        listOf("P01", "P02", "P06", "P07", "P08", "P11", "P12", "P14", "P15", "P16", "P17").forEach { id ->
             assertTrue(id, !dataset.pois.first { it.id == id }.safetyNote.isNullOrBlank())
         }
     }
@@ -46,6 +46,21 @@ class PoiDatasetTest {
         val match = dataset.pois.first { "kopi" in it.aliases }
         assertEquals("P03", match.id)
         assertEquals(PoiCategory.TEMPAT_MAKAN, match.category)
+    }
+
+    @Test
+    fun prdSearchKeywordsMatchExpectedPoi() {
+        mapOf("bridge" to "P01", "castle" to "P02", "aspasia" to "P03", "golf" to "P17", "kuda" to "P14")
+            .forEach { (keyword, id) ->
+                assertTrue(keyword, keyword in dataset.pois.first { it.id == id }.aliases)
+            }
+    }
+
+    @Test
+    fun foodPlacesShowMenuSection() {
+        listOf("P03", "P05", "P10").forEach { id ->
+            assertTrue(id, !dataset.pois.first { it.id == id }.infoTitle.isNullOrBlank())
+        }
     }
 
     @Test
