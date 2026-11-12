@@ -10,6 +10,9 @@ import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
+import com.orchidapps.audio.AudioGuide
+import com.orchidapps.audio.NarrationPlayer
+import com.orchidapps.audio.NarrationStatus
 import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiRepository
 import com.orchidapps.location.GeofenceEngine
@@ -34,6 +37,8 @@ class ExplorationService : Service() {
     private val geofence = GeofenceEngine()
     private var pois: List<Poi> = emptyList()
     private var trackingJob: Job? = null
+    private var announceJob: Job? = null
+    private val narration by lazy { NarrationPlayer.get(this) }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -49,6 +54,8 @@ class ExplorationService : Service() {
                 endSession()
                 return START_NOT_STICKY
             }
+            ACTION_LISTEN -> intent.poi()?.let(::listen)
+            ACTION_SKIP -> intent.poi()?.let(::skip)
             else -> startSession()
         }
         return START_NOT_STICKY
@@ -87,26 +94,61 @@ class ExplorationService : Service() {
             ?.let { onArrived(it.poi) }
     }
 
+    /** Tiba di POI (PB07): getar 2x, notifikasi "Anda berada di …", dan nama lokasi disebutkan. */
     private fun onArrived(poi: Poi) {
         ExplorationSession.onArrived(poi)
         updateSessionNotification()
-    }
-
-    private fun updateSessionNotification() {
-        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) return
-        try {
-            NotificationManagerCompat.from(this).notify(
-                ExplorationNotifications.NOTIFICATION_SESSION,
-                ExplorationNotifications.session(this, ExplorationSession.visited.value.size),
-            )
-        } catch (_: SecurityException) {
-            // Izin notifikasi dicabut; sesi tetap berjalan.
+        Haptics.vibrateTwice(this)
+        notify(ExplorationNotifications.NOTIFICATION_ARRIVAL, ExplorationNotifications.arrival(this, poi))
+        announceJob?.cancel()
+        announceJob = scope.launch {
+            if (narration.state.value.status == NarrationStatus.PLAYING) narration.pause()
+            runCatching { narration.speech.speak(AudioGuide.arrivalAnnouncement(poi)) }
+            onAnnounced(poi)
         }
     }
+
+    /** Setelah nama lokasi disebutkan; Auto-Play ditambahkan di PB09. */
+    private fun onAnnounced(poi: Poi) = Unit
+
+    private fun listen(poi: Poi) {
+        NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
+        announceJob?.cancel()
+        narration.play(AudioGuide.item(poi))
+    }
+
+    private fun skip(poi: Poi) {
+        NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
+        announceJob?.cancel()
+        narration.speech.stop()
+        if (narration.state.value.item?.id == poi.id) narration.stop()
+        if (ExplorationSession.arrival.value?.id == poi.id) ExplorationSession.dismissArrival()
+    }
+
+    private fun Intent.poi(): Poi? {
+        val id = getStringExtra(EXTRA_POI_ID) ?: return null
+        return pois.firstOrNull { it.id == id }
+    }
+
+    private fun notify(id: Int, notification: android.app.Notification) {
+        try {
+            NotificationManagerCompat.from(this).notify(id, notification)
+        } catch (_: SecurityException) {
+            // Izin notifikasi ditolak; getar dan suara tetap berjalan.
+        }
+    }
+
+    private fun updateSessionNotification() = notify(
+        ExplorationNotifications.NOTIFICATION_SESSION,
+        ExplorationNotifications.session(this, ExplorationSession.visited.value.size),
+    )
 
     private fun endSession() {
         trackingJob?.cancel()
         trackingJob = null
+        announceJob?.cancel()
+        narration.speech.stop()
+        NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
         geofence.reset()
         ExplorationSession.onEnded()
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
@@ -122,6 +164,8 @@ class ExplorationService : Service() {
     companion object {
         const val ACTION_START = "com.orchidapps.exploration.START"
         const val ACTION_STOP = "com.orchidapps.exploration.STOP"
+        const val ACTION_LISTEN = "com.orchidapps.exploration.LISTEN"
+        const val ACTION_SKIP = "com.orchidapps.exploration.SKIP"
 
         fun start(context: Context) {
             ContextCompat.startForegroundService(

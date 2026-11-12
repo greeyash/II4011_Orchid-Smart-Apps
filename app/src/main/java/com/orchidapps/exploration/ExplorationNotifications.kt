@@ -1,5 +1,6 @@
 package com.orchidapps.exploration
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,12 +10,15 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.orchidapps.MainActivity
 import com.orchidapps.R
+import com.orchidapps.data.Poi
 
 /** Kanal dan isi notifikasi sesi jelajah. */
 internal object ExplorationNotifications {
 
     const val CHANNEL_SESSION = "exploration_session"
     const val NOTIFICATION_SESSION = 1
+    const val CHANNEL_ARRIVAL = "poi_arrival"
+    const val NOTIFICATION_ARRIVAL = 2
 
     fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -25,9 +29,41 @@ internal object ExplorationNotifications {
                 setShowBadge(false)
             }
         )
+        manager.createNotificationChannel(
+            NotificationChannel(CHANNEL_ARRIVAL, "Tiba di titik wisata", NotificationManager.IMPORTANCE_HIGH).apply {
+                description = "Pemberitahuan \"Anda berada di …\" saat memasuki area sebuah POI."
+                // Getar 2x dan suara nama lokasi diatur sendiri oleh aplikasi (F02, F04).
+                enableVibration(false)
+                setSound(null, null)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            }
+        )
     }
 
-    fun session(context: Context, visitedCount: Int): android.app.Notification =
+    /** Notifikasi kedatangan dengan tombol Dengarkan/Lewati (PB07, F04d). */
+    fun arrival(context: Context, poi: Poi): Notification =
+        NotificationCompat.Builder(context, CHANNEL_ARRIVAL)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Anda berada di ${poi.name}")
+            .setContentText(poi.shortDescription)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(poi.shortDescription))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setSilent(true)
+            .setAutoCancel(true)
+            .setContentIntent(openAppIntent(context, poi.id))
+            .addAction(
+                0, "Dengarkan",
+                ExplorationService.actionIntent(context, ExplorationService.ACTION_LISTEN, poi.id),
+            )
+            .addAction(
+                0, "Lewati",
+                ExplorationService.actionIntent(context, ExplorationService.ACTION_SKIP, poi.id),
+            )
+            .build()
+
+    fun session(context: Context, visitedCount: Int): Notification =
         NotificationCompat.Builder(context, CHANNEL_SESSION)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Jelajah Orchid Forest aktif")
