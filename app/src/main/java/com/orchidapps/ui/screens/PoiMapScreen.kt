@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -68,6 +69,7 @@ fun PoiMapScreen(vm: MainViewModel, onBack: () -> Unit, onOpenPoi: (String) -> U
     val datasetState by vm.dataset.collectAsStateWithLifecycle()
     val locationState by vm.location.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
+    val explorationActive by vm.explorationActive.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -76,6 +78,12 @@ fun PoiMapScreen(vm: MainViewModel, onBack: () -> Unit, onOpenPoi: (String) -> U
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
+                    }
+                },
+                actions = {
+                    // UI04: tombol Akhiri Jelajah di peta selama sesi aktif.
+                    if (explorationActive) {
+                        TextButton(onClick = vm::endExploration) { Text("Akhiri Jelajah") }
                     }
                 },
             )

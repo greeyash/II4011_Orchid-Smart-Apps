@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.ui.screens.ArrivalBanner
 import com.orchidapps.ui.screens.HomeScreen
 import com.orchidapps.ui.screens.MiniPlayerBar
@@ -47,8 +49,8 @@ fun OrchidApp() {
         onPauseOrDispose { }
     }
 
-    // Lokasi dibaca selama aplikasi terlihat, di layar mana pun (dipakai peta dan geofence).
-    // Pelacakan saat layar mati menyusul di PB08.
+    // Lokasi dibaca selama aplikasi terlihat untuk peta dan kartu lokasi. Geofence dan
+    // pelacakan saat layar mati berjalan di ExplorationService selama sesi jelajah (PB08).
     val granted = locationState.permission == PermissionStatus.GRANTED
     LifecycleStartEffect(granted) {
         if (granted) vm.startTracking()
@@ -56,6 +58,16 @@ fun OrchidApp() {
     }
 
     val openPoi: (String) -> Unit = { navController.navigate(Routes.poiDetail(it)) }
+
+    // Ketukan pada notifikasi kedatangan langsung membuka halaman POI (F03 AC4).
+    val openRequest by ExplorationSession.openPoiRequest.collectAsStateWithLifecycle()
+    LaunchedEffect(openRequest) {
+        openRequest?.let {
+            ExplorationSession.consumeOpenPoiRequest()
+            vm.dismissArrival()
+            openPoi(it)
+        }
+    }
 
     Box(Modifier.fillMaxSize()) {
         NavHost(navController = navController, startDestination = Routes.HOME) {

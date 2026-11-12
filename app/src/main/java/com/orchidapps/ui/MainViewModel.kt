@@ -6,8 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
-import com.orchidapps.location.GeofenceEngine
-import com.orchidapps.location.GeofenceTransition
+import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.Job
@@ -55,14 +54,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private var trackingJob: Job? = null
 
-    private val geofence = GeofenceEngine()
+    /** POI yang baru saja dimasuki selama sesi jelajah (PB05, PB07); null bila sudah ditutup. */
+    val arrival: StateFlow<Poi?> = ExplorationSession.arrival
 
-    /** POI yang baru saja dimasuki pengguna (PB05); null bila tidak ada atau sudah ditutup. */
-    private val _arrival = MutableStateFlow<Poi?>(null)
-    val arrival: StateFlow<Poi?> = _arrival.asStateFlow()
-
-    private val _insidePoiIds = MutableStateFlow<Set<String>>(emptySet())
-    val insidePoiIds: StateFlow<Set<String>> = _insidePoiIds.asStateFlow()
+    val explorationActive: StateFlow<Boolean> = ExplorationSession.active
+    val visitedPoiIds: StateFlow<Set<String>> = ExplorationSession.visited
 
     init {
         loadDataset()
@@ -130,22 +126,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         trackingJob = null
     }
 
-    fun dismissArrival() {
-        _arrival.value = null
+    fun dismissArrival() = ExplorationSession.dismissArrival()
+
+    /** "Mulai Jelajah" (PB08): pelacakan dan geofence pindah ke Foreground Service. */
+    fun startExploration() {
+        if (locationRepository.hasPermission()) ExplorationSession.start(getApplication())
     }
+
+    /** "Akhiri Jelajah": pelacakan latar belakang dan notifikasi POI berhenti. */
+    fun endExploration() = ExplorationSession.end(getApplication())
 
     private fun onNewLocation(loc: UserLocation) {
         _location.update { it.copy(location = loc, noFixTimeout = false, error = null) }
-
-        val pois = (_dataset.value as? DatasetState.Loaded)?.dataset?.pois ?: return
-        val events = geofence.update(loc, pois)
-        _insidePoiIds.value = geofence.insidePoiIds
-        events.filter { it.transition == GeofenceTransition.ENTER }
-            .minByOrNull { it.distanceMeters }
-            ?.let { _arrival.value = it.poi }
-        // Tutup pemberitahuan bila pengguna sudah meninggalkan POI tersebut.
-        val current = _arrival.value
-        if (current != null && current.id !in geofence.insidePoiIds) _arrival.value = null
     }
 
     private companion object {
