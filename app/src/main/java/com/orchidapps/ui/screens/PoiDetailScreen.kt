@@ -16,20 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -43,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.orchidapps.audio.AudioGuide
-import com.orchidapps.audio.AudioStatus
 import com.orchidapps.data.Poi
 import com.orchidapps.ui.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -96,7 +89,9 @@ fun PoiDetailScreen(vm: MainViewModel, poiId: String, onBack: () -> Unit) {
             }
             Text(poi.description, style = MaterialTheme.typography.bodyLarge)
 
-            AudioGuideCard(poi)
+            SectionCard(title = "Pemandu audio") {
+                NarrationControls(AudioGuide.item(poi))
+            }
 
             SectionCard(title = "Kegiatan") {
                 poi.activities.forEach { Text("• $it") }
@@ -158,44 +153,6 @@ private fun PoiPhoto(poi: Poi) {
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text("Foto belum tersedia", style = MaterialTheme.typography.bodySmall)
-            }
-        }
-    }
-}
-
-@Composable
-private fun AudioGuideCard(poi: Poi) {
-    val context = LocalContext.current
-    val guide = remember { AudioGuide(context) }
-    DisposableEffect(guide) { onDispose { guide.release() } }
-    val audio by guide.state.collectAsStateWithLifecycle()
-    val hasRecording = remember(poi.id) { guide.hasRecording(poi) }
-
-    SectionCard(title = "Pemandu audio") {
-        when (audio.status) {
-            AudioStatus.IDLE -> {
-                Button(onClick = { guide.play(poi) }, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.Filled.PlayArrow, contentDescription = null)
-                    Text("  Dengarkan")
-                }
-                if (!hasRecording) {
-                    Text(
-                        "Rekaman narasi belum ada; deskripsi akan dibacakan oleh suara HP.",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-            }
-            AudioStatus.PREPARING -> Text("Menyiapkan suara…")
-            AudioStatus.PLAYING -> {
-                Text(if (audio.usesTts) "Membacakan deskripsi…" else "Memutar audio…")
-                OutlinedButton(onClick = guide::stop, modifier = Modifier.fillMaxWidth()) {
-                    Icon(Icons.Filled.Stop, contentDescription = null)
-                    Text("  Berhenti")
-                }
-            }
-            AudioStatus.UNAVAILABLE -> {
-                Text(audio.message ?: "Audio tidak tersedia.", color = MaterialTheme.colorScheme.error)
-                TextButton(onClick = { guide.play(poi) }) { Text("Coba lagi") }
             }
         }
     }

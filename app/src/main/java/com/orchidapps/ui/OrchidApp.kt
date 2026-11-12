@@ -1,6 +1,8 @@
 package com.orchidapps.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.orchidapps.ui.screens.ArrivalBanner
 import com.orchidapps.ui.screens.HomeScreen
+import com.orchidapps.ui.screens.MiniPlayerBar
 import com.orchidapps.ui.screens.PoiDetailScreen
 import com.orchidapps.ui.screens.PoiListScreen
 import com.orchidapps.ui.screens.PoiMapScreen
@@ -90,19 +93,24 @@ fun OrchidApp() {
             }
         }
 
-        arrival?.let { poi ->
-            ArrivalBanner(
-                poi = poi,
-                onOpen = {
-                    vm.dismissArrival()
-                    openPoi(poi.id)
-                },
-                onDismiss = vm::dismissArrival,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .navigationBarsPadding()
-                    .padding(16.dp),
-            )
+        Column(
+            Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            arrival?.let { poi ->
+                ArrivalBanner(
+                    poi = poi,
+                    onOpen = {
+                        vm.dismissArrival()
+                        openPoi(poi.id)
+                    },
+                    onDismiss = vm::dismissArrival,
+                )
+            }
+            MiniPlayerBar()
         }
     }
 }
