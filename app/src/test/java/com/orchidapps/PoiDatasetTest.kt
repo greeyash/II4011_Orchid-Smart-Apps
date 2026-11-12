@@ -64,6 +64,22 @@ class PoiDatasetTest {
     }
 
     @Test
+    fun orchidHouseHasAtLeastThreeSpeciesWithSource() {
+        val species = dataset.pois.first { it.id == "P04" }.species
+        assertTrue(species.size >= 3)
+        species.forEach {
+            assertTrue(it.id, it.characteristics.isNotBlank() && it.origin.isNotBlank() && it.source.isNotBlank())
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun duplicateSpeciesQrIsRejected() {
+        val raw = File("src/main/assets/${PoiRepository.ASSET_FILE}").readText()
+            .replace("ORCHID-P04-S02", "ORCHID-P04-S01")
+        PoiRepository.parseDataset(raw)
+    }
+
+    @Test
     fun woodBridgeHasSafetyNote() {
         assertTrue(dataset.pois.first { it.id == "P01" }.safetyNote!!.isNotBlank())
     }
