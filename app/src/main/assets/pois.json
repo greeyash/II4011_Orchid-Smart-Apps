@@ -70,7 +70,7 @@
         "Menikmati kopi dan camilan"
       ],
       "safetyNote": null,
-      "infoTitle": null,
+      "infoTitle": "Daftar menu dan harga",
       "info": null,
       "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
       "checkedAt": null
@@ -112,7 +112,7 @@
         "Mencoba menu best seller"
       ],
       "safetyNote": null,
-      "infoTitle": null,
+      "infoTitle": "Daftar menu dan harga",
       "info": null,
       "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
       "checkedAt": null
@@ -221,7 +221,155 @@
         "Piknik dengan picnic basket"
       ],
       "safetyNote": null,
-      "infoTitle": "Menu dan paket piknik",
+      "infoTitle": "Menu, harga, dan paket piknik",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P11",
+      "qrCode": "ORCHID-P11",
+      "name": "Pet Venture",
+      "aliases": ["pet venture", "pet", "hewan peliharaan", "anjing", "kucing", "jalan jalan"],
+      "category": "WISATA_ALAM",
+      "lat": -6.7799205,
+      "lng": 107.6363906,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Jalur khusus untuk berjalan-jalan bersama hewan peliharaan.",
+      "description": "Pet Venture adalah area yang menyediakan jalur untuk berjalan-jalan sambil membawa hewan peliharaan.",
+      "activities": [
+        "Berjalan-jalan bersama hewan peliharaan"
+      ],
+      "safetyNote": "Gunakan tali pengikat untuk hewan peliharaan dan awasi anak-anak selama berada di jalur.",
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P12",
+      "qrCode": "ORCHID-P12",
+      "name": "Souvenir Shop",
+      "aliases": ["souvenir shop", "souvenir", "oleh oleh", "oleh-oleh", "toko", "cendera mata"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.7800127,
+      "lng": 107.6374521,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Toko yang menjual berbagai souvenir Orchid Forest.",
+      "description": "Souvenir Shop adalah tempat yang menjual berbagai souvenir khas Orchid Forest.",
+      "activities": [
+        "Membeli souvenir dan oleh-oleh"
+      ],
+      "safetyNote": "Awasi anak-anak selama berada di dalam toko.",
+      "infoTitle": "Daftar barang dan harga",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P13",
+      "qrCode": "ORCHID-P13",
+      "name": "Photobooth",
+      "aliases": ["photobooth", "photo booth", "foto", "spot foto", "berfoto"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.7799614,
+      "lng": 107.6383785,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Tempat mengabadikan momen bersama teman atau pasangan.",
+      "description": "Photobooth adalah tempat untuk mengabadikan momen bersama teman atau pasangan yang ikut berkunjung.",
+      "activities": [
+        "Berfoto bersama teman atau pasangan"
+      ],
+      "safetyNote": null,
+      "infoTitle": "Daftar harga",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P14",
+      "qrCode": "ORCHID-P14",
+      "name": "Horse Ranch",
+      "aliases": ["horse ranch", "horse", "kuda", "berkuda", "naik kuda", "ranch"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.781441,
+      "lng": 107.6416293,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Tempat bermain dan berjalan-jalan dengan kuda.",
+      "description": "Horse Ranch adalah tempat untuk bermain dan berjalan-jalan dengan kuda.",
+      "activities": [
+        "Berjalan-jalan dengan kuda"
+      ],
+      "safetyNote": "Ikuti arahan petugas, jangan berdiri di belakang kuda, dan awasi anak-anak selama berada di area kuda.",
+      "infoTitle": "Jenis kuda yang tersedia",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P15",
+      "qrCode": "ORCHID-P15",
+      "name": "Catur",
+      "aliases": ["catur", "catur raksasa", "chess", "permainan"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.7793418,
+      "lng": 107.6385414,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Permainan catur raksasa.",
+      "description": "Di area ini tersedia permainan catur raksasa yang bisa dimainkan bersama teman atau keluarga.",
+      "activities": [
+        "Bermain catur raksasa",
+        "Berfoto"
+      ],
+      "safetyNote": "Angkat bidak catur dengan hati-hati dan awasi anak-anak selama bermain.",
+      "infoTitle": null,
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P16",
+      "qrCode": "ORCHID-P16",
+      "name": "Bazaar Anggrek",
+      "aliases": ["bazaar anggrek", "bazaar", "bazar", "jual anggrek", "beli anggrek", "belanja"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.7795819,
+      "lng": 107.6388579,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Tempat yang menjual berbagai jenis bunga anggrek.",
+      "description": "Bazaar Anggrek adalah tempat yang menjual berbagai jenis bunga anggrek.",
+      "activities": [
+        "Berbelanja bunga anggrek"
+      ],
+      "safetyNote": "Awasi anak-anak dan hindari menyentuh tanaman yang dipajang tanpa izin penjual.",
+      "infoTitle": "Jenis dan harga anggrek yang dijual",
+      "info": null,
+      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "checkedAt": null
+    },
+    {
+      "id": "P17",
+      "qrCode": "ORCHID-P17",
+      "name": "Putt Putt Golf",
+      "aliases": ["putt putt golf", "putt putt", "mini golf", "golf"],
+      "category": "WISATA_TEMPAT",
+      "lat": -6.780288,
+      "lng": 107.6391788,
+      "radiusMeters": 20,
+      "coordinateVerified": false,
+      "shortDescription": "Arena mini golf untuk bermain bersama teman atau keluarga.",
+      "description": "Putt Putt Golf adalah area permainan mini golf yang bisa dimainkan bersama teman atau keluarga.",
+      "activities": [
+        "Bermain putt putt golf"
+      ],
+      "safetyNote": "Ayunkan stik golf hanya saat giliran Anda dan pastikan tidak ada orang di dekat Anda; awasi anak-anak selama bermain.",
+      "infoTitle": "Aturan bermain, jam operasional, dan harga tiket",
       "info": null,
       "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
       "checkedAt": null
