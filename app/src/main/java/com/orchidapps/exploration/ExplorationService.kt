@@ -61,6 +61,8 @@ class ExplorationService : Service() {
             ACTION_REPLAY -> narration.replay()
             else -> startSession()
         }
+        // Tombol notifikasi lama bisa membangunkan service setelah sesi berakhir.
+        if (trackingJob?.isActive != true) stopSelf()
         return START_NOT_STICKY
     }
 
@@ -79,7 +81,12 @@ class ExplorationService : Service() {
         geofence.reset()
         ExplorationSession.onStarted()
         trackingJob = scope.launch {
-            pois = PoiRepository(this@ExplorationService).loadDataset().pois
+            pois = try {
+                PoiRepository(this@ExplorationService).loadDataset().pois
+            } catch (e: Exception) {
+                endSession()
+                return@launch
+            }
             // Suara narasi disiapkan lebih awal agar Auto-Play mulai ≤3 detik (F04 AC2).
             narration.prefetch(pois.map(AudioGuide::item))
             locationRepository.locationUpdates().collect(::onLocation)
