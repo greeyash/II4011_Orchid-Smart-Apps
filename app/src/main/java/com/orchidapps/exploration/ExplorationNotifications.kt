@@ -6,10 +6,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaStyleNotificationHelper
 import com.orchidapps.MainActivity
 import com.orchidapps.R
+import com.orchidapps.audio.NarrationState
+import com.orchidapps.audio.NarrationStatus
 import com.orchidapps.data.Poi
 
 /** Kanal dan isi notifikasi sesi jelajah. */
@@ -21,7 +26,6 @@ internal object ExplorationNotifications {
     const val NOTIFICATION_ARRIVAL = 2
 
     fun createChannels(context: Context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(
             NotificationChannel(CHANNEL_SESSION, "Sesi jelajah", NotificationManager.IMPORTANCE_LOW).apply {
@@ -63,20 +67,57 @@ internal object ExplorationNotifications {
             )
             .build()
 
-    fun session(context: Context, visitedCount: Int): Notification =
-        NotificationCompat.Builder(context, CHANNEL_SESSION)
+    /**
+     * Notifikasi sesi jelajah. Selama narasi aktif, notifikasi ini memakai MediaStyle yang terhubung
+     * ke sesi media sehingga narasi bisa dijeda/dilanjutkan dari layar kunci (PB09, F04d).
+     */
+    @OptIn(UnstableApi::class)
+    fun session(
+        context: Context,
+        visitedCount: Int,
+        narration: NarrationState?,
+        session: MediaSession,
+    ): Notification {
+        val visitedText = if (visitedCount == 0) "Kami akan memberi tahu saat Anda tiba di titik wisata."
+        else "$visitedCount titik wisata sudah dikunjungi."
+        val builder = NotificationCompat.Builder(context, CHANNEL_SESSION)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Jelajah Orchid Forest aktif")
-            .setContentText(
-                if (visitedCount == 0) "Kami akan memberi tahu saat Anda tiba di titik wisata."
-                else "$visitedCount titik wisata sudah dikunjungi."
-            )
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .setSilent(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setContentIntent(openAppIntent(context, poiId = null))
-            .addAction(0, "Akhiri Jelajah", ExplorationService.actionIntent(context, ExplorationService.ACTION_STOP))
+        val item = narration?.item
+        if (item == null) {
+            return builder
+                .setContentTitle("Jelajah Orchid Forest aktif")
+                .setContentText(visitedText)
+                .addAction(0, "Akhiri Jelajah", ExplorationService.actionIntent(context, ExplorationService.ACTION_STOP))
+                .build()
+        }
+        val playing = narration.status == NarrationStatus.PLAYING
+        return builder
+            .setContentTitle(item.title)
+            .setContentText("Narasi Orchid Forest · $visitedText")
+            .addAction(
+                if (playing) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play,
+                if (playing) "Jeda" else "Lanjutkan",
+                ExplorationService.actionIntent(context, ExplorationService.ACTION_TOGGLE_PLAY),
+            )
+            .addAction(
+                android.R.drawable.ic_media_previous,
+                "Ulang",
+                ExplorationService.actionIntent(context, ExplorationService.ACTION_REPLAY),
+            )
+            .addAction(
+                android.R.drawable.ic_menu_close_clear_cancel,
+                "Akhiri Jelajah",
+                ExplorationService.actionIntent(context, ExplorationService.ACTION_STOP),
+            )
+            .setStyle(MediaStyleNotificationHelper.MediaStyle(session).setShowActionsInCompactView(0, 1))
             .build()
+    }
 
     fun openAppIntent(context: Context, poiId: String?): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)

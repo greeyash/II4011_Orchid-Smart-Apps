@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,17 +28,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.location.Geo
 import com.orchidapps.ui.DatasetState
 import com.orchidapps.ui.LocationUiState
@@ -65,6 +70,8 @@ fun HomeScreen(
     val locationState by vm.location.collectAsStateWithLifecycle()
     val explorationActive by vm.explorationActive.collectAsStateWithLifecycle()
     val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
+    val settings = remember { ExplorationSettings.get(context) }
+    val autoPlay by settings.autoPlay.collectAsStateWithLifecycle()
 
     // Izin notifikasi (Android 13+) diminta saat "Mulai Jelajah"; sesi tetap jalan bila ditolak
     // karena getar dan suara tidak membutuhkan izin ini.
@@ -148,6 +155,8 @@ fun HomeScreen(
                 canStart = locationState.permission == PermissionStatus.GRANTED,
                 onStart = startExploration,
                 onEnd = vm::endExploration,
+                autoPlay = autoPlay,
+                onAutoPlayChange = settings::setAutoPlay,
             )
 
             Button(onClick = onOpenMap, modifier = Modifier.fillMaxWidth()) {
@@ -170,6 +179,8 @@ private fun ExplorationCard(
     canStart: Boolean,
     onStart: () -> Unit,
     onEnd: () -> Unit,
+    autoPlay: Boolean,
+    onAutoPlayChange: (Boolean) -> Unit,
 ) {
     SectionCard(
         title = if (active) "Jelajah aktif" else "Jelajah",
@@ -201,6 +212,16 @@ private fun ExplorationCard(
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("Auto-Play narasi", style = MaterialTheme.typography.titleSmall)
+                Text(
+                    "Narasi langsung diputar setelah tiba di titik wisata.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            Switch(checked = autoPlay, onCheckedChange = onAutoPlayChange)
         }
     }
 }

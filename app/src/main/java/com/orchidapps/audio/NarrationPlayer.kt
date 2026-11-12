@@ -1,5 +1,6 @@
 package com.orchidapps.audio
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import androidx.media3.common.AudioAttributes
@@ -180,6 +181,8 @@ class NarrationPlayer private constructor(context: Context) {
     }
 
     companion object {
+        // Hanya menyimpan applicationContext, jadi tidak menahan Activity.
+        @SuppressLint("StaticFieldLeak")
         @Volatile
         private var instance: NarrationPlayer? = null
 

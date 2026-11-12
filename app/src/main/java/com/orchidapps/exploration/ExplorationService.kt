@@ -38,6 +38,7 @@ class ExplorationService : Service() {
     private var pois: List<Poi> = emptyList()
     private var trackingJob: Job? = null
     private var announceJob: Job? = null
+    private var narrationJob: Job? = null
     private val narration by lazy { NarrationPlayer.get(this) }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -56,6 +57,8 @@ class ExplorationService : Service() {
             }
             ACTION_LISTEN -> intent.poi()?.let(::listen)
             ACTION_SKIP -> intent.poi()?.let(::skip)
+            ACTION_TOGGLE_PLAY -> narration.togglePlayPause()
+            ACTION_REPLAY -> narration.replay()
             else -> startSession()
         }
         return START_NOT_STICKY
@@ -70,20 +73,22 @@ class ExplorationService : Service() {
         ServiceCompat.startForeground(
             this,
             ExplorationNotifications.NOTIFICATION_SESSION,
-            ExplorationNotifications.session(this, visitedCount = 0),
+            ExplorationNotifications.session(this, visitedCount = 0, narration = null, session = narration.session),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION else 0,
         )
         geofence.reset()
         ExplorationSession.onStarted()
         trackingJob = scope.launch {
             pois = PoiRepository(this@ExplorationService).loadDataset().pois
-            onSessionReady(pois)
+            // Suara narasi disiapkan lebih awal agar Auto-Play mulai ≤3 detik (F04 AC2).
+            narration.prefetch(pois.map(AudioGuide::item))
             locationRepository.locationUpdates().collect(::onLocation)
         }
+        // Notifikasi sesi berubah menjadi kontrol media layar kunci selama narasi aktif (PB09).
+        narrationJob = scope.launch {
+            narration.state.collect { updateSessionNotification() }
+        }
     }
-
-    /** Titik perluasan untuk persiapan saat data POI sudah dimuat. */
-    private fun onSessionReady(pois: List<Poi>) = Unit
 
     private fun onLocation(location: UserLocation) {
         val events = geofence.update(location, pois)
@@ -108,8 +113,13 @@ class ExplorationService : Service() {
         }
     }
 
-    /** Setelah nama lokasi disebutkan; Auto-Play ditambahkan di PB09. */
-    private fun onAnnounced(poi: Poi) = Unit
+    /** Auto-Play (F04c): narasi langsung diputar setelah nama lokasi disebutkan. */
+    private fun onAnnounced(poi: Poi) {
+        if (ExplorationSettings.get(this).autoPlay.value) {
+            NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
+            narration.play(AudioGuide.item(poi))
+        }
+    }
 
     private fun listen(poi: Poi) {
         NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
@@ -140,12 +150,19 @@ class ExplorationService : Service() {
 
     private fun updateSessionNotification() = notify(
         ExplorationNotifications.NOTIFICATION_SESSION,
-        ExplorationNotifications.session(this, ExplorationSession.visited.value.size),
+        ExplorationNotifications.session(
+            this,
+            visitedCount = ExplorationSession.visited.value.size,
+            narration = narration.state.value.takeIf { it.isActive },
+            session = narration.session,
+        ),
     )
 
     private fun endSession() {
         trackingJob?.cancel()
         trackingJob = null
+        narrationJob?.cancel()
+        narrationJob = null
         announceJob?.cancel()
         narration.speech.stop()
         NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
@@ -166,6 +183,8 @@ class ExplorationService : Service() {
         const val ACTION_STOP = "com.orchidapps.exploration.STOP"
         const val ACTION_LISTEN = "com.orchidapps.exploration.LISTEN"
         const val ACTION_SKIP = "com.orchidapps.exploration.SKIP"
+        const val ACTION_TOGGLE_PLAY = "com.orchidapps.exploration.TOGGLE_PLAY"
+        const val ACTION_REPLAY = "com.orchidapps.exploration.REPLAY"
 
         fun start(context: Context) {
             ContextCompat.startForegroundService(
