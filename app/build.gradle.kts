@@ -64,6 +64,10 @@ dependencies {
     // Peta (PB04)
     implementation(libs.maplibre.android)
 
+    // Narasi audio + kontrol layar kunci/earphone (PB09)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
+
     // Data POI lokal (JSON di assets)
     implementation(libs.kotlinx.serialization.json)
 
