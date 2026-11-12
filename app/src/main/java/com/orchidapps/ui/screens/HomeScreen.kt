@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
@@ -164,8 +164,8 @@ fun HomeScreen(
                 Text("  Lihat Peta")
             }
             OutlinedButton(onClick = onOpenPoiList, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
-                Text("  Lihat Semua POI")
+                Icon(Icons.Filled.Search, contentDescription = null)
+                Text("  Cari POI")
             }
         }
     }
