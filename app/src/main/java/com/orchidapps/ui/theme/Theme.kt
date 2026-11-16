@@ -8,10 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.orchidapps.R
 
 /** Palet dari desain hi-fi Orchid Apps (Figma). */
 object OrchidColors {
@@ -58,18 +62,49 @@ private val ColorScheme = lightColorScheme(
     onErrorContainer = OrchidColors.ForestDark,
 )
 
-/** Judul memakai huruf serif seperti desain; isi memakai sans bawaan perangkat. */
-private val Display = FontFamily.Serif
+/**
+ * Font dari desain Figma: Fraunces untuk judul dan Plus Jakarta Sans untuk teks isi.
+ * Keduanya font variabel berlisensi SIL OFL (lihat assets/licenses), disertakan di aplikasi
+ * agar tetap tampil tanpa internet.
+ */
+@OptIn(ExperimentalTextApi::class)
+private fun variable(resId: Int, weight: FontWeight) = Font(
+    resId,
+    weight = weight,
+    variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight)),
+)
+
+private val Display = FontFamily(
+    variable(R.font.fraunces, FontWeight.SemiBold),
+    variable(R.font.fraunces, FontWeight.Bold),
+)
+
+private val Body = FontFamily(
+    variable(R.font.plus_jakarta_sans, FontWeight.Normal),
+    variable(R.font.plus_jakarta_sans, FontWeight.Medium),
+    variable(R.font.plus_jakarta_sans, FontWeight.SemiBold),
+    variable(R.font.plus_jakarta_sans, FontWeight.Bold),
+)
 
 private val OrchidTypography = Typography().run {
+    fun TextStyle.body(weight: FontWeight? = null) = copy(fontFamily = Body, fontWeight = weight ?: fontWeight)
+    fun TextStyle.display() = copy(fontFamily = Display, fontWeight = FontWeight.SemiBold)
     copy(
-        displaySmall = displaySmall.copy(fontFamily = Display, fontWeight = FontWeight.Bold),
-        headlineLarge = headlineLarge.copy(fontFamily = Display, fontWeight = FontWeight.Bold),
-        headlineMedium = headlineMedium.copy(fontFamily = Display, fontWeight = FontWeight.Bold),
-        headlineSmall = headlineSmall.copy(fontFamily = Display, fontWeight = FontWeight.Bold),
-        titleLarge = titleLarge.copy(fontFamily = Display, fontWeight = FontWeight.Bold),
-        titleMedium = titleMedium.copy(fontWeight = FontWeight.SemiBold),
-        labelSmall = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.3.sp),
+        displayLarge = displayLarge.display(),
+        displayMedium = displayMedium.display(),
+        displaySmall = displaySmall.display(),
+        headlineLarge = headlineLarge.display(),
+        headlineMedium = headlineMedium.display(),
+        headlineSmall = headlineSmall.display(),
+        titleLarge = titleLarge.display(),
+        titleMedium = titleMedium.body(FontWeight.SemiBold),
+        titleSmall = titleSmall.body(FontWeight.SemiBold),
+        bodyLarge = bodyLarge.body(),
+        bodyMedium = bodyMedium.body(),
+        bodySmall = bodySmall.body(),
+        labelLarge = labelLarge.body(FontWeight.SemiBold),
+        labelMedium = labelMedium.body(FontWeight.Medium),
+        labelSmall = TextStyle(fontFamily = Body, fontSize = 11.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.2.sp),
     )
 }
 
