@@ -202,11 +202,6 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
                     InfoTile("Asal", species.origin, Modifier.weight(1f))
                 }
                 NarrationCard(AudioGuide.speciesItem(poi, species))
-                Text(
-                    "Sumber: ${species.source}. Dicek: ${species.checkedAt ?: "belum"}.",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = OrchidColors.Muted,
-                )
             }
         }
         PrimaryButton(
