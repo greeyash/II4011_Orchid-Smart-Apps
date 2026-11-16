@@ -110,14 +110,6 @@ fun PoiDetailScreen(
                     Text(poi.info ?: "Belum tersedia.", style = MaterialTheme.typography.bodyMedium)
                 }
             }
-
-            Text(
-                "Sumber: ${poi.source}. Dicek: ${poi.checkedAt ?: "belum dicek ke pengelola"}." +
-                    "\nRadius pemicu ${poi.radiusMeters} m" +
-                    if (poi.coordinateVerified) "" else " · koordinat belum diverifikasi di lapangan",
-                style = MaterialTheme.typography.labelSmall,
-                color = OrchidColors.Muted,
-            )
         }
     }
 }
