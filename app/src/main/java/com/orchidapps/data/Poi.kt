@@ -25,6 +25,8 @@ data class Poi(
     val coordinateVerified: Boolean = false,
     val shortDescription: String,
     val description: String,
+    /** Naskah audio dari tim; dibacakan sebagai narasi bila rekaman belum ada (F03, F08a). */
+    val narration: String? = null,
     val activities: List<String>,
     /** Pengingat keselamatan; dibacakan sebelum narasi (PRD 4.1). */
     val safetyNote: String? = null,

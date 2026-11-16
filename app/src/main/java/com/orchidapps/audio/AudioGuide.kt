@@ -12,8 +12,13 @@ object AudioGuide {
     fun recordingPath(poi: Poi) = "audio/${poi.id}.mp3"
     fun photoPath(poi: Poi) = "images/${poi.id}.jpg"
 
-    /** Teks yang dibacakan bila rekaman belum ada. Pengingat keselamatan didahulukan (PRD 4.1). */
-    fun narration(poi: Poi): String = buildString {
+    /**
+     * Teks yang dibacakan bila rekaman belum ada: naskah audio dari tim bila tersedia, selain itu
+     * disusun dari data POI dengan pengingat keselamatan didahulukan (PRD 4.1).
+     */
+    fun narration(poi: Poi): String = poi.narration ?: generatedNarration(poi)
+
+    private fun generatedNarration(poi: Poi): String = buildString {
         append("Anda tiba di ").append(poi.name).append(". ")
         poi.safetyNote?.let { append("Perhatian: ").append(it).append(' ') }
         append(poi.description).append(' ')

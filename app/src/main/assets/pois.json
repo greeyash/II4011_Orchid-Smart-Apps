@@ -18,16 +18,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Jembatan goyang ikonik dari kayu dan tali tambang putih.",
-      "description": "Tahukah Anda? Wood Bridge adalah jembatan goyang yang dibuat dari kayu dan tali tambang putih, dan menjadi spot paling ikonik di Orchid Forest. Dari atas jembatan Anda bisa menikmati pemandangan hutan pinus.",
+      "description": "Tahukah Kamu? Wood Bridge merupakan Jembatan goyang dari kayu dan tali tambang putih yang jadi spot ikonik saat pengunjung berkunjung ke Orchid Forest. Keunikan lainnya ialah saat malam hari, dimana lampu-lampu di jembatan menyala otomatis yang menciptakan suasana menjadi lebih romantis.",
+      "narration": "Selamat datang di area wisata Wood Bridge, jembatan goyang dari kayu dan tali tambang putih yang membentang di antara pohon pinus. Silakan berjalan di jembatan dan nikmati pemandangan hutan pinus dari ketinggian. Setelah itu, kamu bisa lanjut mencoba flying fox atau turun ke area Garden of Lights. Harap berhati-hati dan ikuti arahan petugas.",
       "activities": [
-        "Berjalan menyusuri jembatan goyang",
-        "Mencoba flying fox",
+        "Berjalan di jembatan",
+        "Mencoba permainan flying fox",
         "Menikmati pemandangan hutan pinus"
       ],
-      "safetyNote": "Berpegangan pada tali pengaman, jangan berlari atau mengayunkan jembatan, dan ikuti batas jumlah orang di atas jembatan.",
+      "safetyNote": "Berpegangan pada tali pegangan, jangan berlari atau mengayunkan jembatan, dan ikuti batas jumlah orang di atas jembatan.",
       "infoTitle": "Informasi botani",
       "info": "Pohon di sekitar jembatan adalah pinus (Pinus merkusii).",
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -41,16 +42,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Arena bermain anak dengan skuter, sepeda mini, ayunan, dan perosotan.",
-      "description": "Orchid Castle adalah arena bermain anak. Di sini tersedia skuter, sepeda mini, ayunan, dan perosotan.",
+      "description": "Tahukah Kamu? Orchid Castle merupakan arena bermain anak dengan bangunan kayu berbentuk kastil yang menjadi spot foto favorit keluarga di Orchid Forest. Di sekitarnya tersedia berbagai wahana seperti skuter, sepeda mini, ayunan, dan perosotan, sehingga si kecil bisa bermain sepuasnya di tengah udara sejuk hutan pinus.",
+      "narration": "Selamat datang di Orchid Castle, arena bermain anak dengan bangunan kastil dari kayu yang ada di tengah hutan pinus. Di sini tersedia skuter, sepeda mini, ayunan, dan perosotan yang seru untuk si kecil. Silakan temani anak bermain dan jangan lupa abadikan momen serunya di depan kastil. Orang tua harap tetap mengawasi anak-anak ya.",
       "activities": [
-        "Bermain di perosotan",
-        "Bermain ayunan",
-        "Mencoba skuter dan sepeda mini"
+        "Bermain skuter dan sepeda mini",
+        "Bermain ayunan dan perosotan",
+        "Berfoto di depan bangunan kastil kayu"
       ],
-      "safetyNote": "Orang tua harap tetap mengawasi anak-anaknya selama bermain.",
+      "safetyNote": "Orang tua harap tetap mengawasi anak-anak selama bermain, dan pastikan anak bermain bergantian serta tidak berlarian di sekitar wahana.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -64,15 +66,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Kafe bernuansa rustik yang didominasi kayu.",
-      "description": "Aspasia Coffee adalah kafe bernuansa rustik yang didominasi kayu.",
+      "description": "Tahukah Kamu? Aspasia Coffee merupakan kafe bernuansa rustik dengan bangunan kayu yang berdiri di tengah hutan pinus. Menu ikoniknya adalah pizza yang dipanggang dengan oven tradisional dan kopi hangat, perpaduan yang pas untuk menemani udara sejuk Lembang.",
+      "narration": "Selamat datang di Aspasia Coffee, kafe bernuansa rustik yang didominasi kayu di tengah hutan pinus. Tempat ini cocok untuk beristirahat setelah berkeliling. Silakan coba pizza yang dipanggang dengan oven tradisional dan secangkir kopi hangat sambil menikmati suasana sejuk di sekitarmu. Jangan lupa jaga kebersihan area ya.",
       "activities": [
-        "Mencoba pizza",
-        "Menikmati kopi dan camilan"
+        "Mencoba pizza oven tradisional",
+        "Menikmati secangkir kopi hangat",
+        "Beristirahat sambil menikmati suasana hutan pinus"
       ],
-      "safetyNote": null,
+      "safetyNote": "Berhati-hati dengan makanan dan minuman yang masih panas, serta jaga kebersihan area dengan membuang sampah pada tempatnya.",
       "infoTitle": "Daftar menu dan harga",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -86,15 +90,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Taman dan koleksi berbagai jenis bunga anggrek.",
-      "description": "Tahukah Anda? Orchid House, yang juga dikenal sebagai Museum Anggrek, menampilkan koleksi berbagai jenis bunga anggrek.",
+      "description": "Tahukah Kamu? Orchid House merupakan taman anggrek yang menjadi salah satu daya tarik utama Orchid Forest. Di sini kamu bisa melihat berbagai jenis anggrek dengan bentuk dan warna yang berbeda, seperti Anggrek Hitam, Anggrek Kantong Semar, Anggrek Kasut Hijau, Dracula Simia, Phalaenopsis Laycocky, dan Anggrek Bulan.",
+      "narration": "Selamat datang di Orchid House, taman anggrek yang menjadi salah satu ikon Orchid Forest. Silakan jelajahi koleksi anggrek yang ada di sini, mulai dari Anggrek Hitam, Anggrek Kantong Semar, hingga Anggrek Bulan. Perhatikan bentuk dan warna bunganya, karena setiap anggrek punya ciri khasnya sendiri. Abadikan momen bersama koleksi anggrek, tapi jangan memetik atau merusak bunga ya.",
       "activities": [
-        "Mengabadikan momen dengan berfoto di antara bunga anggrek",
-        "Mendengarkan informasi jenis-jenis anggrek"
+        "Mengenal berbagai jenis anggrek",
+        "Berfoto bersama koleksi anggrek",
+        "Mengamati bentuk dan warna bunga dari dekat"
       ],
-      "safetyNote": null,
+      "safetyNote": "Nikmati koleksi anggrek dengan mata saja: jangan memetik, menyentuh berlebihan, atau merusak bunga dan tanaman agar tetap terawat.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null,
       "species": [
         {
@@ -150,14 +156,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Kafe bergaya Eropa berdinding kaca dengan dekorasi bunga gantung.",
-      "description": "Golden Pine adalah kafe bergaya Eropa dengan dinding kaca dan dekorasi bunga gantung.",
+      "description": "Tahukah Kamu? Golden Pine merupakan kafe glasshouse bergaya Eropa dengan dinding kaca dan hiasan bunga gantung. Dari balik kaca, pengunjung bisa menikmati pemandangan hutan pinus sambil bersantai dan mencicipi menu best seller seperti Almond Croissant, Pain au Chocolat, Hot Chocolate, dan Japanese Cheesecake.",
+      "narration": "Selamat datang di Golden Pine, kafe bergaya Eropa dengan dinding kaca dan hiasan bunga gantung di sekelilingnya. Duduklah dengan nyaman dan nikmati suasana hutan pinus dari balik kaca sambil bersantai. Kamu bisa mencoba menu best seller seperti Almond Croissant, Hot Chocolate, atau Japanese Cheesecake. Selamat menikmati waktu istirahatmu.",
       "activities": [
-        "Mencoba menu best seller"
+        "Mencoba menu best seller (pastry, cokelat panas, dan lainnya)",
+        "Bersantai sambil menikmati pemandangan hutan pinus dari balik kaca",
+        "Berfoto dengan latar dekorasi bunga gantung"
       ],
-      "safetyNote": null,
+      "safetyNote": "Berhati-hati dengan minuman panas, jaga kebersihan area, dan jangan menarik atau merusak dekorasi bunga gantung.",
       "infoTitle": "Daftar menu dan harga",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -171,14 +180,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Area hutan pinus yang dihiasi lampu.",
-      "description": "Tahukah Anda? Garden of Light adalah area di hutan pinus yang dihiasi lampu-lampu.",
+      "description": "Tahukah Kamu? Garden of Light merupakan area wisata alam dengan dekorasi lampu yang menyala di tengah hutan pinus, dan suasananya semakin memukau saat hari mulai gelap. Terdapat berbagai spot foto bertema cahaya, yaitu Sky Mountain, Tulip Glow, Moon Mist, Mirror of Light, Luminous Melody, Dream Balloon, dan Fairy Tunnel.",
+      "narration": "Selamat datang di Garden of Light! Di area ini kamu bisa menikmati suasana hutan pinus dengan dekorasi lampu yang membuat kawasan terlihat semakin menarik. Silakan berjalan santai dan cari spot foto favoritmu, mulai dari Tulip Glow, Mirror of Light, hingga Fairy Tunnel. Kalau berkunjung saat hari mulai gelap, suasana cahayanya akan terasa lebih istimewa. Hati-hati melangkah dan jaga lampu dekorasi ya.",
       "activities": [
-        "Mengabadikan momen di spot foto berhias lampu"
+        "Berjalan santai menikmati dekorasi lampu",
+        "Berfoto di spot Sky Mountain, Tulip Glow, Moon Mist, dan lainnya",
+        "Mengabadikan momen bersama teman dan keluarga"
       ],
-      "safetyNote": "Perhatikan langkah Anda di jalur hutan pinus, terutama saat gelap.",
+      "safetyNote": "Perhatikan langkah kaki karena area bisa gelap dan licin, jaga anak-anak tetap dalam pengawasan, serta jangan merusak atau mencabut lampu dekorasi.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -192,15 +204,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Area ala amfiteater dengan dek kayu.",
-      "description": "Tahukah Anda? Terrace Paphio adalah area ala amfiteater dengan dek kayu. Namanya diambil dari anggrek Paphiopedilum.",
+      "description": "Tahukah Kamu? Terrace Paphio merupakan area santai ala amfiteater dengan lantai dek kayu di tengah hutan pinus. Namanya diambil dari anggrek Paphiopedilum atau anggrek kantong semar, yang ciri khasnya berbentuk seperti kantong. Area ini sering dipakai sebagai tempat pertunjukan musik.",
+      "narration": "Selamat datang di Terrace Paphio, area santai ala amfiteater dengan dek kayu di tengah hutan pinus. Namanya diambil dari anggrek Paphiopedilum, atau anggrek kantong semar, yang punya bentuk bunga seperti kantong. Silakan duduk santai dan nikmati suasana sekitar, dan kalau sedang beruntung, kamu bisa menonton live music di sini. Harap berhati-hati saat berjalan di dek kayu, dan orang tua tetap mengawasi anak-anak ya.",
       "activities": [
-        "Duduk santai di dek kayu",
-        "Menonton live music"
+        "Duduk santai menikmati suasana hutan pinus",
+        "Menonton live music (jika sedang ada pertunjukan)",
+        "Berfoto di area amfiteater kayu"
       ],
-      "safetyNote": "Awasi anak-anak di area dek dan tangga amfiteater.",
+      "safetyNote": "Berhati-hati saat berjalan di dek kayu karena bisa licin, terutama saat basah, dan orang tua harap tetap mengawasi anak-anak.",
       "infoTitle": "Informasi tambahan",
       "info": "Tempat ini sering dijadikan lokasi pertunjukan musik. Paphiopedilum (anggrek kantong semar atau anggrek kasut) dikenali dari bibir bunganya yang berbentuk kantong.",
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -214,21 +228,23 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Area kelinci untuk belajar, bermain, dan berinteraksi.",
-      "description": "Rabbit Forest adalah area tempat kelinci hidup. Pengunjung bisa belajar, bermain, dan berinteraksi dengan kelinci.",
+      "description": "Tahukah Kamu? Rabbit Forest merupakan area bermain dan belajar bersama kelinci hidup yang bisa ditemui langsung oleh pengunjung. Tempat ini cocok untuk keluarga, terutama anak-anak yang ingin mengenal hewan lebih dekat sambil memberi makan dan bermain bersama kelinci.",
+      "narration": "Selamat datang di Rabbit Forest, area tempat kamu bisa bermain dan belajar bersama kelinci. Di sini ada kelinci hidup yang bisa kamu temui langsung, memberi mereka makan, dan bermain bersama. Informasi jenis-jenis kelinci juga bisa kamu lihat di layar. Mohon perlakukan kelinci dengan lembut dan orang tua tetap mengawasi anak-anak ya.",
       "activities": [
         "Memberi makan kelinci",
-        "Bermain bersama kelinci"
+        "Bermain bersama kelinci",
+        "Mengenal berbagai jenis kelinci"
       ],
-      "safetyNote": "Awasi anak saat berinteraksi dengan kelinci dan perlakukan kelinci dengan lembut.",
+      "safetyNote": "Perlakukan kelinci dengan lembut, jangan mengangkat atau menarik telinganya, cuci tangan setelah berinteraksi, dan orang tua harap tetap mengawasi anak-anak.",
       "infoTitle": "Jenis kelinci",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
       "id": "P09",
       "qrCode": "ORCHID-P09",
-      "name": "Food Corner",
+      "name": "Food Court",
       "aliases": ["food corner", "food court", "jajan", "gorengan", "hot dog", "sosis", "kentang", "souvenir"],
       "category": "WISATA_TEMPAT",
       "lat": -6.7809009,
@@ -236,15 +252,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Tempat jajan ringan.",
-      "description": "Food Corner adalah tempat jajan ringan yang menyajikan gorengan, hot dog, sosis bakar, dan kentang goreng.",
+      "description": "Tahukah Kamu? Food Court (Food Corner) merupakan area makan dengan meja-meja kayu di tengah hutan pinus, tempat yang pas untuk mengisi tenaga setelah berkeliling. Tersedia pilihan camilan seperti gorengan, hot dog, sosis bakar, kentang goreng, donat, dan roti bakar, dan di sekitarnya kamu juga bisa mencari souvenir.",
+      "narration": "Selamat datang di Food Corner! Setelah puas menjelajahi berbagai spot di Orchid Forest, kamu bisa mampir ke sini untuk beristirahat sejenak. Ada banyak camilan yang bisa dinikmati, mulai dari gorengan, hot dog, sosis bakar, hingga kentang goreng, serta donat dan roti bakar untuk yang ingin yang manis. Di sekitar area ini, kamu juga bisa mencari souvenir untuk dibawa pulang.",
       "activities": [
-        "Beristirahat sambil jajan",
-        "Membeli souvenir"
+        "Mencoba gorengan, hot dog, sosis bakar, dan kentang goreng",
+        "Menikmati donat atau roti bakar sambil beristirahat",
+        "Mencari souvenir di sekitar area"
       ],
-      "safetyNote": null,
+      "safetyNote": "Jaga kebersihan dengan membuang sampah pada tempatnya, berhati-hati dengan makanan yang masih panas, dan jaga barang bawaanmu.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -258,15 +276,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Restoran di hutan pinus dengan pilihan picnic basket.",
-      "description": "Pine Kitchen adalah restoran di hutan pinus, berada di jalur kanan dari pintu masuk. Anda bisa makan di tempat atau memesan picnic basket.",
+      "description": "Tahukah Kamu? Pine Kitchen merupakan restoran dengan konsep glasshouse di tengah suasana sejuk hutan pinus. Menunya beragam, mulai dari nasi goreng, ayam geprek, sup iga, hingga beef teriyaki, dan pengunjung juga bisa mencoba pengalaman makan dengan konsep picnic basket.",
+      "narration": "Selamat datang di Pine Kitchen, tempat makan di tengah suasana sejuk hutan pinus Orchid Forest. Kalau kamu mulai lapar setelah berkeliling, tempat ini bisa jadi pilihan untuk menikmati hidangan yang mengenyangkan, seperti nasi goreng, ayam geprek, sup iga, dan beef teriyaki. Kamu juga bisa mencoba picnic basket untuk pengalaman makan yang berbeda. Selamat menikmati hidangan bersama teman atau keluargamu.",
       "activities": [
-        "Makan di tempat",
-        "Piknik dengan picnic basket"
+        "Menikmati hidangan makan berat (nasi goreng, ayam geprek, sup iga, beef teriyaki)",
+        "Mencoba pengalaman makan dengan konsep picnic basket",
+        "Bersantai bersama teman atau keluarga di tengah suasana alam"
       ],
-      "safetyNote": null,
+      "safetyNote": "Berhati-hati dengan makanan dan minuman yang masih panas, serta jaga kebersihan area makan dan barang bawaanmu.",
       "infoTitle": "Menu, harga, dan paket piknik",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -280,14 +300,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Jalur khusus untuk berjalan-jalan bersama hewan peliharaan.",
-      "description": "Pet Venture adalah area yang menyediakan jalur untuk berjalan-jalan sambil membawa hewan peliharaan.",
+      "description": "Tahukah Kamu? Pet Venture merupakan area wisata alam tempat pengunjung bisa bertemu dan berinteraksi langsung dengan hewan-hewan lucu. Selain bermain, pengunjung juga bisa belajar mengenal berbagai jenis hewan lebih dekat dengan didampingi petugas.",
+      "narration": "Selamat datang di Pet Venture! Di sini kamu bisa bertemu dan berinteraksi langsung dengan hewan-hewan lucu, sekaligus belajar mengenal mereka lebih dekat. Silakan bermain dan berfoto bersama, dan informasi jenis hewannya bisa kamu lihat di layar. Mohon perlakukan hewan dengan lembut, ikuti arahan petugas, dan orang tua tetap mengawasi anak-anak ya.",
       "activities": [
-        "Berjalan-jalan bersama hewan peliharaan"
+        "Berinteraksi dengan hewan",
+        "Berfoto bersama hewan",
+        "Belajar mengenal jenis-jenis hewan"
       ],
-      "safetyNote": "Gunakan tali pengikat untuk hewan peliharaan dan awasi anak-anak selama berada di jalur.",
+      "safetyNote": "Orang tua harap tetap mengawasi anak-anak, perlakukan hewan dengan lembut, dan ikuti arahan petugas selama berinteraksi.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -301,14 +324,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Toko yang menjual berbagai souvenir Orchid Forest.",
-      "description": "Souvenir Shop adalah tempat yang menjual berbagai souvenir khas Orchid Forest.",
+      "description": "Tahukah Kamu? Souvenir Shop merupakan toko oleh-oleh khas Orchid Forest yang menyediakan berbagai pilihan cendera mata. Tempat ini pas untuk mencari kenang-kenangan, baik untuk diri sendiri, keluarga, maupun teman setelah selesai menjelajah.",
+      "narration": "Selamat datang di Souvenir Shop. Di sini kamu bisa mencari oleh-oleh dan cendera mata khas Orchid Forest Cikole untuk keluarga atau teman. Silakan lihat-lihat dan pilih yang kamu suka, dan informasi produk bisa kamu lihat di layar. Selamat berbelanja dan semoga kenang-kenangannya berkesan ya.",
       "activities": [
-        "Membeli souvenir dan oleh-oleh"
+        "Membeli oleh-oleh dan cendera mata khas Orchid Forest",
+        "Melihat-lihat berbagai pilihan produk",
+        "Mencari hadiah untuk keluarga atau teman"
       ],
-      "safetyNote": "Awasi anak-anak selama berada di dalam toko.",
+      "safetyNote": "Jaga barang bawaan, periksa kembali barang dan harga sebelum membayar, serta rapikan kembali produk yang sudah dilihat.",
       "infoTitle": "Daftar barang dan harga",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -322,14 +348,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Tempat mengabadikan momen bersama teman atau pasangan.",
-      "description": "Photobooth adalah tempat untuk mengabadikan momen bersama teman atau pasangan yang ikut berkunjung.",
+      "description": "Tahukah Kamu? Photobooth merupakan spot foto untuk mengabadikan momen kunjunganmu di Orchid Forest. Kamu bisa berfoto bersama teman atau keluarga lalu membawa pulang hasil fotonya sebagai kenang-kenangan.",
+      "narration": "Selamat datang di Photobooth! Di sini kamu bisa mengabadikan momen kunjungan bersama teman atau keluarga dan membawa pulang kenangan dari Orchid Forest. Siapkan gaya terbaikmu, dan petunjuk penggunaannya ada di layar. Jangan lupa antre dengan tertib ya.",
       "activities": [
-        "Berfoto bersama teman atau pasangan"
+        "Berfoto bersama teman atau keluarga",
+        "Mengabadikan momen kunjungan",
+        "Membawa pulang hasil foto sebagai kenang-kenangan"
       ],
-      "safetyNote": null,
+      "safetyNote": "Antre dengan tertib dan bergantian, serta gunakan perangkat photobooth dengan hati-hati agar tidak rusak.",
       "infoTitle": "Daftar harga",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -343,14 +372,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Tempat bermain dan berjalan-jalan dengan kuda.",
-      "description": "Horse Ranch adalah tempat untuk bermain dan berjalan-jalan dengan kuda.",
+      "description": "Tahukah Kamu? Horse Ranch merupakan area wisata tempat pengunjung bisa menunggangi kuda dan berjalan-jalan bersama kuda di tengah hutan pinus. Selama berkuda, pengunjung akan didampingi instruktur yang siap membantu menjaga keamanan sepanjang perjalanan.",
+      "narration": "Selamat datang di Horse Ranch, tempat kamu bisa mencoba pengalaman seru menunggangi kuda. Di sini kamu tidak hanya melihat kuda dari dekat, tetapi juga bisa berkeliling sambil menikmati suasana hutan pinus yang sejuk dan asri. Tenang saja, kamu akan didampingi instruktur selama berkuda. Sebelum mulai, pastikan kamu mengikuti arahan petugas dan aturan keselamatan ya.",
       "activities": [
-        "Berjalan-jalan dengan kuda"
+        "Menunggangi kuda",
+        "Berjalan-jalan bersama kuda di tengah hutan pinus",
+        "Berfoto bersama kuda"
       ],
-      "safetyNote": "Ikuti arahan petugas, jangan berdiri di belakang kuda, dan awasi anak-anak selama berada di area kuda.",
+      "safetyNote": "Ikuti arahan petugas dan instruktur, patuhi aturan keselamatan sebelum mulai berkuda, jangan membuat kuda terkejut, dan orang tua harap mengawasi anak-anak.",
       "infoTitle": "Jenis kuda yang tersedia",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -364,15 +396,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Permainan catur raksasa.",
-      "description": "Di area ini tersedia permainan catur raksasa yang bisa dimainkan bersama teman atau keluarga.",
+      "description": "Tahukah Kamu? Catur merupakan permainan catur raksasa yang dimainkan layaknya bidak catur sungguhan. Papan dan bidaknya berukuran besar dengan bentuk karakter yang menyerupai tokoh wayang, sehingga bermain di sini terasa berbeda dari catur pada umumnya.",
+      "narration": "Selamat datang di area Catur! Ini adalah salah satu spot unik di Orchid Forest dengan papan dan bidak catur berukuran raksasa. Bidaknya berbentuk karakter yang menyerupai tokoh wayang, jadi bermain di sini terasa berbeda dari biasanya. Ajak teman atau keluargamu bermain bersama dan jangan lupa berfoto. Mohon jangan memindahkan atau menaiki bidak tanpa izin ya.",
       "activities": [
-        "Bermain catur raksasa",
-        "Berfoto"
+        "Bermain catur ukuran raksasa",
+        "Mengabadikan momen dengan berfoto",
+        "Mengajak teman atau keluarga bermain bersama"
       ],
-      "safetyNote": "Angkat bidak catur dengan hati-hati dan awasi anak-anak selama bermain.",
+      "safetyNote": "Jangan memindahkan atau menaiki bidak catur tanpa izin, dan orang tua harap tetap mengawasi anak-anak saat bermain.",
       "infoTitle": null,
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -386,14 +420,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Tempat yang menjual berbagai jenis bunga anggrek.",
-      "description": "Bazaar Anggrek adalah tempat yang menjual berbagai jenis bunga anggrek.",
+      "description": "Tahukah Kamu? Bazaar Anggrek merupakan area tempat menjual berbagai jenis bunga anggrek di Orchid Forest. Pengunjung bisa melihat koleksi anggrek dengan beragam warna dan bentuk, lalu membawa pulang anggrek favorit sebagai kenang-kenangan.",
+      "narration": "Selamat datang di Bazaar Anggrek! Di sini kamu bisa melihat dan membeli berbagai jenis bunga anggrek dengan beragam warna dan bentuk. Silakan berkeliling melihat koleksinya dan bandingkan jenisnya. Kalau tertarik, kamu bisa membawa pulang anggrek favoritmu, dan jangan ragu bertanya kepada penjual tentang jenis dan cara perawatannya. Mohon jangan memetik bunga ya.",
       "activities": [
-        "Berbelanja bunga anggrek"
+        "Berbelanja bunga anggrek",
+        "Melihat ragam jenis anggrek",
+        "Bertanya kepada penjual tentang jenis dan perawatan anggrek"
       ],
-      "safetyNote": "Awasi anak-anak dan hindari menyentuh tanaman yang dipajang tanpa izin penjual.",
+      "safetyNote": "Jangan memetik atau merusak bunga, dan tanyakan kepada penjual untuk informasi jenis, harga, dan cara perawatan sebelum membeli.",
       "infoTitle": "Jenis dan harga anggrek yang dijual",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     },
     {
@@ -407,14 +444,17 @@
       "radiusMeters": 20,
       "coordinateVerified": false,
       "shortDescription": "Arena mini golf untuk bermain bersama teman atau keluarga.",
-      "description": "Putt Putt Golf adalah area permainan mini golf yang bisa dimainkan bersama teman atau keluarga.",
+      "description": "Tahukah Kamu? Putt Putt Golf merupakan area permainan mini golf di tengah hutan pinus dengan lintasan yang dikelilingi suasana sejuk. Permainannya mudah diikuti sehingga cocok untuk semua usia, dari anak-anak sampai dewasa.",
+      "narration": "Selamat datang di Putt Putt Golf! Di sini kamu bisa bermain mini golf dengan lintasan yang dikelilingi suasana hutan pinus yang sejuk. Permainannya mudah diikuti, jadi cocok untuk semua usia. Ajak teman atau keluargamu bertanding, lalu lihat siapa yang paling sedikit memukul bola untuk masuk lubang. Mohon hati-hati saat mengayunkan tongkat dan orang tua tetap mengawasi anak-anak ya.",
       "activities": [
-        "Bermain putt putt golf"
+        "Bermain mini golf",
+        "Bertanding bersama teman atau keluarga",
+        "Mengabadikan momen seru dengan berfoto"
       ],
-      "safetyNote": "Ayunkan stik golf hanya saat giliran Anda dan pastikan tidak ada orang di dekat Anda; awasi anak-anak selama bermain.",
+      "safetyNote": "Orang tua harap mengawasi anak-anak, jangan mengayunkan tongkat golf dekat orang lain, dan jaga lintasan agar tidak rusak.",
       "infoTitle": "Aturan bermain, jam operasional, dan harga tiket",
       "info": null,
-      "source": "PRD Kelompok 11, bagian 4.1 POI Definition",
+      "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null
     }
   ]
