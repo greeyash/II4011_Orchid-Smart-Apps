@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.orchidapps.BuildConfig
 import com.orchidapps.exploration.ExplorationSettings
+import com.orchidapps.location.DemoLocation
 import com.orchidapps.ui.DatasetState
 import com.orchidapps.ui.MainViewModel
 import com.orchidapps.ui.PermissionStatus
@@ -101,6 +102,8 @@ fun SettingsScreen(vm: MainViewModel) {
             )
         }
 
+        if (BuildConfig.DEBUG) DemoLocationCard(vm)
+
         SectionCard("Tentang data") {
             val count = (dataset as? DatasetState.Loaded)?.dataset?.pois?.size ?: 0
             Text(
@@ -109,6 +112,56 @@ fun SettingsScreen(vm: MainViewModel) {
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text("Versi ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = OrchidColors.Muted)
+        }
+    }
+}
+
+/**
+ * Mode Demo Lokasi (hanya di build debug): posisi palsu di Orchid Forest untuk uji pemicu lokasi
+ * dan rekaman video demo tanpa harus berada di lokasi.
+ */
+@Composable
+private fun DemoLocationCard(vm: MainViewModel) {
+    val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
+    val target by DemoLocation.target.collectAsStateWithLifecycle()
+    val dataset by vm.dataset.collectAsStateWithLifecycle()
+    val pois = (dataset as? DatasetState.Loaded)?.dataset?.pois.orEmpty()
+
+    PaperCard(Modifier.fillMaxWidth(), color = OrchidColors.BlushLight) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("Mode Demo Lokasi", style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        "Posisi palsu di Orchid Forest untuk uji pemicu lokasi tanpa ke lokasi. " +
+                            "GPS asli tidak dipakai selama mode ini aktif.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = OrchidColors.Muted,
+                    )
+                }
+                Switch(
+                    checked = demo,
+                    onCheckedChange = DemoLocation::setEnabled,
+                    colors = SwitchDefaults.colors(checkedTrackColor = OrchidColors.Forest),
+                )
+            }
+            if (demo) {
+                Text(
+                    target?.let { "Sedang berjalan ke $it…" }
+                        ?: "Cara pakai: tekan Mulai Jelajah di Peta, lalu jalankan tur otomatis di sini, " +
+                            "atau ketuk penanda POI di peta dan pilih \"Jalan ke sini\".",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                PrimaryButton(
+                    "Mulai Tur Otomatis",
+                    onClick = { DemoLocation.startTour(pois) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SecondaryButton("Berhenti", onClick = DemoLocation::stop, modifier = Modifier.weight(1f))
+                    SecondaryButton("Ke Pintu Masuk", onClick = DemoLocation::reset, modifier = Modifier.weight(1f))
+                }
+            }
         }
     }
 }

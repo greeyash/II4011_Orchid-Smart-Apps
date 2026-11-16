@@ -110,14 +110,6 @@ fun PoiDetailScreen(
                     Text(poi.info ?: "Belum tersedia.", style = MaterialTheme.typography.bodyMedium)
                 }
             }
-
-            Text(
-                "Sumber: ${poi.source}. Dicek: ${poi.checkedAt ?: "belum dicek ke pengelola"}." +
-                    "\nRadius pemicu ${poi.radiusMeters} m" +
-                    if (poi.coordinateVerified) "" else " · koordinat belum diverifikasi di lapangan",
-                style = MaterialTheme.typography.labelSmall,
-                color = OrchidColors.Muted,
-            )
         }
     }
 }
@@ -210,11 +202,6 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
                     InfoTile("Asal", species.origin, Modifier.weight(1f))
                 }
                 NarrationCard(AudioGuide.speciesItem(poi, species))
-                Text(
-                    "Sumber: ${species.source}. Dicek: ${species.checkedAt ?: "belum"}.",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = OrchidColors.Muted,
-                )
             }
         }
         PrimaryButton(

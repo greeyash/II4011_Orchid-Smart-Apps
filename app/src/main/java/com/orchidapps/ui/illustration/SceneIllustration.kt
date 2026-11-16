@@ -35,7 +35,7 @@ private val PetalCenter = Color(0xFFB4506D)
 fun sceneFor(poi: Poi): SceneSubject = when (poi.id) {
     "P01" -> SceneSubject.BRIDGE
     "P02" -> SceneSubject.CASTLE
-    "P04", "P16", "P18" -> SceneSubject.GREENHOUSE
+    "P04", "P16" -> SceneSubject.GREENHOUSE
     "P07", "P13", "P15" -> SceneSubject.FLOWER
     "P08", "P11", "P14" -> SceneSubject.RABBIT
     "P06" -> SceneSubject.TREES

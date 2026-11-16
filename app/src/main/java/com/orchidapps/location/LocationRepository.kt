@@ -16,7 +16,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
@@ -49,12 +51,14 @@ class LocationRepository(private val context: Context) {
             PackageManager.PERMISSION_GRANTED
 
     fun isLocationEnabled(): Boolean {
+        if (DemoLocation.enabled.value) return true
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return LocationManagerCompat.isLocationEnabled(manager)
     }
 
     @SuppressLint("MissingPermission")
     suspend fun currentLocation(): UserLocation? {
+        if (DemoLocation.enabled.value) return DemoLocation.current()
         if (!hasPermission()) return null
         val cts = CancellationTokenSource()
         return try {
@@ -65,9 +69,18 @@ class LocationRepository(private val context: Context) {
         }
     }
 
-    /** Pembaruan posisi berkala selama layar aktif; berhenti saat collector dibatalkan. */
+    /**
+     * Pembaruan posisi berkala; berhenti saat collector dibatalkan. Selama Mode Demo Lokasi aktif,
+     * posisi diambil dari [DemoLocation] sebagai pengganti GPS.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun locationUpdates(intervalMillis: Long = UPDATE_INTERVAL_MS): Flow<UserLocation> =
+        DemoLocation.enabled.flatMapLatest { demo ->
+            if (demo) DemoLocation.updates() else gpsUpdates(intervalMillis)
+        }
+
     @SuppressLint("MissingPermission")
-    fun locationUpdates(intervalMillis: Long = UPDATE_INTERVAL_MS): Flow<UserLocation> = callbackFlow {
+    private fun gpsUpdates(intervalMillis: Long): Flow<UserLocation> = callbackFlow {
         if (!hasPermission()) {
             close()
             return@callbackFlow
