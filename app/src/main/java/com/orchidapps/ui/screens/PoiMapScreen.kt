@@ -55,6 +55,7 @@ import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiArea
 import com.orchidapps.data.PoiCategory
 import com.orchidapps.exploration.ExplorationSettings
+import com.orchidapps.location.DemoLocation
 import com.orchidapps.location.Geo
 import com.orchidapps.location.UserLocation
 import com.orchidapps.ui.DatasetState
@@ -96,6 +97,8 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val autoPlay by settings.autoPlay.collectAsStateWithLifecycle()
     val narration by rememberNarrationPlayer().state.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
+    val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
+    val demoTarget by DemoLocation.target.collectAsStateWithLifecycle()
 
     var category by rememberSaveable { mutableStateOf<PoiCategory?>(null) }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -128,10 +131,11 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (active || locationState.showWeakGps) {
+            if (active || demo || locationState.showWeakGps) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
-                    if (locationState.showWeakGps) WeakGpsBadge()
+                    if (demo) Pill(demoTarget?.let { "Demo · menuju $it" } ?: "Mode demo lokasi")
+                    if (locationState.showWeakGps && !demo) WeakGpsBadge()
                 }
             }
             SearchBarButton(onClick = onOpenSearch)
@@ -165,6 +169,14 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                     user = locationState.location,
                     onOpen = { onOpenPoi(selected.id) },
                     onClose = { selectedId = null },
+                    onDemoWalk = if (demo) {
+                        {
+                            DemoLocation.walkTo(selected)
+                            selectedId = null
+                        }
+                    } else {
+                        null
+                    },
                 )
                 active -> {
                     if (narration.isActive && narration.status != NarrationStatus.IDLE) MiniPlayerBar()
@@ -284,6 +296,7 @@ private fun PoiPreviewCard(
     user: UserLocation?,
     onOpen: () -> Unit,
     onClose: () -> Unit,
+    onDemoWalk: (() -> Unit)?,
 ) {
     PaperCard(Modifier.fillMaxWidth(), elevated = true) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -317,6 +330,10 @@ private fun PoiPreviewCard(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PrimaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
                 SecondaryButton("Tutup", onClick = onClose)
+            }
+            // Mode Demo Lokasi: posisi palsu berjalan ke POI ini untuk menguji pemicu lokasi.
+            onDemoWalk?.let {
+                PinkButton("Jalan ke sini (demo)", onClick = it, modifier = Modifier.fillMaxWidth())
             }
         }
     }
