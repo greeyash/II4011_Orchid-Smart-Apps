@@ -121,6 +121,12 @@ class NarrationPlayer private constructor(context: Context) {
 
     fun pause() = player.pause()
 
+    /** Posisi dan durasi narasi (milidetik) untuk progress bar; durasi 0 bila belum diketahui. */
+    fun progress(): Pair<Long, Long> {
+        val duration = player.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
+        return player.currentPosition.coerceAtLeast(0L) to duration
+    }
+
     fun resume() {
         if (player.playbackState == Player.STATE_ENDED) player.seekTo(0)
         player.play()

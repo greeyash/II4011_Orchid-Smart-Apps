@@ -1,24 +1,36 @@
 package com.orchidapps.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -26,9 +38,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -36,13 +50,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.orchidapps.audio.NarrationStatus
 import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiArea
 import com.orchidapps.data.PoiCategory
+import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.location.Geo
 import com.orchidapps.location.UserLocation
 import com.orchidapps.ui.DatasetState
 import com.orchidapps.ui.MainViewModel
+import com.orchidapps.ui.PermissionStatus
+import com.orchidapps.ui.rememberLocationPermissionRequest
+import com.orchidapps.ui.rememberStartExploration
+import com.orchidapps.ui.theme.OrchidColors
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -53,7 +73,6 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.style.expressions.Expression
 import org.maplibre.android.style.layers.CircleLayer
 import org.maplibre.android.style.layers.FillLayer
-import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.layers.SymbolLayer
 import org.maplibre.android.style.sources.GeoJsonSource
@@ -62,47 +81,242 @@ import org.maplibre.geojson.FeatureCollection
 import org.maplibre.geojson.Point
 import org.maplibre.geojson.Polygon
 
-/** Peta kawasan dengan titik POI, radius pemicu, dan posisi pengguna (PB04). */
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Layar utama Peta (L02 sebelum jelajah, L02-B ringkasan POI, L03 jelajah aktif; PB04, PB08).
+ * Peta menampilkan posisi pengguna dan penanda POI bernomor; panel bawah berganti sesuai kondisi.
+ */
 @Composable
-fun PoiMapScreen(vm: MainViewModel, onBack: () -> Unit, onOpenPoi: (String) -> Unit) {
+fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String) -> Unit) {
+    val context = LocalContext.current
     val datasetState by vm.dataset.collectAsStateWithLifecycle()
     val locationState by vm.location.collectAsStateWithLifecycle()
+    val active by vm.explorationActive.collectAsStateWithLifecycle()
+    val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
+    val settings = remember { ExplorationSettings.get(context) }
+    val autoPlay by settings.autoPlay.collectAsStateWithLifecycle()
+    val narration by rememberNarrationPlayer().state.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
-    val explorationActive by vm.explorationActive.collectAsStateWithLifecycle()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Peta Orchid Forest") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Kembali")
-                    }
-                },
-                actions = {
-                    // UI04: tombol Akhiri Jelajah di peta selama sesi aktif.
-                    if (explorationActive) {
-                        TextButton(onClick = vm::endExploration) { Text("Akhiri Jelajah") }
-                    }
-                },
-            )
-        },
-    ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
-            if (dataset == null) {
-                Text("Memuat data POI…", Modifier.align(Alignment.Center))
-                return@Box
-            }
+    var category by rememberSaveable { mutableStateOf<PoiCategory?>(null) }
+    var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
+    var recenter by remember { mutableStateOf(0) }
+    val startExploration = rememberStartExploration(vm)
+    val requestPermission = rememberLocationPermissionRequest(vm)
+
+    Box(Modifier.fillMaxSize().background(OrchidColors.MapGreen)) {
+        if (dataset != null) {
+            val pois = dataset.pois.filter { category == null || it.category == category }
             PoiMap(
                 area = dataset.area,
-                pois = dataset.pois,
+                pois = pois,
+                visited = visited,
+                selectedId = selectedId,
                 user = locationState.location,
-                onPoiClick = onOpenPoi,
+                recenterSignal = recenter,
+                onPoiClick = { selectedId = it },
                 modifier = Modifier.fillMaxSize(),
             )
-            if (locationState.showWeakGps) {
-                WeakGpsBadge(Modifier.align(Alignment.TopStart).padding(12.dp))
+        } else {
+            Text("Memuat data POI…", Modifier.align(Alignment.Center))
+        }
+
+        // Atas: status, kolom cari, filter kategori.
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (active || locationState.showWeakGps) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
+                    if (locationState.showWeakGps) WeakGpsBadge()
+                }
+            }
+            SearchBarButton(onClick = onOpenSearch)
+            CategoryChips(category, onChange = { category = it }, Modifier.fillMaxWidth())
+        }
+
+        // Kanan: tombol ke posisi saya.
+        if (locationState.location != null) {
+            CircleIconButton(
+                Icons.Filled.MyLocation,
+                contentDescription = "Ke posisi saya",
+                onClick = { recenter++ },
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 16.dp),
+            )
+        }
+
+        // Bawah: ringkasan POI / siap menjelajah / jelajah aktif.
+        val selected = dataset?.pois?.firstOrNull { it.id == selectedId }
+        Column(
+            Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            when {
+                selected != null -> PoiPreviewCard(
+                    poi = selected,
+                    visited = selected.id in visited,
+                    user = locationState.location,
+                    onOpen = { onOpenPoi(selected.id) },
+                    onClose = { selectedId = null },
+                )
+                active -> {
+                    if (narration.isActive && narration.status != NarrationStatus.IDLE) MiniPlayerBar()
+                    SecondaryButton(
+                        "Akhiri Jelajah",
+                        onClick = vm::endExploration,
+                        icon = Icons.Filled.Stop,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                else -> ReadyCard(
+                    hasPermission = locationState.permission == PermissionStatus.GRANTED,
+                    autoPlay = autoPlay,
+                    onAutoPlayChange = settings::setAutoPlay,
+                    onStart = startExploration,
+                    onRequestPermission = requestPermission,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchBarButton(onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = OrchidColors.Paper,
+        shadowElevation = 2.dp,
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+    ) {
+        Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Filled.Search, contentDescription = null, tint = OrchidColors.ForestDark)
+            Text(
+                "Cari tempat atau kegiatan",
+                Modifier.weight(1f).padding(start = 12.dp),
+                color = OrchidColors.Muted,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Icon(Icons.Filled.Tune, contentDescription = null, tint = OrchidColors.ForestDark)
+        }
+    }
+}
+
+/** Chip kategori: Semua, Wisata Alam, Wisata Tempat, Tempat Makan (F05). */
+@Composable
+fun CategoryChips(selected: PoiCategory?, onChange: (PoiCategory?) -> Unit, modifier: Modifier = Modifier) {
+    Row(
+        modifier.horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        (listOf<PoiCategory?>(null) + PoiCategory.entries).forEach { c ->
+            FilterChip(
+                selected = selected == c,
+                onClick = { onChange(if (selected == c) null else c) },
+                label = { Text(c?.label ?: "Semua") },
+                shape = CircleShape,
+                border = null,
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = OrchidColors.Paper,
+                    labelColor = OrchidColors.ForestDark,
+                    selectedContainerColor = OrchidColors.Forest,
+                    selectedLabelColor = OrchidColors.Paper,
+                ),
+            )
+        }
+    }
+}
+
+/** "Siap menjelajah?" (L02): Audio Otomatis dan tombol Mulai Jelajah. */
+@Composable
+private fun ReadyCard(
+    hasPermission: Boolean,
+    autoPlay: Boolean,
+    onAutoPlayChange: (Boolean) -> Unit,
+    onStart: () -> Unit,
+    onRequestPermission: () -> Unit,
+) {
+    PaperCard(Modifier.fillMaxWidth(), elevated = true) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Siap menjelajah?", style = MaterialTheme.typography.titleLarge)
+            Text(
+                if (hasPermission) "Pakai earphone, lalu simpan ponsel Anda."
+                else "Izinkan lokasi agar aplikasi memberi tahu saat Anda tiba di titik wisata.",
+                style = MaterialTheme.typography.bodySmall,
+                color = OrchidColors.Muted,
+            )
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(OrchidColors.Cream)
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("Audio Otomatis", Modifier.weight(1f), style = MaterialTheme.typography.labelLarge)
+                Switch(
+                    checked = autoPlay,
+                    onCheckedChange = onAutoPlayChange,
+                    colors = SwitchDefaults.colors(checkedTrackColor = OrchidColors.Forest),
+                )
+            }
+            if (hasPermission) {
+                PrimaryButton("Mulai Jelajah", onClick = onStart, modifier = Modifier.fillMaxWidth())
+            } else {
+                PrimaryButton("Izinkan Lokasi", onClick = onRequestPermission, modifier = Modifier.fillMaxWidth())
+            }
+        }
+    }
+}
+
+/** Ringkasan POI yang diketuk di peta (L02-B, UI21). */
+@Composable
+private fun PoiPreviewCard(
+    poi: Poi,
+    visited: Boolean,
+    user: UserLocation?,
+    onOpen: () -> Unit,
+    onClose: () -> Unit,
+) {
+    PaperCard(Modifier.fillMaxWidth(), elevated = true) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .size(width = 36.dp, height = 4.dp)
+                    .clip(CircleShape)
+                    .background(OrchidColors.Blush),
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                PoiImage(poi, Modifier.size(64.dp).clip(RoundedCornerShape(14.dp)), showFlowers = false)
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(poi.name, style = MaterialTheme.typography.titleLarge)
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Pill(poi.category.label)
+                        if (visited) Pill("Sudah dikunjungi", style = PillStyle.DARK, leading = "✓")
+                        else Pill("Belum dikunjungi", style = PillStyle.LIGHT, leading = "•")
+                    }
+                    user?.let {
+                        val d = Geo.distanceMeters(it.lat, it.lng, poi.lat, poi.lng)
+                        Text(
+                            "${formatDistance(d)} · ±${Geo.walkingMinutes(d)} menit jalan kaki",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = OrchidColors.Muted,
+                        )
+                    }
+                }
+            }
+            Text(poi.shortDescription, style = MaterialTheme.typography.bodyMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                PrimaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
+                SecondaryButton("Tutup", onClick = onClose)
             }
         }
     }
@@ -112,7 +326,10 @@ fun PoiMapScreen(vm: MainViewModel, onBack: () -> Unit, onOpenPoi: (String) -> U
 private fun PoiMap(
     area: PoiArea,
     pois: List<Poi>,
+    visited: Set<String>,
+    selectedId: String?,
     user: UserLocation?,
+    recenterSignal: Int,
     onPoiClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -148,12 +365,15 @@ private fun PoiMap(
 
     LaunchedEffect(mapView) {
         mapView.getMapAsync { m ->
+            m.uiSettings.isCompassEnabled = false
+            m.uiSettings.isAttributionEnabled = false
+            m.uiSettings.isLogoEnabled = false
             m.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(area.centerLat, area.centerLng))
                 .zoom(INITIAL_ZOOM)
                 .build()
             val onStyleLoaded = Style.OnStyleLoaded { s ->
-                addPoiLayers(s, withLabels = !offline)
+                addPoiLayers(s, withNumbers = !offline)
                 style = s
             }
             // Tanpa internet peta dasar gagal dimuat; POI dan posisi tetap digambar di atas latar polos.
@@ -175,10 +395,10 @@ private fun PoiMap(
         }
     }
 
-    LaunchedEffect(style, pois) {
+    LaunchedEffect(style, pois, visited, selectedId) {
         val s = style ?: return@LaunchedEffect
         s.getSourceAs<GeoJsonSource>(SOURCE_POI_AREA)?.setGeoJson(poiAreas(pois))
-        s.getSourceAs<GeoJsonSource>(SOURCE_POI_POINT)?.setGeoJson(poiPoints(pois))
+        s.getSourceAs<GeoJsonSource>(SOURCE_POI_POINT)?.setGeoJson(poiPoints(pois, visited, selectedId))
     }
 
     LaunchedEffect(style, user) {
@@ -187,13 +407,20 @@ private fun PoiMap(
         s.getSourceAs<GeoJsonSource>(SOURCE_USER)?.setGeoJson(userPoint(user))
     }
 
+    LaunchedEffect(recenterSignal) {
+        if (recenterSignal > 0 && user != null) {
+            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(user.lat, user.lng), USER_ZOOM))
+        }
+    }
+
     Box(modifier) {
         AndroidView(factory = { mapView }, modifier = Modifier.fillMaxSize())
-
         if (offline) {
             Surface(
-                modifier = Modifier.align(Alignment.TopCenter).padding(12.dp).fillMaxWidth(),
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(24.dp),
+                color = OrchidColors.Paper,
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(
@@ -203,45 +430,10 @@ private fun PoiMap(
                 )
             }
         }
-
-        Column(
-            Modifier.align(Alignment.BottomStart).padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            PoiCategory.entries.forEach { MapLegendItem(it) }
-        }
-
-        if (user != null) {
-            SmallFloatingActionButton(
-                onClick = {
-                    map?.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(LatLng(user.lat, user.lng), USER_ZOOM)
-                    )
-                },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
-            ) {
-                Icon(Icons.Filled.MyLocation, contentDescription = "Ke posisi saya")
-            }
-        }
     }
 }
 
-@Composable
-private fun MapLegendItem(category: PoiCategory) {
-    Surface(
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-        shape = MaterialTheme.shapes.small,
-    ) {
-        Text(
-            "● ${category.label}",
-            Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-            style = MaterialTheme.typography.labelSmall,
-            color = androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(category.mapColor)),
-        )
-    }
-}
-
-private fun addPoiLayers(style: Style, withLabels: Boolean) {
+private fun addPoiLayers(style: Style, withNumbers: Boolean) {
     style.addSource(GeoJsonSource(SOURCE_POI_AREA))
     style.addSource(GeoJsonSource(SOURCE_POI_POINT))
     style.addSource(GeoJsonSource(SOURCE_USER_ACCURACY))
@@ -249,35 +441,28 @@ private fun addPoiLayers(style: Style, withLabels: Boolean) {
 
     style.addLayer(
         FillLayer(LAYER_POI_AREA, SOURCE_POI_AREA).withProperties(
-            PropertyFactory.fillColor(Expression.get(PROP_COLOR)),
-            PropertyFactory.fillOpacity(0.18f),
+            PropertyFactory.fillColor(BLUSH),
+            PropertyFactory.fillOpacity(0.25f),
         )
     )
-    style.addLayer(
-        LineLayer("poi-area-line", SOURCE_POI_AREA).withProperties(
-            PropertyFactory.lineColor(Expression.get(PROP_COLOR)),
-            PropertyFactory.lineWidth(1.5f),
-        )
-    )
+    // Penanda POI: lingkaran pink bernomor; POI terpilih/sudah dikunjungi berwarna hijau tua.
     style.addLayer(
         CircleLayer(LAYER_POI_DOT, SOURCE_POI_POINT).withProperties(
-            PropertyFactory.circleRadius(8f),
-            PropertyFactory.circleColor(Expression.get(PROP_COLOR)),
-            PropertyFactory.circleStrokeColor("#FFFFFF"),
-            PropertyFactory.circleStrokeWidth(2f),
+            PropertyFactory.circleRadius(Expression.get(PROP_RADIUS)),
+            PropertyFactory.circleColor(Expression.get(PROP_FILL)),
+            PropertyFactory.circleStrokeColor(FOREST),
+            PropertyFactory.circleStrokeWidth(1.5f),
         )
     )
-    if (withLabels) {
+    if (withNumbers) {
         style.addLayer(
-            SymbolLayer("poi-label", SOURCE_POI_POINT).withProperties(
-                PropertyFactory.textField(Expression.get(PROP_NAME)),
-                PropertyFactory.textFont(arrayOf("Noto Sans Regular")),
-                PropertyFactory.textSize(13f),
-                PropertyFactory.textOffset(arrayOf(0f, 1.3f)),
-                PropertyFactory.textAnchor("top"),
-                PropertyFactory.textColor("#1B1B1B"),
-                PropertyFactory.textHaloColor("#FFFFFF"),
-                PropertyFactory.textHaloWidth(1.5f),
+            SymbolLayer("poi-number", SOURCE_POI_POINT).withProperties(
+                PropertyFactory.textField(Expression.get(PROP_NUMBER)),
+                PropertyFactory.textFont(arrayOf("Noto Sans Bold")),
+                PropertyFactory.textSize(12f),
+                PropertyFactory.textColor(Expression.get(PROP_TEXT)),
+                PropertyFactory.textAllowOverlap(true),
+                PropertyFactory.textIgnorePlacement(true),
             )
         )
     }
@@ -306,17 +491,19 @@ private fun poiAreas(pois: List<Poi>) = FeatureCollection.fromFeatures(
     pois.map { poi ->
         Feature.fromGeometry(circle(poi.lat, poi.lng, poi.radiusMeters.toDouble())).apply {
             addStringProperty(PROP_ID, poi.id)
-            addStringProperty(PROP_COLOR, poi.category.mapColor)
         }
     }
 )
 
-private fun poiPoints(pois: List<Poi>) = FeatureCollection.fromFeatures(
+private fun poiPoints(pois: List<Poi>, visited: Set<String>, selectedId: String?) = FeatureCollection.fromFeatures(
     pois.map { poi ->
+        val highlighted = poi.id == selectedId || poi.id in visited
         Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)).apply {
             addStringProperty(PROP_ID, poi.id)
-            addStringProperty(PROP_NAME, poi.name)
-            addStringProperty(PROP_COLOR, poi.category.mapColor)
+            addStringProperty(PROP_NUMBER, poi.number())
+            addStringProperty(PROP_FILL, if (highlighted) FOREST else BLUSH)
+            addStringProperty(PROP_TEXT, if (highlighted) "#FEFCF7" else FOREST)
+            addNumberProperty(PROP_RADIUS, if (poi.id == selectedId) 15f else 12f)
         }
     }
 )
@@ -331,21 +518,16 @@ private fun userAccuracy(user: UserLocation?) = FeatureCollection.fromFeatures(
     )
 )
 
-private val PoiCategory.mapColor: String
-    get() = when (this) {
-        PoiCategory.WISATA_ALAM -> "#2E7D32"
-        PoiCategory.WISATA_TEMPAT -> "#6A1B9A"
-        PoiCategory.TEMPAT_MAKAN -> "#E65100"
-    }
-
 /** Gaya peta dasar OpenFreeMap (gratis, tanpa API key). */
-private const val STYLE_URL = "https://tiles.openfreemap.org/styles/liberty"
+private const val STYLE_URL = "https://tiles.openfreemap.org/styles/positron"
 private const val FALLBACK_STYLE =
-    """{"version":8,"sources":{},"layers":[{"id":"bg","type":"background","paint":{"background-color":"#E8EFE3"}}]}"""
+    """{"version":8,"sources":{},"layers":[{"id":"bg","type":"background","paint":{"background-color":"#E5E9DA"}}]}"""
 
 private const val INITIAL_ZOOM = 17.0
 private const val USER_ZOOM = 18.0
 private const val USER_COLOR = "#1565C0"
+private const val BLUSH = "#F6C2CF"
+private const val FOREST = "#324A3A"
 
 private const val SOURCE_POI_AREA = "poi-area"
 private const val SOURCE_POI_POINT = "poi-point"
@@ -354,5 +536,7 @@ private const val SOURCE_USER = "user"
 private const val LAYER_POI_AREA = "poi-area-fill"
 private const val LAYER_POI_DOT = "poi-dot"
 private const val PROP_ID = "id"
-private const val PROP_NAME = "name"
-private const val PROP_COLOR = "color"
+private const val PROP_NUMBER = "number"
+private const val PROP_FILL = "fill"
+private const val PROP_TEXT = "text"
+private const val PROP_RADIUS = "radius"

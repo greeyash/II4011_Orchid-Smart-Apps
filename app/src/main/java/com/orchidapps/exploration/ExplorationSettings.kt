@@ -19,8 +19,16 @@ class ExplorationSettings private constructor(context: Context) {
         _autoPlay.value = enabled
     }
 
+    /** Layar sambutan (S00) hanya tampil saat aplikasi pertama kali dibuka. */
+    val welcomeSeen: Boolean get() = prefs.getBoolean(KEY_WELCOME_SEEN, false)
+
+    fun markWelcomeSeen() {
+        prefs.edit().putBoolean(KEY_WELCOME_SEEN, true).apply()
+    }
+
     companion object {
         private const val KEY_AUTO_PLAY = "auto_play"
+        private const val KEY_WELCOME_SEEN = "welcome_seen"
 
         @Volatile
         private var instance: ExplorationSettings? = null
