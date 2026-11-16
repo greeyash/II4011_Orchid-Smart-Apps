@@ -2,11 +2,12 @@ package com.orchidapps
 
 import com.orchidapps.audio.AudioGuide
 import com.orchidapps.data.PoiRepository
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
-/** PRD 4.1: pengingat keselamatan dibacakan sebelum narasi. */
+/** Narasi POI: naskah tim dipakai bila ada; narasi otomatis mendahulukan pengingat keselamatan (PRD 4.1). */
 class NarrationTest {
 
     private val pois = PoiRepository.parseDataset(
@@ -15,7 +16,7 @@ class NarrationTest {
 
     @Test
     fun safetyNoteIsReadBeforeDescription() {
-        pois.filter { it.safetyNote != null }.forEach { poi ->
+        pois.filter { it.safetyNote != null }.map { it.copy(narration = null) }.forEach { poi ->
             val text = AudioGuide.narration(poi)
             assertTrue(poi.id, text.indexOf(poi.safetyNote!!) < text.indexOf(poi.description))
         }
@@ -23,12 +24,16 @@ class NarrationTest {
 
     @Test
     fun narrationMentionsPoiName() {
-        pois.forEach { assertTrue(it.id, AudioGuide.narration(it).contains(it.name)) }
+        pois.forEach { poi ->
+            val text = AudioGuide.narration(poi).lowercase()
+            val names = listOf(poi.name.lowercase()) + poi.aliases
+            assertTrue(poi.id, names.any { text.contains(it) })
+        }
     }
 
     @Test
     fun orchidMuseumNarrationListsSpecies() {
-        val orchidHouse = pois.first { it.id == "P04" }
+        val orchidHouse = pois.first { it.id == "P04" }.copy(narration = null)
         val text = AudioGuide.narration(orchidHouse)
         orchidHouse.species.forEach { assertTrue(it.name, text.contains(it.name)) }
     }
@@ -40,5 +45,11 @@ class NarrationTest {
             val text = AudioGuide.speciesNarration(it)
             assertTrue(it.id, text.contains(it.latinName) && text.contains(it.characteristics) && text.contains(it.origin))
         }
+    }
+
+    @Test
+    fun teamScriptIsUsedWhenAvailable() {
+        pois.filter { it.narration != null }.forEach { assertEquals(it.id, it.narration, AudioGuide.narration(it)) }
+        assertTrue(pois.all { it.narration != null })
     }
 }
