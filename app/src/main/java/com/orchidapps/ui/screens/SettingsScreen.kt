@@ -102,7 +102,7 @@ fun SettingsScreen(vm: MainViewModel) {
             )
         }
 
-        if (BuildConfig.DEBUG) DemoLocationCard(vm)
+        if (BuildConfig.DEBUG) DemoLocationCard()
 
         SectionCard("Tentang data") {
             val count = (dataset as? DatasetState.Loaded)?.dataset?.pois?.size ?: 0
@@ -118,14 +118,11 @@ fun SettingsScreen(vm: MainViewModel) {
 
 /**
  * Mode Demo Lokasi (hanya di build debug): posisi palsu di Orchid Forest untuk uji pemicu lokasi
- * dan rekaman video demo tanpa harus berada di lokasi.
+ * dan rekaman video demo tanpa harus berada di lokasi. Posisi digerakkan dengan joystick di peta.
  */
 @Composable
-private fun DemoLocationCard(vm: MainViewModel) {
+private fun DemoLocationCard() {
     val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
-    val target by DemoLocation.target.collectAsStateWithLifecycle()
-    val dataset by vm.dataset.collectAsStateWithLifecycle()
-    val pois = (dataset as? DatasetState.Loaded)?.dataset?.pois.orEmpty()
 
     PaperCard(Modifier.fillMaxWidth(), color = OrchidColors.BlushLight) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -147,20 +144,11 @@ private fun DemoLocationCard(vm: MainViewModel) {
             }
             if (demo) {
                 Text(
-                    target?.let { "Sedang berjalan ke $it…" }
-                        ?: "Cara pakai: tekan Mulai Jelajah di Peta, lalu jalankan tur otomatis di sini, " +
-                            "atau ketuk penanda POI di peta dan pilih \"Jalan ke sini\".",
+                    "Cara pakai: buka Peta, tekan Mulai Jelajah, lalu geser joystick di sisi kiri peta " +
+                        "untuk berjalan ke titik wisata mana pun.",
                     style = MaterialTheme.typography.bodySmall,
                 )
-                PrimaryButton(
-                    "Mulai Tur Otomatis",
-                    onClick = { DemoLocation.startTour(pois) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SecondaryButton("Berhenti", onClick = DemoLocation::stop, modifier = Modifier.weight(1f))
-                    SecondaryButton("Ke Pintu Masuk", onClick = DemoLocation::reset, modifier = Modifier.weight(1f))
-                }
+                SecondaryButton("Kembali ke Pintu Masuk", onClick = DemoLocation::reset, modifier = Modifier.fillMaxWidth())
             }
         }
     }

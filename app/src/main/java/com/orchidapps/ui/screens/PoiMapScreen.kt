@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -98,7 +99,6 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val narration by rememberNarrationPlayer().state.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
     val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
-    val demoTarget by DemoLocation.target.collectAsStateWithLifecycle()
 
     var category by rememberSaveable { mutableStateOf<PoiCategory?>(null) }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -135,7 +135,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
             if (active || demo || locationState.showWeakGps) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
-                    if (demo) Pill(demoTarget?.let { "Demo · menuju $it" } ?: "Mode demo lokasi")
+                    if (demo) Pill("Mode demo lokasi")
                     if (locationState.showWeakGps && !demo) WeakGpsBadge()
                 }
             }
@@ -155,6 +155,16 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
             )
         }
 
+        // Mode Demo Lokasi: joystick untuk menggerakkan posisi seolah berjalan sendiri.
+        if (demo) {
+            DemoJoystick(
+                Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
+                    .offset(y = 40.dp),
+            )
+        }
+
         // Bawah: ringkasan POI / siap menjelajah / jelajah aktif.
         val selected = dataset?.pois?.firstOrNull { it.id == selectedId }
         Column(
@@ -170,14 +180,6 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                     user = locationState.location,
                     onOpen = { onOpenPoi(selected.id) },
                     onClose = { selectedId = null },
-                    onDemoWalk = if (demo) {
-                        {
-                            DemoLocation.walkTo(selected)
-                            selectedId = null
-                        }
-                    } else {
-                        null
-                    },
                 )
                 active -> {
                     if (narration.isActive && narration.status != NarrationStatus.IDLE) MiniPlayerBar()
@@ -297,7 +299,6 @@ private fun PoiPreviewCard(
     user: UserLocation?,
     onOpen: () -> Unit,
     onClose: () -> Unit,
-    onDemoWalk: (() -> Unit)?,
 ) {
     PaperCard(Modifier.fillMaxWidth(), elevated = true) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -331,10 +332,6 @@ private fun PoiPreviewCard(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PrimaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
                 SecondaryButton("Tutup", onClick = onClose)
-            }
-            // Mode Demo Lokasi: posisi palsu berjalan ke POI ini untuk menguji pemicu lokasi.
-            onDemoWalk?.let {
-                PinkButton("Jalan ke sini (demo)", onClick = it, modifier = Modifier.fillMaxWidth())
             }
         }
     }
@@ -391,6 +388,8 @@ private fun PoiMap(
             m.uiSettings.isCompassEnabled = false
             m.uiSettings.isAttributionEnabled = false
             m.uiSettings.isLogoEnabled = false
+            // Peta selalu menghadap utara agar arah joystick demo sesuai arah di layar.
+            m.uiSettings.isRotateGesturesEnabled = false
             m.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(area.centerLat, area.centerLng))
                 .zoom(INITIAL_ZOOM)
@@ -435,7 +434,7 @@ private fun PoiMap(
     LaunchedEffect(map, user, followUser) {
         val m = map ?: return@LaunchedEffect
         if (followUser && user != null) {
-            m.easeCamera(CameraUpdateFactory.newLatLng(LatLng(user.lat, user.lng)), 800)
+            m.easeCamera(CameraUpdateFactory.newLatLng(LatLng(user.lat, user.lng)), 450)
         }
     }
 
