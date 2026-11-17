@@ -116,6 +116,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 selectedId = selectedId,
                 user = locationState.location,
                 recenterSignal = recenter,
+                followUser = demo,
                 onPoiClick = { selectedId = it },
                 modifier = Modifier.fillMaxSize(),
             )
@@ -347,10 +348,15 @@ private fun PoiMap(
     selectedId: String?,
     user: UserLocation?,
     recenterSignal: Int,
+    followUser: Boolean,
     onPoiClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    // Pusat peta digeser agar titik posisi tidak tertutup kolom cari (atas) dan kartu (bawah).
+    val topPadPx = with(density) { 170.dp.toPx() }.toDouble()
+    val bottomPadPx = with(density) { 300.dp.toPx() }.toDouble()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val mapView = remember {
         MapLibre.getInstance(context)
@@ -388,6 +394,7 @@ private fun PoiMap(
             m.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(area.centerLat, area.centerLng))
                 .zoom(INITIAL_ZOOM)
+                .padding(0.0, topPadPx, 0.0, bottomPadPx)
                 .build()
             val onStyleLoaded = Style.OnStyleLoaded { s ->
                 addPoiLayers(s, withNumbers = !offline)
@@ -422,6 +429,14 @@ private fun PoiMap(
         val s = style ?: return@LaunchedEffect
         s.getSourceAs<GeoJsonSource>(SOURCE_USER_ACCURACY)?.setGeoJson(userAccuracy(user))
         s.getSourceAs<GeoJsonSource>(SOURCE_USER)?.setGeoJson(userPoint(user))
+    }
+
+    // Mode Demo Lokasi: kamera mengikuti titik posisi agar selalu terlihat selama "berjalan".
+    LaunchedEffect(map, user, followUser) {
+        val m = map ?: return@LaunchedEffect
+        if (followUser && user != null) {
+            m.easeCamera(CameraUpdateFactory.newLatLng(LatLng(user.lat, user.lng)), 800)
+        }
     }
 
     LaunchedEffect(recenterSignal) {
@@ -491,7 +506,7 @@ private fun addPoiLayers(style: Style, withNumbers: Boolean) {
     )
     style.addLayer(
         CircleLayer("user-dot", SOURCE_USER).withProperties(
-            PropertyFactory.circleRadius(7f),
+            PropertyFactory.circleRadius(9f),
             PropertyFactory.circleColor(USER_COLOR),
             PropertyFactory.circleStrokeColor("#FFFFFF"),
             PropertyFactory.circleStrokeWidth(2.5f),
