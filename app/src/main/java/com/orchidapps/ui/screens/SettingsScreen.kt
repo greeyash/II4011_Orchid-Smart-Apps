@@ -27,6 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.orchidapps.BuildConfig
 import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.location.DemoLocation
+import com.orchidapps.map.OfflineMapState
+import com.orchidapps.map.OfflineMaps
 import com.orchidapps.ui.DatasetState
 import com.orchidapps.ui.MainViewModel
 import com.orchidapps.ui.PermissionStatus
@@ -102,13 +104,14 @@ fun SettingsScreen(vm: MainViewModel) {
             )
         }
 
+        OfflineMapCard(vm)
+
         if (BuildConfig.DEBUG) DemoLocationCard()
 
         SectionCard("Tentang data") {
             val count = (dataset as? DatasetState.Loaded)?.dataset?.pois?.size ?: 0
             Text(
-                "$count titik wisata tersimpan di perangkat dan bisa dibuka tanpa internet. " +
-                    "Peta dasar masih membutuhkan internet.",
+                "$count titik wisata, foto, dan audio tersimpan di perangkat dan bisa dibuka tanpa internet.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text("Versi ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelSmall, color = OrchidColors.Muted)
@@ -150,6 +153,39 @@ private fun DemoLocationCard() {
                 )
                 SecondaryButton("Kembali ke Pintu Masuk", onClick = DemoLocation::reset, modifier = Modifier.fillMaxWidth())
             }
+        }
+    }
+}
+
+/** Status peta offline (PB15, A01) dan tombol unduh ulang. */
+@Composable
+private fun OfflineMapCard(vm: MainViewModel) {
+    val context = LocalContext.current
+    val state by OfflineMaps.state.collectAsStateWithLifecycle()
+    val dataset by vm.dataset.collectAsStateWithLifecycle()
+    val pois = (dataset as? DatasetState.Loaded)?.dataset?.pois.orEmpty()
+    SectionCard("Peta offline") {
+        Text(
+            when (val s = state) {
+                OfflineMapState.Ready -> "Peta kawasan sudah tersimpan. Peta, notifikasi, detail, audio, pencarian, dan navigasi tetap berjalan dalam mode pesawat."
+                is OfflineMapState.Downloading -> "Mengunduh peta kawasan… ${(s.progress * 100).toInt()}%"
+                OfflineMapState.NotDownloaded -> "Peta kawasan belum tersimpan. Sambungkan ke internet sekali (mis. di loket) agar peta bisa dipakai tanpa sinyal."
+                is OfflineMapState.Failed -> "Gagal mengunduh peta: ${s.message}"
+            },
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        if (state is OfflineMapState.Downloading) {
+            androidx.compose.material3.LinearProgressIndicator(
+                progress = { (state as OfflineMapState.Downloading).progress },
+                modifier = Modifier.fillMaxWidth(),
+                color = OrchidColors.Forest,
+            )
+        } else if (state !is OfflineMapState.Ready) {
+            SecondaryButton(
+                "Unduh Peta Offline",
+                onClick = { OfflineMaps.ensure(context, pois, force = true) },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }
