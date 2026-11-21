@@ -31,8 +31,19 @@ object ExplorationSession {
     private val _openPoiRequest = MutableStateFlow<String?>(null)
     val openPoiRequest: StateFlow<String?> = _openPoiRequest.asStateFlow()
 
+    /** POI yang dibuka lewat scan QR; tidak memicu notifikasi ganda dari geofence (A02 AC3). */
+    private val _scanned = MutableStateFlow<Set<String>>(emptySet())
+    val scanned: StateFlow<Set<String>> = _scanned.asStateFlow()
+
+    /** Scan QR di papan POI: dihitung dikunjungi dan tidak muncul lagi di rekomendasi (A02 AC3). */
+    fun markScanned(poiId: String) {
+        _visited.update { it + poiId }
+        _scanned.update { it + poiId }
+    }
+
     internal fun onStarted() {
         _visited.value = emptySet()
+        _scanned.value = emptySet()
         _arrival.value = null
         _insidePoiIds.value = emptySet()
         _active.value = true

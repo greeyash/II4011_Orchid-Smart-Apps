@@ -90,4 +90,10 @@ class PoiDatasetTest {
             .replaceFirst("\"radiusMeters\": 20", "\"radiusMeters\": 100")
         PoiRepository.parseDataset(raw)
     }
+
+    @Test
+    fun rainModeHasShelters() {
+        assertTrue(dataset.pois.count { it.shelter } >= 2)
+        assertTrue(dataset.pois.first { it.id == "P01" }.safetyFirst)
+    }
 }

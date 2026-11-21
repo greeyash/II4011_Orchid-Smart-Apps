@@ -13,8 +13,8 @@ android {
         applicationId = "com.orchidapps"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.3.0-sprint3"
+        versionCode = 4
+        versionName = "0.4.0-sprint4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,6 +68,12 @@ dependencies {
     // Narasi audio + kontrol layar kunci/earphone (PB09)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
+
+    // Scan QR papan informasi (PB14): CameraX + ML Kit bundled (tanpa internet)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.mlkit.barcode.scanning)
 
     // Data POI lokal (JSON di assets)
     implementation(libs.kotlinx.serialization.json)

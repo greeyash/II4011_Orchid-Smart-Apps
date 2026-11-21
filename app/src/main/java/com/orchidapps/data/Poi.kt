@@ -21,6 +21,10 @@ data class Poi(
     val lng: Double,
     /** Radius geofence dalam meter; PRD menetapkan rentang 20-40 m. */
     val radiusMeters: Int,
+    /** Pengingat keselamatan diucapkan saat tiba, sebelum narasi (PRD 4.1, A04). */
+    val safetyFirst: Boolean = false,
+    /** Tempat berteduh yang disarankan saat Mode Hujan/Kabut (A05). */
+    val shelter: Boolean = false,
     /** False selama koordinat belum dicek langsung di lapangan. */
     val coordinateVerified: Boolean = false,
     val shortDescription: String,

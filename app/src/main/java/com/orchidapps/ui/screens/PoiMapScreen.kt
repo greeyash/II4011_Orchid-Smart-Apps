@@ -1,5 +1,6 @@
 package com.orchidapps.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.filled.Umbrella
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -31,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -64,6 +68,16 @@ import com.orchidapps.ui.PermissionStatus
 import com.orchidapps.ui.rememberLocationPermissionRequest
 import com.orchidapps.ui.rememberStartExploration
 import com.orchidapps.ui.theme.OrchidColors
+import org.maplibre.geojson.LineString
+import org.maplibre.android.style.layers.Property
+import org.maplibre.android.style.layers.LineLayer
+import com.orchidapps.map.OfflineMapState
+import com.orchidapps.map.OfflineMaps
+import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.Recommendation
+import com.orchidapps.recommendation.RecommendationPrompt
+import com.orchidapps.recommendation.Recommender
+import androidx.compose.material.icons.filled.Directions
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -98,7 +112,24 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val narration by rememberNarrationPlayer().state.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
     val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
-    val demoTarget by DemoLocation.target.collectAsStateWithLifecycle()
+    val nav by NavigationSession.state.collectAsStateWithLifecycle()
+    val navStartDistance by NavigationSession.startDistance.collectAsStateWithLifecycle()
+    val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
+    val rainMode by settings.rainMode.collectAsStateWithLifecycle()
+    val offlineMap by OfflineMaps.state.collectAsStateWithLifecycle()
+    // Rekomendasi dihitung dari posisi pengunjung, atau dari POI yang baru ditutup bila posisi belum ada.
+    fun recommendationsFrom(anchorId: String?): List<Recommendation> {
+        val pois = dataset?.pois ?: return emptyList()
+        val anchor = pois.firstOrNull { it.id == anchorId }
+        val lat = locationState.location?.lat ?: anchor?.lat ?: return emptyList()
+        val lng = locationState.location?.lng ?: anchor?.lng ?: return emptyList()
+        return Recommender.recommend(pois, visited, lat, lng, exclude = setOfNotNull(anchorId))
+    }
+    val startNavigation: (Poi) -> Unit = { poi ->
+        if (!vm.startNavigation(poi)) {
+            Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     var category by rememberSaveable { mutableStateOf<PoiCategory?>(null) }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -116,6 +147,8 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 selectedId = selectedId,
                 user = locationState.location,
                 recenterSignal = recenter,
+                followUser = demo || nav != null,
+                route = nav?.takeIf { !it.arrived }?.let { (it.originLat to it.originLng) to (it.target.lat to it.target.lng) },
                 onPoiClick = { selectedId = it },
                 modifier = Modifier.fillMaxSize(),
             )
@@ -131,15 +164,38 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (active || demo || locationState.showWeakGps) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
-                    if (demo) Pill(demoTarget?.let { "Demo · menuju $it" } ?: "Mode demo lokasi")
-                    if (locationState.showWeakGps && !demo) WeakGpsBadge()
-                }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
+                if (demo) Pill("Mode demo lokasi")
+                // A01: peta kawasan sudah tersimpan di HP.
+                if (offlineMap is OfflineMapState.Ready) Pill("Tersedia offline", style = PillStyle.LIGHT, leading = "✓")
+                if (locationState.showWeakGps && !demo) WeakGpsBadge()
+                Spacer(Modifier.weight(1f))
+                // A05: Mode Hujan/Kabut diaktifkan manual.
+                FilterChip(
+                    selected = rainMode,
+                    onClick = { settings.setRainMode(!rainMode) },
+                    label = { Text("Hujan/Kabut") },
+                    leadingIcon = { Icon(Icons.Filled.Umbrella, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                    shape = CircleShape,
+                    border = null,
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = OrchidColors.Paper,
+                        labelColor = OrchidColors.ForestDark,
+                        iconColor = OrchidColors.ForestDark,
+                        selectedContainerColor = OrchidColors.Forest,
+                        selectedLabelColor = OrchidColors.Paper,
+                        selectedLeadingIconColor = OrchidColors.Paper,
+                    ),
+                )
             }
-            SearchBarButton(onClick = onOpenSearch)
-            CategoryChips(category, onChange = { category = it }, Modifier.fillMaxWidth())
+            val navState = nav
+            if (navState != null && !navState.arrived) {
+                NavigationTopCard(navState)
+            } else {
+                SearchBarButton(onClick = onOpenSearch)
+                CategoryChips(category, onChange = { category = it }, Modifier.fillMaxWidth())
+            }
         }
 
         // Kanan: tombol ke posisi saya.
@@ -154,6 +210,16 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
             )
         }
 
+        // Mode Demo Lokasi: joystick untuk menggerakkan posisi seolah berjalan sendiri.
+        if (demo) {
+            DemoJoystick(
+                Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
+                    .offset(y = 40.dp),
+            )
+        }
+
         // Bawah: ringkasan POI / siap menjelajah / jelajah aktif.
         val selected = dataset?.pois?.firstOrNull { it.id == selectedId }
         Column(
@@ -162,21 +228,67 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            val navState = nav
             when {
+                navState != null && navState.arrived -> NavigationArrivedCard(
+                    state = navState,
+                    onOpen = {
+                        vm.stopNavigation()
+                        onOpenPoi(navState.target.id)
+                    },
+                    onDone = vm::stopNavigation,
+                ) {
+                    // F07: setelah tiba di tujuan, tampilkan rekomendasi berikutnya.
+                    Text("Lanjut ke mana?", style = MaterialTheme.typography.titleSmall)
+                    RecommendationList(
+                        recommendationsFrom(navState.target.id),
+                        onNavigate = { startNavigation(it.poi) },
+                        onOpen = {
+                            vm.stopNavigation()
+                            onOpenPoi(it.poi.id)
+                        },
+                    )
+                }
+                navState != null -> NavigationBottomCard(
+                    state = navState,
+                    startDistance = navStartDistance,
+                    onStop = vm::stopNavigation,
+                )
                 selected != null -> PoiPreviewCard(
                     poi = selected,
                     visited = selected.id in visited,
                     user = locationState.location,
                     onOpen = { onOpenPoi(selected.id) },
                     onClose = { selectedId = null },
-                    onDemoWalk = if (demo) {
-                        {
-                            DemoLocation.walkTo(selected)
-                            selectedId = null
-                        }
-                    } else {
-                        null
+                    onNavigate = {
+                        startNavigation(selected)
+                        selectedId = null
                     },
+                )
+                rainMode -> ShelterCard(
+                    shelters = dataset?.pois.orEmpty().filter { it.shelter }.let { shelters ->
+                        val loc = locationState.location ?: return@let emptyList()
+                        Recommender.recommend(shelters, emptySet(), loc.lat, loc.lng, max = 2)
+                            .map { it.copy(reason = "Tempat berteduh, ${Recommender.activityHint(it.poi)}") }
+                    },
+                    onNavigate = {
+                        settings.setRainMode(false)
+                        startNavigation(it.poi)
+                    },
+                    onOpen = { onOpenPoi(it.poi.id) },
+                    onTurnOff = { settings.setRainMode(false) },
+                )
+                recommendAfter != null -> RecommendationCard(
+                    recommendations = recommendationsFrom(recommendAfter),
+                    onNavigate = {
+                        RecommendationPrompt.dismiss()
+                        startNavigation(it.poi)
+                    },
+                    onOpen = {
+                        RecommendationPrompt.dismiss()
+                        onOpenPoi(it.poi.id)
+                    },
+                    onClose = RecommendationPrompt::dismiss,
                 )
                 active -> {
                     if (narration.isActive && narration.status != NarrationStatus.IDLE) MiniPlayerBar()
@@ -296,7 +408,7 @@ private fun PoiPreviewCard(
     user: UserLocation?,
     onOpen: () -> Unit,
     onClose: () -> Unit,
-    onDemoWalk: (() -> Unit)?,
+    onNavigate: () -> Unit,
 ) {
     PaperCard(Modifier.fillMaxWidth(), elevated = true) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -328,12 +440,11 @@ private fun PoiPreviewCard(
             }
             Text(poi.shortDescription, style = MaterialTheme.typography.bodyMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                PrimaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
-                SecondaryButton("Tutup", onClick = onClose)
+                PrimaryButton("Navigasi", onClick = onNavigate, icon = Icons.Filled.Directions, modifier = Modifier.weight(1f))
+                SecondaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
             }
-            // Mode Demo Lokasi: posisi palsu berjalan ke POI ini untuk menguji pemicu lokasi.
-            onDemoWalk?.let {
-                PinkButton("Jalan ke sini (demo)", onClick = it, modifier = Modifier.fillMaxWidth())
+            TextButton(onClick = onClose, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text("Tutup", color = OrchidColors.ForestDark)
             }
         }
     }
@@ -347,10 +458,16 @@ private fun PoiMap(
     selectedId: String?,
     user: UserLocation?,
     recenterSignal: Int,
+    followUser: Boolean,
+    route: Pair<Pair<Double, Double>, Pair<Double, Double>>?,
     onPoiClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    // Pusat peta digeser agar titik posisi tidak tertutup kolom cari (atas) dan kartu (bawah).
+    val topPadPx = with(density) { 170.dp.toPx() }.toDouble()
+    val bottomPadPx = with(density) { 300.dp.toPx() }.toDouble()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val mapView = remember {
         MapLibre.getInstance(context)
@@ -385,9 +502,12 @@ private fun PoiMap(
             m.uiSettings.isCompassEnabled = false
             m.uiSettings.isAttributionEnabled = false
             m.uiSettings.isLogoEnabled = false
+            // Peta selalu menghadap utara agar arah joystick demo sesuai arah di layar.
+            m.uiSettings.isRotateGesturesEnabled = false
             m.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(area.centerLat, area.centerLng))
                 .zoom(INITIAL_ZOOM)
+                .padding(0.0, topPadPx, 0.0, bottomPadPx)
                 .build()
             val onStyleLoaded = Style.OnStyleLoaded { s ->
                 addPoiLayers(s, withNumbers = !offline)
@@ -400,7 +520,7 @@ private fun PoiMap(
                     m.setStyle(Style.Builder().fromJson(FALLBACK_STYLE), onStyleLoaded)
                 }
             }
-            m.setStyle(Style.Builder().fromUri(STYLE_URL), onStyleLoaded)
+            m.setStyle(Style.Builder().fromUri(OfflineMaps.STYLE_URL), onStyleLoaded)
             m.addOnMapClickListener { point ->
                 val screen = m.projection.toScreenLocation(point)
                 val id = m.queryRenderedFeatures(screen, LAYER_POI_DOT, LAYER_POI_AREA)
@@ -418,10 +538,23 @@ private fun PoiMap(
         s.getSourceAs<GeoJsonSource>(SOURCE_POI_POINT)?.setGeoJson(poiPoints(pois, visited, selectedId))
     }
 
+    LaunchedEffect(style, route) {
+        val s = style ?: return@LaunchedEffect
+        s.getSourceAs<GeoJsonSource>(SOURCE_ROUTE)?.setGeoJson(routeLine(route))
+    }
+
     LaunchedEffect(style, user) {
         val s = style ?: return@LaunchedEffect
         s.getSourceAs<GeoJsonSource>(SOURCE_USER_ACCURACY)?.setGeoJson(userAccuracy(user))
         s.getSourceAs<GeoJsonSource>(SOURCE_USER)?.setGeoJson(userPoint(user))
+    }
+
+    // Mode Demo Lokasi: kamera mengikuti titik posisi agar selalu terlihat selama "berjalan".
+    LaunchedEffect(map, user, followUser) {
+        val m = map ?: return@LaunchedEffect
+        if (followUser && user != null) {
+            m.easeCamera(CameraUpdateFactory.newLatLng(LatLng(user.lat, user.lng)), 450)
+        }
     }
 
     LaunchedEffect(recenterSignal) {
@@ -453,6 +586,7 @@ private fun PoiMap(
 private fun addPoiLayers(style: Style, withNumbers: Boolean) {
     style.addSource(GeoJsonSource(SOURCE_POI_AREA))
     style.addSource(GeoJsonSource(SOURCE_POI_POINT))
+    style.addSource(GeoJsonSource(SOURCE_ROUTE))
     style.addSource(GeoJsonSource(SOURCE_USER_ACCURACY))
     style.addSource(GeoJsonSource(SOURCE_USER))
 
@@ -460,6 +594,15 @@ private fun addPoiLayers(style: Style, withNumbers: Boolean) {
         FillLayer(LAYER_POI_AREA, SOURCE_POI_AREA).withProperties(
             PropertyFactory.fillColor(BLUSH),
             PropertyFactory.fillOpacity(0.25f),
+        )
+    )
+    // Garis rute navigasi (PB12).
+    style.addLayer(
+        LineLayer("route-line", SOURCE_ROUTE).withProperties(
+            PropertyFactory.lineColor(FOREST),
+            PropertyFactory.lineWidth(5f),
+            PropertyFactory.lineDasharray(arrayOf(1.5f, 1f)),
+            PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
         )
     )
     // Penanda POI: lingkaran pink bernomor; POI terpilih/sudah dikunjungi berwarna hijau tua.
@@ -491,7 +634,7 @@ private fun addPoiLayers(style: Style, withNumbers: Boolean) {
     )
     style.addLayer(
         CircleLayer("user-dot", SOURCE_USER).withProperties(
-            PropertyFactory.circleRadius(7f),
+            PropertyFactory.circleRadius(9f),
             PropertyFactory.circleColor(USER_COLOR),
             PropertyFactory.circleStrokeColor("#FFFFFF"),
             PropertyFactory.circleStrokeWidth(2.5f),
@@ -525,6 +668,16 @@ private fun poiPoints(pois: List<Poi>, visited: Set<String>, selectedId: String?
     }
 )
 
+private fun routeLine(route: Pair<Pair<Double, Double>, Pair<Double, Double>>?) = FeatureCollection.fromFeatures(
+    listOfNotNull(
+        route?.let { (from, to) ->
+            Feature.fromGeometry(
+                LineString.fromLngLats(listOf(Point.fromLngLat(from.second, from.first), Point.fromLngLat(to.second, to.first)))
+            )
+        }
+    )
+)
+
 private fun userPoint(user: UserLocation?) = FeatureCollection.fromFeatures(
     listOfNotNull(user?.let { Feature.fromGeometry(Point.fromLngLat(it.lng, it.lat)) })
 )
@@ -535,8 +688,6 @@ private fun userAccuracy(user: UserLocation?) = FeatureCollection.fromFeatures(
     )
 )
 
-/** Gaya peta dasar OpenFreeMap (gratis, tanpa API key). */
-private const val STYLE_URL = "https://tiles.openfreemap.org/styles/positron"
 private const val FALLBACK_STYLE =
     """{"version":8,"sources":{},"layers":[{"id":"bg","type":"background","paint":{"background-color":"#E5E9DA"}}]}"""
 
@@ -550,6 +701,7 @@ private const val SOURCE_POI_AREA = "poi-area"
 private const val SOURCE_POI_POINT = "poi-point"
 private const val SOURCE_USER_ACCURACY = "user-accuracy"
 private const val SOURCE_USER = "user"
+private const val SOURCE_ROUTE = "route"
 private const val LAYER_POI_AREA = "poi-area-fill"
 private const val LAYER_POI_DOT = "poi-dot"
 private const val PROP_ID = "id"

@@ -7,6 +7,9 @@ import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
 import com.orchidapps.exploration.ExplorationSession
+import com.orchidapps.map.OfflineMaps
+import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.RecommendationPrompt
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.Job
@@ -72,6 +75,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: Exception) {
                 DatasetState.Error(e.message ?: "Data POI gagal dibaca")
             }
+            // PB15: unduh peta kawasan untuk dipakai tanpa internet bila belum tersimpan.
+            (_dataset.value as? DatasetState.Loaded)?.let { OfflineMaps.ensure(getApplication(), it.dataset.pois) }
         }
     }
 
@@ -136,8 +141,21 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     /** "Akhiri Jelajah": pelacakan latar belakang dan notifikasi POI berhenti. */
     fun endExploration() = ExplorationSession.end(getApplication())
 
+    /**
+     * Mulai navigasi ke [poi] (PB12). Mengembalikan false bila posisi belum terbaca.
+     */
+    fun startNavigation(poi: Poi): Boolean {
+        val from = _location.value.location ?: return false
+        RecommendationPrompt.dismiss()
+        NavigationSession.start(getApplication(), poi, from)
+        return true
+    }
+
+    fun stopNavigation() = NavigationSession.stop()
+
     private fun onNewLocation(loc: UserLocation) {
         _location.update { it.copy(location = loc, noFixTimeout = false, error = null) }
+        NavigationSession.onLocation(loc)
     }
 
     private companion object {

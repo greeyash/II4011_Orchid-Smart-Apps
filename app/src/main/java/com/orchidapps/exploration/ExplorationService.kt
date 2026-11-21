@@ -19,6 +19,7 @@ import com.orchidapps.location.GeofenceEngine
 import com.orchidapps.location.GeofenceTransition
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
+import com.orchidapps.navigation.NavigationSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -98,10 +99,12 @@ class ExplorationService : Service() {
     }
 
     private fun onLocation(location: UserLocation) {
+        // Navigasi tetap mendapat posisi dan mengucapkan arahan saat layar mati (PB12, F04e).
+        NavigationSession.onLocation(location)
         val events = geofence.update(location, pois)
         ExplorationSession.onInsideChanged(geofence.insidePoiIds)
         // Bila dua POI berdekatan terpicu bersamaan, POI terdekat didahulukan (F02).
-        events.filter { it.transition == GeofenceTransition.ENTER }
+        events.filter { it.transition == GeofenceTransition.ENTER && it.poi.id !in ExplorationSession.scanned.value }
             .minByOrNull { it.distanceMeters }
             ?.let { onArrived(it.poi) }
     }

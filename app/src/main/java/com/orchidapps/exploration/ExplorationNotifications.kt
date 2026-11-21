@@ -49,8 +49,8 @@ internal object ExplorationNotifications {
         NotificationCompat.Builder(context, CHANNEL_ARRIVAL)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Anda berada di ${poi.name}")
-            .setContentText(poi.shortDescription)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(poi.shortDescription))
+            .setContentText(arrivalText(poi))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(arrivalText(poi)))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -118,6 +118,10 @@ internal object ExplorationNotifications {
             .setStyle(MediaStyleNotificationHelper.MediaStyle(session).setShowActionsInCompactView(0, 1))
             .build()
     }
+
+    /** Pengingat keselamatan didahulukan di notifikasi untuk POI yang ditandai (A04). */
+    private fun arrivalText(poi: Poi): String =
+        if (poi.safetyFirst && poi.safetyNote != null) "⚠️ ${poi.safetyNote}" else poi.shortDescription
 
     fun openAppIntent(context: Context, poiId: String?): PendingIntent {
         val intent = Intent(context, MainActivity::class.java)

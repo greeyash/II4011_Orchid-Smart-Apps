@@ -52,4 +52,12 @@ class NarrationTest {
         pois.filter { it.narration != null }.forEach { assertEquals(it.id, it.narration, AudioGuide.narration(it)) }
         assertTrue(pois.all { it.narration != null })
     }
+
+    @Test
+    fun woodBridgeArrivalIncludesSafetyReminder() {
+        val woodBridge = pois.first { it.id == "P01" }
+        val text = AudioGuide.arrivalAnnouncement(woodBridge)
+        assertTrue(text.startsWith("Anda berada di Wood Bridge."))
+        assertTrue(text.contains(woodBridge.safetyNote!!))
+    }
 }

@@ -244,6 +244,12 @@ fun ArrivalBanner(
                     )
                 }
             }
+            // A04: pengingat keselamatan muncul saat tiba (mis. di Wood Bridge).
+            if (poi.safetyFirst) {
+                poi.safetyNote?.let {
+                    Text("⚠️ $it", style = MaterialTheme.typography.bodySmall, color = OrchidColors.Blush)
+                }
+            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PinkButton("Buka Detail", onClick = onOpen, modifier = Modifier.weight(1f))
                 OutlinedButton(
