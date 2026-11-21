@@ -42,6 +42,7 @@ import androidx.navigation.navArgument
 import android.widget.Toast
 import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.RecommendationPrompt
 import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.ui.screens.ArrivalBanner
 import com.orchidapps.ui.screens.MiniPlayerBar
@@ -139,7 +140,11 @@ fun OrchidApp() {
                 PoiDetailScreen(
                     vm = vm,
                     poiId = id,
-                    onBack = { navController.popBackStack() },
+                    onBack = {
+                        // F07: setelah halaman POI ditutup, tampilkan "Lanjut ke Mana?" di peta.
+                        RecommendationPrompt.show(id)
+                        navController.popBackStack()
+                    },
                     onOpenSpecies = { navController.navigate(Routes.species(id, it)) },
                     onNavigate = { poi ->
                         if (vm.startNavigation(poi)) {
@@ -204,8 +209,9 @@ private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     // Saat navigasi dimulai dari tab lain, tampilkan peta (L07-A).
     val navigating by NavigationSession.state.collectAsStateWithLifecycle()
-    LaunchedEffect(navigating != null) {
-        if (navigating != null) tabIndex = Tab.MAP.ordinal
+    val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
+    LaunchedEffect(navigating != null, recommendAfter) {
+        if (navigating != null || recommendAfter != null) tabIndex = Tab.MAP.ordinal
     }
     var focusSearch by remember { androidx.compose.runtime.mutableStateOf(false) }
     val tab = Tab.entries[tabIndex]

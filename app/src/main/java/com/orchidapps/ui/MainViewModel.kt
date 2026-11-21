@@ -8,6 +8,7 @@ import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
 import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.RecommendationPrompt
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.Job
@@ -142,6 +143,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun startNavigation(poi: Poi): Boolean {
         val from = _location.value.location ?: return false
+        RecommendationPrompt.dismiss()
         NavigationSession.start(getApplication(), poi, from)
         return true
     }
