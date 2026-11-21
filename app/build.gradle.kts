@@ -69,6 +69,12 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
 
+    // Scan QR papan informasi (PB14): CameraX + ML Kit bundled (tanpa internet)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.mlkit.barcode.scanning)
+
     // Data POI lokal (JSON di assets)
     implementation(libs.kotlinx.serialization.json)
 
