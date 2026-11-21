@@ -104,7 +104,7 @@ class ExplorationService : Service() {
         val events = geofence.update(location, pois)
         ExplorationSession.onInsideChanged(geofence.insidePoiIds)
         // Bila dua POI berdekatan terpicu bersamaan, POI terdekat didahulukan (F02).
-        events.filter { it.transition == GeofenceTransition.ENTER }
+        events.filter { it.transition == GeofenceTransition.ENTER && it.poi.id !in ExplorationSession.scanned.value }
             .minByOrNull { it.distanceMeters }
             ?.let { onArrived(it.poi) }
     }

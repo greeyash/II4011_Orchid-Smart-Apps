@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Directions
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,6 +56,7 @@ fun PoiDetailScreen(
     onBack: () -> Unit,
     onOpenSpecies: (String) -> Unit,
     onNavigate: (Poi) -> Unit,
+    onScan: () -> Unit,
 ) {
     val dataset by vm.dataset.collectAsStateWithLifecycle()
     val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
@@ -105,7 +107,16 @@ fun PoiDetailScreen(
 
             NarrationCard(AudioGuide.item(poi))
 
-            if (poi.species.isNotEmpty()) SpeciesSection(poi, onOpenSpecies)
+            if (poi.species.isNotEmpty()) {
+                SpeciesSection(poi, onOpenSpecies)
+                // L05-B/F08c: pindai QR di papan anggrek untuk langsung mendengar info spesies.
+                SecondaryButton(
+                    "Scan QR Spesies",
+                    onClick = onScan,
+                    icon = Icons.Filled.QrCodeScanner,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             poi.infoTitle?.let { title ->
                 SectionCard(title = title) {

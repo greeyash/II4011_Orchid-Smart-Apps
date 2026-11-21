@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -40,7 +41,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import android.widget.Toast
+import com.orchidapps.audio.AudioGuide
+import com.orchidapps.audio.NarrationPlayer
 import com.orchidapps.exploration.ExplorationSession
+import com.orchidapps.qr.QrResult
 import com.orchidapps.navigation.NavigationSession
 import com.orchidapps.recommendation.RecommendationPrompt
 import com.orchidapps.exploration.ExplorationSettings
@@ -50,6 +54,7 @@ import com.orchidapps.ui.screens.PermissionScreen
 import com.orchidapps.ui.screens.PoiDetailScreen
 import com.orchidapps.ui.screens.PoiListScreen
 import com.orchidapps.ui.screens.PoiMapScreen
+import com.orchidapps.ui.screens.QrScannerScreen
 import com.orchidapps.ui.screens.SettingsScreen
 import com.orchidapps.ui.screens.SpeciesDetailScreen
 import com.orchidapps.ui.screens.WelcomeScreen
@@ -61,6 +66,7 @@ private object Routes {
     const val MAIN = "main"
     const val POI_DETAIL = "poi/{id}"
     const val SPECIES = "poi/{id}/species/{speciesId}"
+    const val SCAN = "scan"
     fun poiDetail(id: String) = "poi/$id"
     fun species(poiId: String, speciesId: String) = "poi/$poiId/species/$speciesId"
 }
@@ -68,6 +74,7 @@ private object Routes {
 private enum class Tab(val label: String, val icon: ImageVector) {
     MAP("Peta", Icons.Filled.Map),
     SEARCH("Cari", Icons.Filled.Search),
+    SCAN("Scan QR", Icons.Filled.QrCodeScanner),
     PLACES("Tempat", Icons.AutoMirrored.Filled.List),
     SETTINGS("Pengaturan", Icons.Filled.Settings),
 }
@@ -98,6 +105,28 @@ fun OrchidApp() {
     }
 
     val openPoi: (String) -> Unit = { navController.navigate(Routes.poiDetail(it)) }
+    // PB14: hasil scan QR membuka halaman POI/spesies; audio langsung mulai bila Auto-Play aktif (A02 AC2).
+    val handleScan: (QrResult) -> Unit = { result ->
+        val player = NarrationPlayer.get(context)
+        when (result) {
+            is QrResult.PoiCode -> {
+                ExplorationSession.markScanned(result.poi.id)
+                if (settings.autoPlay.value) player.play(AudioGuide.item(result.poi))
+                navController.navigate(Routes.poiDetail(result.poi.id)) {
+                    popUpTo(Routes.MAIN)
+                }
+            }
+            is QrResult.SpeciesCode -> {
+                ExplorationSession.markScanned(result.poi.id)
+                if (settings.autoPlay.value) player.play(AudioGuide.speciesItem(result.poi, result.species))
+                navController.navigate(Routes.species(result.poi.id, result.species.id)) {
+                    popUpTo(Routes.MAIN)
+                }
+            }
+            is QrResult.Unknown -> Unit
+        }
+    }
+
     val goMain: () -> Unit = {
         navController.navigate(Routes.MAIN) { popUpTo(0) { inclusive = true } }
     }
@@ -129,8 +158,16 @@ fun OrchidApp() {
             composable(Routes.PERMISSION) {
                 PermissionScreen(vm, onDone = goMain)
             }
+            composable(Routes.SCAN) {
+                QrScannerScreen(
+                    vm,
+                    onResult = handleScan,
+                    onBack = { navController.popBackStack() },
+                    onManual = { navController.popBackStack(Routes.MAIN, inclusive = false) },
+                )
+            }
             composable(Routes.MAIN) {
-                MainScreen(vm, onOpenPoi = openPoi)
+                MainScreen(vm, onOpenPoi = openPoi, onScanResult = handleScan)
             }
             composable(
                 Routes.POI_DETAIL,
@@ -146,6 +183,7 @@ fun OrchidApp() {
                         navController.popBackStack()
                     },
                     onOpenSpecies = { navController.navigate(Routes.species(id, it)) },
+                    onScan = { navController.navigate(Routes.SCAN) },
                     onNavigate = { poi ->
                         if (vm.startNavigation(poi)) {
                             navController.popBackStack(Routes.MAIN, inclusive = false)
@@ -205,7 +243,7 @@ fun OrchidApp() {
 
 /** Layar utama dengan menu bawah: Peta, Cari, Tempat, Pengaturan. */
 @Composable
-private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit) {
+private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit, onScanResult: (QrResult) -> Unit) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     // Saat navigasi dimulai dari tab lain, tampilkan peta (L07-A).
     val navigating by NavigationSession.state.collectAsStateWithLifecycle()
@@ -253,10 +291,16 @@ private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit) {
                     onOpenPoi = onOpenPoi,
                 )
                 Tab.SEARCH -> PoiListScreen(vm, onOpenPoi, showSearch = true, autoFocus = focusSearch)
+                Tab.SCAN -> QrScannerScreen(
+                    vm,
+                    onResult = onScanResult,
+                    onBack = null,
+                    onManual = { tabIndex = Tab.PLACES.ordinal },
+                )
                 Tab.PLACES -> PoiListScreen(vm, onOpenPoi, showSearch = false)
                 Tab.SETTINGS -> SettingsScreen(vm)
             }
-            if (tab != Tab.MAP) {
+            if (tab != Tab.MAP && tab != Tab.SCAN) {
                 MiniPlayerBar(Modifier.align(Alignment.BottomCenter).padding(12.dp))
             }
         }
