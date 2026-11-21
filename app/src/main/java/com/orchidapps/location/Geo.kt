@@ -2,7 +2,9 @@ package com.orchidapps.location
 
 import com.orchidapps.data.Poi
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.asin
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -21,6 +23,28 @@ object Geo {
         val a = sin(dLat / 2).pow(2) +
             cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(dLng / 2).pow(2)
         return 2 * EARTH_RADIUS_M * asin(sqrt(a))
+    }
+
+    /** Arah dari titik 1 ke titik 2 dalam derajat (0 = utara, 90 = timur). */
+    fun bearingDegrees(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
+        val phi1 = Math.toRadians(lat1)
+        val phi2 = Math.toRadians(lat2)
+        val dLng = Math.toRadians(lng2 - lng1)
+        val y = sin(dLng) * cos(phi2)
+        val x = cos(phi1) * sin(phi2) - sin(phi1) * cos(phi2) * cos(dLng)
+        return (Math.toDegrees(atan2(y, x)) + 360) % 360
+    }
+
+    /** Jarak tegak lurus (meter) titik P ke garis A→B; dipakai untuk mendeteksi keluar jalur. */
+    fun crossTrackMeters(
+        latA: Double, lngA: Double,
+        latB: Double, lngB: Double,
+        latP: Double, lngP: Double,
+    ): Double {
+        val dAP = distanceMeters(latA, lngA, latP, lngP) / EARTH_RADIUS_M
+        val bearingAP = Math.toRadians(bearingDegrees(latA, lngA, latP, lngP))
+        val bearingAB = Math.toRadians(bearingDegrees(latA, lngA, latB, lngB))
+        return abs(asin(sin(dAP) * sin(bearingAP - bearingAB))) * EARTH_RADIUS_M
     }
 
     fun walkingMinutes(distanceMeters: Double): Int =
