@@ -19,6 +19,14 @@ class ExplorationSettings private constructor(context: Context) {
         _autoPlay.value = enabled
     }
 
+    /** Mode Hujan/Kabut (A05): menyarankan tempat berteduh terdekat. */
+    private val _rainMode = MutableStateFlow(false)
+    val rainMode: StateFlow<Boolean> = _rainMode.asStateFlow()
+
+    fun setRainMode(enabled: Boolean) {
+        _rainMode.value = enabled
+    }
+
     /** Layar sambutan (S00) hanya tampil saat aplikasi pertama kali dibuka. */
     val welcomeSeen: Boolean get() = prefs.getBoolean(KEY_WELCOME_SEEN, false)
 

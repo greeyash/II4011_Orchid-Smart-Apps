@@ -99,3 +99,34 @@ fun RecommendationList(
         }
     }
 }
+
+/** Mode Hujan/Kabut (A05): tempat berteduh terdekat yang bisa langsung dinavigasi. */
+@Composable
+fun ShelterCard(
+    shelters: List<Recommendation>,
+    onNavigate: (Recommendation) -> Unit,
+    onOpen: (Recommendation) -> Unit,
+    onTurnOff: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PaperCard(modifier.fillMaxWidth(), elevated = true, color = OrchidColors.Paper) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("Mode Hujan/Kabut", style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        "Tempat berteduh terdekat dari posisi Anda.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = OrchidColors.Muted,
+                    )
+                }
+                IconButton(onClick = onTurnOff) { Icon(Icons.Filled.Close, contentDescription = "Matikan Mode Hujan/Kabut") }
+            }
+            if (shelters.isEmpty()) {
+                Text("Posisi Anda belum terbaca.", style = MaterialTheme.typography.bodyMedium)
+            } else {
+                RecommendationList(shelters, onNavigate, onOpen)
+            }
+        }
+    }
+}

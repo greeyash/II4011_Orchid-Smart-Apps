@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.filled.Umbrella
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -112,6 +113,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val nav by NavigationSession.state.collectAsStateWithLifecycle()
     val navStartDistance by NavigationSession.startDistance.collectAsStateWithLifecycle()
     val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
+    val rainMode by settings.rainMode.collectAsStateWithLifecycle()
     // Rekomendasi dihitung dari posisi pengunjung, atau dari POI yang baru ditutup bila posisi belum ada.
     fun recommendationsFrom(anchorId: String?): List<Recommendation> {
         val pois = dataset?.pois ?: return emptyList()
@@ -159,12 +161,28 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (active || demo || locationState.showWeakGps) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
-                    if (demo) Pill("Mode demo lokasi")
-                    if (locationState.showWeakGps && !demo) WeakGpsBadge()
-                }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
+                if (demo) Pill("Mode demo lokasi")
+                if (locationState.showWeakGps && !demo) WeakGpsBadge()
+                Spacer(Modifier.weight(1f))
+                // A05: Mode Hujan/Kabut diaktifkan manual.
+                FilterChip(
+                    selected = rainMode,
+                    onClick = { settings.setRainMode(!rainMode) },
+                    label = { Text("Hujan/Kabut") },
+                    leadingIcon = { Icon(Icons.Filled.Umbrella, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                    shape = CircleShape,
+                    border = null,
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = OrchidColors.Paper,
+                        labelColor = OrchidColors.ForestDark,
+                        iconColor = OrchidColors.ForestDark,
+                        selectedContainerColor = OrchidColors.Forest,
+                        selectedLabelColor = OrchidColors.Paper,
+                        selectedLeadingIconColor = OrchidColors.Paper,
+                    ),
+                )
             }
             val navState = nav
             if (navState != null && !navState.arrived) {
@@ -241,6 +259,19 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                         startNavigation(selected)
                         selectedId = null
                     },
+                )
+                rainMode -> ShelterCard(
+                    shelters = dataset?.pois.orEmpty().filter { it.shelter }.let { shelters ->
+                        val loc = locationState.location ?: return@let emptyList()
+                        Recommender.recommend(shelters, emptySet(), loc.lat, loc.lng, max = 2)
+                            .map { it.copy(reason = "Tempat berteduh, ${Recommender.activityHint(it.poi)}") }
+                    },
+                    onNavigate = {
+                        settings.setRainMode(false)
+                        startNavigation(it.poi)
+                    },
+                    onOpen = { onOpenPoi(it.poi.id) },
+                    onTurnOff = { settings.setRainMode(false) },
                 )
                 recommendAfter != null -> RecommendationCard(
                     recommendations = recommendationsFrom(recommendAfter),
