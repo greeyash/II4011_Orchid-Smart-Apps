@@ -50,6 +50,12 @@ object AudioGuide {
         recordingAsset = "audio/${poi.id}-${species.id}.mp3",
     )
 
-    /** Kalimat singkat saat tiba di POI (F02, F04b). */
-    fun arrivalAnnouncement(poi: Poi) = "Anda berada di ${poi.name}."
+    /**
+     * Kalimat singkat saat tiba di POI (F02, F04b). Untuk POI yang ditandai di PRD, pengingat
+     * keselamatan langsung menyusul sebelum narasi diputar (PRD 4.1, A04).
+     */
+    fun arrivalAnnouncement(poi: Poi): String = buildString {
+        append("Anda berada di ${poi.name}.")
+        if (poi.safetyFirst) poi.safetyNote?.let { append(" Perhatian: ").append(it) }
+    }
 }
