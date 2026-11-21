@@ -7,6 +7,7 @@ import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
 import com.orchidapps.exploration.ExplorationSession
+import com.orchidapps.map.OfflineMaps
 import com.orchidapps.navigation.NavigationSession
 import com.orchidapps.recommendation.RecommendationPrompt
 import com.orchidapps.location.LocationRepository
@@ -74,6 +75,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: Exception) {
                 DatasetState.Error(e.message ?: "Data POI gagal dibaca")
             }
+            // PB15: unduh peta kawasan untuk dipakai tanpa internet bila belum tersimpan.
+            (_dataset.value as? DatasetState.Loaded)?.let { OfflineMaps.ensure(getApplication(), it.dataset.pois) }
         }
     }
 

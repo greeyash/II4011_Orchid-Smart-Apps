@@ -71,6 +71,8 @@ import com.orchidapps.ui.theme.OrchidColors
 import org.maplibre.geojson.LineString
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.LineLayer
+import com.orchidapps.map.OfflineMapState
+import com.orchidapps.map.OfflineMaps
 import com.orchidapps.navigation.NavigationSession
 import com.orchidapps.recommendation.Recommendation
 import com.orchidapps.recommendation.RecommendationPrompt
@@ -114,6 +116,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val navStartDistance by NavigationSession.startDistance.collectAsStateWithLifecycle()
     val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
     val rainMode by settings.rainMode.collectAsStateWithLifecycle()
+    val offlineMap by OfflineMaps.state.collectAsStateWithLifecycle()
     // Rekomendasi dihitung dari posisi pengunjung, atau dari POI yang baru ditutup bila posisi belum ada.
     fun recommendationsFrom(anchorId: String?): List<Recommendation> {
         val pois = dataset?.pois ?: return emptyList()
@@ -164,6 +167,8 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 if (active) Pill("Jelajah Aktif", style = PillStyle.DARK, leading = "●")
                 if (demo) Pill("Mode demo lokasi")
+                // A01: peta kawasan sudah tersimpan di HP.
+                if (offlineMap is OfflineMapState.Ready) Pill("Tersedia offline", style = PillStyle.LIGHT, leading = "✓")
                 if (locationState.showWeakGps && !demo) WeakGpsBadge()
                 Spacer(Modifier.weight(1f))
                 // A05: Mode Hujan/Kabut diaktifkan manual.
@@ -515,7 +520,7 @@ private fun PoiMap(
                     m.setStyle(Style.Builder().fromJson(FALLBACK_STYLE), onStyleLoaded)
                 }
             }
-            m.setStyle(Style.Builder().fromUri(STYLE_URL), onStyleLoaded)
+            m.setStyle(Style.Builder().fromUri(OfflineMaps.STYLE_URL), onStyleLoaded)
             m.addOnMapClickListener { point ->
                 val screen = m.projection.toScreenLocation(point)
                 val id = m.queryRenderedFeatures(screen, LAYER_POI_DOT, LAYER_POI_AREA)
@@ -683,8 +688,6 @@ private fun userAccuracy(user: UserLocation?) = FeatureCollection.fromFeatures(
     )
 )
 
-/** Gaya peta dasar OpenFreeMap (gratis, tanpa API key). */
-private const val STYLE_URL = "https://tiles.openfreemap.org/styles/positron"
 private const val FALLBACK_STYLE =
     """{"version":8,"sources":{},"layers":[{"id":"bg","type":"background","paint":{"background-color":"#E5E9DA"}}]}"""
 
