@@ -39,7 +39,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import android.widget.Toast
 import com.orchidapps.exploration.ExplorationSession
+import com.orchidapps.navigation.NavigationSession
 import com.orchidapps.exploration.ExplorationSettings
 import com.orchidapps.ui.screens.ArrivalBanner
 import com.orchidapps.ui.screens.MiniPlayerBar
@@ -139,6 +141,13 @@ fun OrchidApp() {
                     poiId = id,
                     onBack = { navController.popBackStack() },
                     onOpenSpecies = { navController.navigate(Routes.species(id, it)) },
+                    onNavigate = { poi ->
+                        if (vm.startNavigation(poi)) {
+                            navController.popBackStack(Routes.MAIN, inclusive = false)
+                        } else {
+                            Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                 )
             }
             composable(
@@ -178,11 +187,12 @@ fun OrchidApp() {
         }
         // Kontrol audio ringkas di halaman detail (UI04); di layar utama diatur oleh MainScreen.
         if (route == Routes.POI_DETAIL || route == Routes.SPECIES) {
+            // Di atas tombol bawah halaman (Mulai Navigasi / Kembali).
             MiniPlayerBar(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
-                    .padding(12.dp)
+                    .padding(start = 12.dp, end = 12.dp, bottom = 84.dp)
             )
         }
     }
@@ -192,6 +202,11 @@ fun OrchidApp() {
 @Composable
 private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
+    // Saat navigasi dimulai dari tab lain, tampilkan peta (L07-A).
+    val navigating by NavigationSession.state.collectAsStateWithLifecycle()
+    LaunchedEffect(navigating != null) {
+        if (navigating != null) tabIndex = Tab.MAP.ordinal
+    }
     var focusSearch by remember { androidx.compose.runtime.mutableStateOf(false) }
     val tab = Tab.entries[tabIndex]
 

@@ -1,5 +1,6 @@
 package com.orchidapps.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -32,6 +33,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -65,6 +67,11 @@ import com.orchidapps.ui.PermissionStatus
 import com.orchidapps.ui.rememberLocationPermissionRequest
 import com.orchidapps.ui.rememberStartExploration
 import com.orchidapps.ui.theme.OrchidColors
+import org.maplibre.geojson.LineString
+import org.maplibre.android.style.layers.Property
+import org.maplibre.android.style.layers.LineLayer
+import com.orchidapps.navigation.NavigationSession
+import androidx.compose.material.icons.filled.Directions
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -99,6 +106,13 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val narration by rememberNarrationPlayer().state.collectAsStateWithLifecycle()
     val dataset = (datasetState as? DatasetState.Loaded)?.dataset
     val demo by DemoLocation.enabled.collectAsStateWithLifecycle()
+    val nav by NavigationSession.state.collectAsStateWithLifecycle()
+    val navStartDistance by NavigationSession.startDistance.collectAsStateWithLifecycle()
+    val startNavigation: (Poi) -> Unit = { poi ->
+        if (!vm.startNavigation(poi)) {
+            Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     var category by rememberSaveable { mutableStateOf<PoiCategory?>(null) }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -116,7 +130,8 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 selectedId = selectedId,
                 user = locationState.location,
                 recenterSignal = recenter,
-                followUser = demo,
+                followUser = demo || nav != null,
+                route = nav?.takeIf { !it.arrived }?.let { (it.originLat to it.originLng) to (it.target.lat to it.target.lng) },
                 onPoiClick = { selectedId = it },
                 modifier = Modifier.fillMaxSize(),
             )
@@ -139,8 +154,13 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                     if (locationState.showWeakGps && !demo) WeakGpsBadge()
                 }
             }
-            SearchBarButton(onClick = onOpenSearch)
-            CategoryChips(category, onChange = { category = it }, Modifier.fillMaxWidth())
+            val navState = nav
+            if (navState != null && !navState.arrived) {
+                NavigationTopCard(navState)
+            } else {
+                SearchBarButton(onClick = onOpenSearch)
+                CategoryChips(category, onChange = { category = it }, Modifier.fillMaxWidth())
+            }
         }
 
         // Kanan: tombol ke posisi saya.
@@ -173,13 +193,31 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            val navState = nav
             when {
+                navState != null && navState.arrived -> NavigationArrivedCard(
+                    state = navState,
+                    onOpen = {
+                        vm.stopNavigation()
+                        onOpenPoi(navState.target.id)
+                    },
+                    onDone = vm::stopNavigation,
+                )
+                navState != null -> NavigationBottomCard(
+                    state = navState,
+                    startDistance = navStartDistance,
+                    onStop = vm::stopNavigation,
+                )
                 selected != null -> PoiPreviewCard(
                     poi = selected,
                     visited = selected.id in visited,
                     user = locationState.location,
                     onOpen = { onOpenPoi(selected.id) },
                     onClose = { selectedId = null },
+                    onNavigate = {
+                        startNavigation(selected)
+                        selectedId = null
+                    },
                 )
                 active -> {
                     if (narration.isActive && narration.status != NarrationStatus.IDLE) MiniPlayerBar()
@@ -299,6 +337,7 @@ private fun PoiPreviewCard(
     user: UserLocation?,
     onOpen: () -> Unit,
     onClose: () -> Unit,
+    onNavigate: () -> Unit,
 ) {
     PaperCard(Modifier.fillMaxWidth(), elevated = true) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -330,8 +369,11 @@ private fun PoiPreviewCard(
             }
             Text(poi.shortDescription, style = MaterialTheme.typography.bodyMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                PrimaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
-                SecondaryButton("Tutup", onClick = onClose)
+                PrimaryButton("Navigasi", onClick = onNavigate, icon = Icons.Filled.Directions, modifier = Modifier.weight(1f))
+                SecondaryButton("Lihat Detail", onClick = onOpen, modifier = Modifier.weight(1f))
+            }
+            TextButton(onClick = onClose, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text("Tutup", color = OrchidColors.ForestDark)
             }
         }
     }
@@ -346,6 +388,7 @@ private fun PoiMap(
     user: UserLocation?,
     recenterSignal: Int,
     followUser: Boolean,
+    route: Pair<Pair<Double, Double>, Pair<Double, Double>>?,
     onPoiClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -424,6 +467,11 @@ private fun PoiMap(
         s.getSourceAs<GeoJsonSource>(SOURCE_POI_POINT)?.setGeoJson(poiPoints(pois, visited, selectedId))
     }
 
+    LaunchedEffect(style, route) {
+        val s = style ?: return@LaunchedEffect
+        s.getSourceAs<GeoJsonSource>(SOURCE_ROUTE)?.setGeoJson(routeLine(route))
+    }
+
     LaunchedEffect(style, user) {
         val s = style ?: return@LaunchedEffect
         s.getSourceAs<GeoJsonSource>(SOURCE_USER_ACCURACY)?.setGeoJson(userAccuracy(user))
@@ -467,6 +515,7 @@ private fun PoiMap(
 private fun addPoiLayers(style: Style, withNumbers: Boolean) {
     style.addSource(GeoJsonSource(SOURCE_POI_AREA))
     style.addSource(GeoJsonSource(SOURCE_POI_POINT))
+    style.addSource(GeoJsonSource(SOURCE_ROUTE))
     style.addSource(GeoJsonSource(SOURCE_USER_ACCURACY))
     style.addSource(GeoJsonSource(SOURCE_USER))
 
@@ -474,6 +523,15 @@ private fun addPoiLayers(style: Style, withNumbers: Boolean) {
         FillLayer(LAYER_POI_AREA, SOURCE_POI_AREA).withProperties(
             PropertyFactory.fillColor(BLUSH),
             PropertyFactory.fillOpacity(0.25f),
+        )
+    )
+    // Garis rute navigasi (PB12).
+    style.addLayer(
+        LineLayer("route-line", SOURCE_ROUTE).withProperties(
+            PropertyFactory.lineColor(FOREST),
+            PropertyFactory.lineWidth(5f),
+            PropertyFactory.lineDasharray(arrayOf(1.5f, 1f)),
+            PropertyFactory.lineCap(Property.LINE_CAP_ROUND),
         )
     )
     // Penanda POI: lingkaran pink bernomor; POI terpilih/sudah dikunjungi berwarna hijau tua.
@@ -539,6 +597,16 @@ private fun poiPoints(pois: List<Poi>, visited: Set<String>, selectedId: String?
     }
 )
 
+private fun routeLine(route: Pair<Pair<Double, Double>, Pair<Double, Double>>?) = FeatureCollection.fromFeatures(
+    listOfNotNull(
+        route?.let { (from, to) ->
+            Feature.fromGeometry(
+                LineString.fromLngLats(listOf(Point.fromLngLat(from.second, from.first), Point.fromLngLat(to.second, to.first)))
+            )
+        }
+    )
+)
+
 private fun userPoint(user: UserLocation?) = FeatureCollection.fromFeatures(
     listOfNotNull(user?.let { Feature.fromGeometry(Point.fromLngLat(it.lng, it.lat)) })
 )
@@ -564,6 +632,7 @@ private const val SOURCE_POI_AREA = "poi-area"
 private const val SOURCE_POI_POINT = "poi-point"
 private const val SOURCE_USER_ACCURACY = "user-accuracy"
 private const val SOURCE_USER = "user"
+private const val SOURCE_ROUTE = "route"
 private const val LAYER_POI_AREA = "poi-area-fill"
 private const val LAYER_POI_DOT = "poi-dot"
 private const val PROP_ID = "id"

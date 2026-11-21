@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,6 +54,7 @@ fun PoiDetailScreen(
     poiId: String,
     onBack: () -> Unit,
     onOpenSpecies: (String) -> Unit,
+    onNavigate: (Poi) -> Unit,
 ) {
     val dataset by vm.dataset.collectAsStateWithLifecycle()
     val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
@@ -65,10 +67,10 @@ fun PoiDetailScreen(
         return
     }
 
+    Box(Modifier.fillMaxSize().background(OrchidColors.Cream)) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(OrchidColors.Cream)
             .verticalScroll(rememberScrollState()),
     ) {
         Box {
@@ -111,6 +113,18 @@ fun PoiDetailScreen(
                 }
             }
         }
+    }
+    // F05/F06: mulai navigasi langsung dari halaman detail.
+    PrimaryButton(
+        "Mulai Navigasi",
+        onClick = { onNavigate(poi) },
+        icon = Icons.Filled.Directions,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(16.dp),
+    )
     }
 }
 
