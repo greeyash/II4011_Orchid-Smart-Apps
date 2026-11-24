@@ -29,6 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.Image
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -149,13 +152,13 @@ private fun SafetyCard(text: String) {
     }
 }
 
-/** "Kenali Anggrek" (L05-B): kartu tiap jenis anggrek, membuka halaman spesies. */
+/** "Kenali Anggrek" (L05-B): kartu tiap jenis anggrek dengan fotonya, membuka halaman spesies. */
 @Composable
 private fun SpeciesSection(poi: Poi, onOpenSpecies: (String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        SectionLabel("Kenali anggrek", Modifier.weight(1f))
+        SectionLabel("Kenali anggrek · ${poi.species.size} jenis", Modifier.weight(1f))
         if (poi.species.any { it.checkedAt == null }) {
-            Text("Belum terverifikasi", style = MaterialTheme.typography.labelSmall, color = Rose)
+            Text("Belum dicek pengelola", style = MaterialTheme.typography.labelSmall, color = Rose)
         }
     }
     Row(
@@ -165,26 +168,41 @@ private fun SpeciesSection(poi: Poi, onOpenSpecies: (String) -> Unit) {
         poi.species.forEachIndexed { index, species ->
             PaperCard(
                 Modifier
-                    .width(124.dp)
+                    .width(132.dp)
                     .clickable { onOpenSpecies(species.id) },
             ) {
-                OrchidIllustration(
-                    speciesPetalColor(index),
+                SpeciesImage(
+                    poi, species, index,
                     Modifier
                         .fillMaxWidth()
-                        .height(96.dp)
+                        .height(104.dp)
                         .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)),
                 )
-                Column(Modifier.padding(10.dp)) {
-                    Text(species.latinName.substringBefore(' '), style = MaterialTheme.typography.titleSmall)
-                    Text(species.name, style = MaterialTheme.typography.labelSmall, color = OrchidColors.Muted)
-                }
+                Text(
+                    species.name,
+                    Modifier.padding(10.dp),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontStyle = FontStyle.Italic,
+                    maxLines = 2,
+                )
             }
         }
     }
 }
 
-/** Halaman detail satu jenis anggrek (L09, UI14): ciri, asal, dan narasinya (F08b). */
+/** Foto spesies dari naskah tim; ilustrasi bila foto belum ada. */
+@Composable
+private fun SpeciesImage(poi: Poi, species: OrchidSpecies, index: Int, modifier: Modifier = Modifier) {
+    val photo = rememberAssetBitmap(AudioGuide.speciesPhotoPath(poi, species))
+    if (photo != null) {
+        Image(photo, contentDescription = "Foto ${species.name}", modifier = modifier, contentScale = ContentScale.Crop)
+    } else {
+        OrchidIllustration(speciesPetalColor(index), modifier)
+    }
+}
+
+/** Halaman detail satu jenis anggrek (L09, UI14): foto, ciri, asal, klasifikasi, dan narasinya (F08b). */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onBack: () -> Unit) {
     val dataset by vm.dataset.collectAsStateWithLifecycle()
@@ -202,7 +220,7 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
     Column(Modifier.fillMaxSize().background(OrchidColors.Cream)) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
             Box {
-                OrchidIllustration(speciesPetalColor(index), Modifier.fillMaxWidth().height(260.dp))
+                SpeciesImage(poi, species, index, Modifier.fillMaxWidth().height(280.dp))
                 CircleIconButton(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Kembali",
@@ -216,17 +234,29 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Pill("Spesies anggrek")
-                    if (species.checkedAt == null) Pill("Ilustrasi · belum terverifikasi", style = PillStyle.LIGHT)
+                    Pill(poi.name, style = PillStyle.LIGHT)
                 }
-                Column {
-                    Text(species.latinName, style = MaterialTheme.typography.headlineMedium)
-                    Text(species.name, style = MaterialTheme.typography.bodyMedium, color = OrchidColors.Muted)
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    InfoTile("Ciri", species.characteristics, Modifier.weight(1f))
-                    InfoTile("Asal", species.origin, Modifier.weight(1f))
-                }
+                Text(species.name, style = MaterialTheme.typography.headlineMedium, fontStyle = FontStyle.Italic)
+
                 NarrationCard(AudioGuide.speciesItem(poi, species))
+
+                SectionCard("Ciri") {
+                    species.characteristics.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
+                }
+                SectionCard("Asal") {
+                    Text(species.origin, style = MaterialTheme.typography.bodyMedium)
+                }
+                if (species.classification.isNotEmpty()) {
+                    SectionCard("Klasifikasi") {
+                        species.classification.forEach { line ->
+                            val (rank, value) = line.split(':', limit = 2).let { it[0].trim() to it.getOrElse(1) { "" }.trim() }
+                            Row {
+                                Text(rank, Modifier.width(110.dp), style = MaterialTheme.typography.bodySmall, color = OrchidColors.Muted)
+                                Text(value, style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
             }
         }
         PrimaryButton(
@@ -237,16 +267,6 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
                 .navigationBarsPadding()
                 .padding(16.dp),
         )
-    }
-}
-
-@Composable
-private fun InfoTile(label: String, text: String, modifier: Modifier = Modifier) {
-    PaperCard(modifier) {
-        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
-            Text(text, style = MaterialTheme.typography.bodySmall)
-        }
     }
 }
 
