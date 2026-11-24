@@ -99,4 +99,42 @@ class GeofenceEngineTest {
         update(at(5.0, 0), pois)
         update(at(5.0, 3_000), pois)
     }
+
+    // Dua POI berdekatan: B 12 m di utara A, radius masing-masing 30 m (tumpang tindih).
+    private val poiB = poi.copy(id = "P02", qrCode = "ORCHID-P02", name = "POI B", lat = poi.lat + 12.0 / 111_195.0)
+    private val overlapping = listOf(poi, poiB)
+
+    @Test
+    fun overlappingPoisOnlyTriggerTheNearestOne() {
+        val engine = GeofenceEngine()
+        // 3 m dari A, 9 m dari B: keduanya dalam radius, tetapi hanya A (terdekat) yang terpicu.
+        engine.update(at(3.0, 0), overlapping)
+        val events = engine.update(at(3.0, 3_000), overlapping)
+        assertEquals(listOf("P01"), events.filter { it.transition == GeofenceTransition.ENTER }.map { it.poi.id })
+        assertEquals(setOf("P01"), engine.insidePoiIds)
+    }
+
+    @Test
+    fun nextOverlappingPoiWaitsForTheGapInsteadOfStacking() {
+        val engine = GeofenceEngine()
+        engine.update(at(0.0, 0), overlapping)
+        engine.update(at(0.0, 3_000), overlapping) // ENTER A
+        // Berjalan ke B (12 m utara): B kini jelas lebih dekat, tetapi baru 9 detik sejak A.
+        engine.update(at(12.0, 6_000), overlapping)
+        val tooSoon = engine.update(at(12.0, 9_000), overlapping)
+        assertTrue(tooSoon.none { it.transition == GeofenceTransition.ENTER })
+        // Setelah jeda 30 detik dan masih di B, kedatangan B baru diumumkan.
+        val later = engine.update(at(12.0, 33_000), overlapping)
+        assertEquals(listOf("P02"), later.filter { it.transition == GeofenceTransition.ENTER }.map { it.poi.id })
+    }
+
+    @Test
+    fun smallMovesAtTheBorderDoNotFlipBetweenPois() {
+        val engine = GeofenceEngine()
+        engine.update(at(5.0, 0), overlapping)
+        engine.update(at(5.0, 3_000), overlapping) // ENTER A (5 m dari A, 7 m dari B)
+        // 7 m dari A, 5 m dari B: B lebih dekat tetapi selisihnya < 5 m, tetap di A.
+        assertTrue(engine.update(at(7.0, 40_000), overlapping).isEmpty())
+        assertEquals(setOf("P01"), engine.insidePoiIds)
+    }
 }

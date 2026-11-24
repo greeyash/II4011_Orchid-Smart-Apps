@@ -43,7 +43,7 @@ class PoiRepository(private val context: Context) {
                 }
                 require(poi.activities.isNotEmpty()) { "${poi.id} belum punya daftar kegiatan" }
                 poi.species.forEach { s ->
-                    require(s.name.isNotBlank() && s.characteristics.isNotBlank() && s.origin.isNotBlank()) {
+                    require(s.name.isNotBlank() && s.characteristics.isNotEmpty() && s.origin.isNotBlank()) {
                         "Data spesies ${poi.id}-${s.id} belum lengkap"
                     }
                     require(s.source.isNotBlank()) { "Spesies ${poi.id}-${s.id} belum punya sumber" }
