@@ -37,8 +37,13 @@ data class LocationUiState(
     /** True bila belum ada posisi 10 detik setelah pelacakan dimulai (target F01). */
     val noFixTimeout: Boolean = false,
     val error: String? = null,
+    /** False bila pengguna hanya memberi izin lokasi perkiraan (Android 12+). */
+    val precise: Boolean = true,
 ) {
     val showWeakGps: Boolean get() = noFixTimeout || location?.isWeak == true
+
+    /** Izin ada tetapi hanya lokasi perkiraan: geofence dan navigasi tidak akan akurat. */
+    val approximateOnly: Boolean get() = permission == PermissionStatus.GRANTED && !precise
 }
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
@@ -91,13 +96,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             permanentlyDenied -> PermissionStatus.PERMANENTLY_DENIED
             else -> PermissionStatus.DENIED
         }
-        _location.update { it.copy(permission = status) }
+        _location.update { it.copy(permission = status, precise = locationRepository.hasPreciseLocation()) }
     }
 
     /** Dipanggil saat layar kembali aktif, mis. setelah pengguna mengubah izin di Pengaturan. */
     fun refreshPermission() {
         if (locationRepository.hasPermission()) {
-            _location.update { it.copy(permission = PermissionStatus.GRANTED) }
+            _location.update { it.copy(permission = PermissionStatus.GRANTED, precise = locationRepository.hasPreciseLocation()) }
         } else if (_location.value.permission == PermissionStatus.GRANTED) {
             _location.update { it.copy(permission = PermissionStatus.DENIED) }
         }

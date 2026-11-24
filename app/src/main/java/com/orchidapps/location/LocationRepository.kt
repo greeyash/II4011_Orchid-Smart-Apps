@@ -50,6 +50,14 @@ class LocationRepository(private val context: Context) {
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
 
+    /**
+     * True bila izin lokasi akurat (FINE) diberikan. Dengan izin "perkiraan" saja, akurasi posisi
+     * sekitar 1-3 km sehingga geofence tidak pernah terpicu.
+     */
+    fun hasPreciseLocation(): Boolean =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+
     fun isLocationEnabled(): Boolean {
         if (DemoLocation.enabled.value) return true
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager

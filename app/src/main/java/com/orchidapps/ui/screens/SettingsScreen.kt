@@ -77,13 +77,14 @@ fun SettingsScreen(vm: MainViewModel) {
         SectionCard("Izin lokasi") {
             Text(
                 when (location.permission) {
-                    PermissionStatus.GRANTED -> "Diizinkan. Posisi Anda tampil di peta dan sesi jelajah bisa dimulai."
+                    PermissionStatus.GRANTED -> if (location.precise) "Diizinkan. Posisi Anda tampil di peta dan sesi jelajah bisa dimulai."
+                    else "Hanya lokasi perkiraan. Pemicu lokasi dan navigasi butuh lokasi akurat."
                     PermissionStatus.NOT_REQUESTED -> "Belum diminta."
                     else -> "Ditolak. Anda tetap bisa memilih tempat secara manual."
                 },
                 style = MaterialTheme.typography.bodyMedium,
             )
-            if (location.permission != PermissionStatus.GRANTED) {
+            if (location.permission != PermissionStatus.GRANTED || !location.precise) {
                 PrimaryButton("Izinkan Lokasi", onClick = requestPermission, modifier = Modifier.fillMaxWidth())
             }
         }

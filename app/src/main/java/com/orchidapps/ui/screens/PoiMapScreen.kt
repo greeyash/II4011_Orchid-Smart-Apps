@@ -292,6 +292,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
+                locationState.approximateOnly && !demo -> ApproximateLocationCard(onFix = requestPermission)
                 else -> ReadyCard(
                     hasPermission = locationState.permission == PermissionStatus.GRANTED,
                     autoPlay = autoPlay,
@@ -702,3 +703,22 @@ private const val PROP_NUMBER = "number"
 private const val PROP_FILL = "fill"
 private const val PROP_TEXT = "text"
 private const val PROP_RADIUS = "radius"
+
+/**
+ * Izin lokasi hanya "perkiraan" (Android 12+): akurasi 1-3 km membuat pemicu lokasi tidak berjalan,
+ * jadi pengunjung diminta mengganti ke lokasi akurat.
+ */
+@Composable
+private fun ApproximateLocationCard(onFix: () -> Unit) {
+    PaperCard(Modifier.fillMaxWidth(), elevated = true, color = OrchidColors.BlushLight) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Lokasi masih perkiraan", style = MaterialTheme.typography.titleLarge)
+            Text(
+                "Anda memberi izin lokasi perkiraan, jadi aplikasi tidak bisa tahu saat Anda tiba di " +
+                    "titik wisata. Pilih \"Lokasi akurat\" agar notifikasi dan navigasi berjalan.",
+                style = MaterialTheme.typography.bodySmall,
+            )
+            PrimaryButton("Izinkan Lokasi Akurat", onClick = onFix, modifier = Modifier.fillMaxWidth())
+        }
+    }
+}
