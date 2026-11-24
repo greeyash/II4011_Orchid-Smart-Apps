@@ -355,6 +355,17 @@ fun CategoryChips(selected: PoiCategory?, onChange: (PoiCategory?) -> Unit, modi
                 selected = selected == c,
                 onClick = { onChange(if (selected == c) null else c) },
                 label = { Text(c?.label ?: "Semua") },
+                // Titik berwarna sekaligus menjadi legenda warna penanda di peta.
+                leadingIcon = c?.let { cat ->
+                    {
+                        Box(
+                            Modifier
+                                .size(10.dp)
+                                .clip(CircleShape)
+                                .background(cat.markerColor),
+                        )
+                    }
+                },
                 shape = CircleShape,
                 border = null,
                 colors = FilterChipDefaults.filterChipColors(
@@ -671,7 +682,8 @@ private fun poiPoints(pois: List<Poi>, visited: Set<String>, selectedId: String?
         Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)).apply {
             addStringProperty(PROP_ID, poi.id)
             addStringProperty(PROP_NUMBER, poi.number())
-            addStringProperty(PROP_FILL, if (highlighted) FOREST else BLUSH)
+            // Warna per kategori; hijau tua bila dipilih atau sudah dikunjungi.
+            addStringProperty(PROP_FILL, if (highlighted) FOREST else poi.category.markerHex)
             addStringProperty(PROP_TEXT, if (highlighted) "#FEFCF7" else FOREST)
             addNumberProperty(PROP_RADIUS, if (poi.id == selectedId) 15f else 12f)
         }
