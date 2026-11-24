@@ -10,3 +10,6 @@
 .cxx/
 *.apk
 *.aab
+
+# Foto mentah dari tim (sudah dikonversi ke app/src/main/assets/images)
+/gambar/
