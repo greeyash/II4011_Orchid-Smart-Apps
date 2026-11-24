@@ -55,6 +55,7 @@ import com.orchidapps.ui.screens.PoiDetailScreen
 import com.orchidapps.ui.screens.PoiListScreen
 import com.orchidapps.ui.screens.PoiMapScreen
 import com.orchidapps.ui.screens.QrScannerScreen
+import com.orchidapps.ui.screens.RecommendationCard
 import com.orchidapps.ui.screens.SettingsScreen
 import com.orchidapps.ui.screens.SpeciesDetailScreen
 import com.orchidapps.ui.screens.WelcomeScreen
@@ -248,8 +249,9 @@ private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit, onScanRes
     // Saat navigasi dimulai dari tab lain, tampilkan peta (L07-A).
     val navigating by NavigationSession.state.collectAsStateWithLifecycle()
     val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
-    LaunchedEffect(navigating != null, recommendAfter) {
-        if (navigating != null || recommendAfter != null) tabIndex = Tab.MAP.ordinal
+    // Rekomendasi tidak memindahkan tab: di tab selain Peta ia tampil sebagai kartu di bawah.
+    LaunchedEffect(navigating != null) {
+        if (navigating != null) tabIndex = Tab.MAP.ordinal
     }
     var focusSearch by remember { androidx.compose.runtime.mutableStateOf(false) }
     val tab = Tab.entries[tabIndex]
@@ -300,7 +302,22 @@ private fun MainScreen(vm: MainViewModel, onOpenPoi: (String) -> Unit, onScanRes
                 Tab.PLACES -> PoiListScreen(vm, onOpenPoi, showSearch = false)
                 Tab.SETTINGS -> SettingsScreen(vm)
             }
-            if (tab != Tab.MAP && tab != Tab.SCAN) {
+            val anchor = recommendAfter
+            if (tab != Tab.MAP && tab != Tab.SCAN && anchor != null) {
+                RecommendationCard(
+                    recommendations = vm.recommendationsAfter(anchor),
+                    onNavigate = {
+                        RecommendationPrompt.dismiss()
+                        vm.startNavigation(it.poi)
+                    },
+                    onOpen = {
+                        RecommendationPrompt.dismiss()
+                        onOpenPoi(it.poi.id)
+                    },
+                    onClose = RecommendationPrompt::dismiss,
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp),
+                )
+            } else if (tab != Tab.MAP && tab != Tab.SCAN) {
                 MiniPlayerBar(Modifier.align(Alignment.BottomCenter).padding(12.dp))
             }
         }

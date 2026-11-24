@@ -117,14 +117,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
     val rainMode by settings.rainMode.collectAsStateWithLifecycle()
     val offlineMap by OfflineMaps.state.collectAsStateWithLifecycle()
-    // Rekomendasi dihitung dari posisi pengunjung, atau dari POI yang baru ditutup bila posisi belum ada.
-    fun recommendationsFrom(anchorId: String?): List<Recommendation> {
-        val pois = dataset?.pois ?: return emptyList()
-        val anchor = pois.firstOrNull { it.id == anchorId }
-        val lat = locationState.location?.lat ?: anchor?.lat ?: return emptyList()
-        val lng = locationState.location?.lng ?: anchor?.lng ?: return emptyList()
-        return Recommender.recommend(pois, visited, lat, lng, exclude = setOfNotNull(anchorId))
-    }
+    fun recommendationsFrom(anchorId: String?): List<Recommendation> = vm.recommendationsAfter(anchorId)
     val startNavigation: (Poi) -> Unit = { poi ->
         if (!vm.startNavigation(poi)) {
             Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()

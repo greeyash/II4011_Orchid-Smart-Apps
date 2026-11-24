@@ -9,7 +9,9 @@ import com.orchidapps.data.PoiRepository
 import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.map.OfflineMaps
 import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.Recommendation
 import com.orchidapps.recommendation.RecommendationPrompt
+import com.orchidapps.recommendation.Recommender
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.Job
@@ -152,6 +154,19 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun stopNavigation() = NavigationSession.stop()
+
+    /**
+     * Rekomendasi 1-3 POI berikutnya (F07) dari posisi pengunjung, atau dari POI [anchorId]
+     * bila posisi belum terbaca.
+     */
+    fun recommendationsAfter(anchorId: String?): List<Recommendation> {
+        val pois = (_dataset.value as? DatasetState.Loaded)?.dataset?.pois ?: return emptyList()
+        val anchor = pois.firstOrNull { it.id == anchorId }
+        val loc = _location.value.location
+        val lat = loc?.lat ?: anchor?.lat ?: return emptyList()
+        val lng = loc?.lng ?: anchor?.lng ?: return emptyList()
+        return Recommender.recommend(pois, ExplorationSession.visited.value, lat, lng, exclude = setOfNotNull(anchorId))
+    }
 
     private fun onNewLocation(loc: UserLocation) {
         _location.update { it.copy(location = loc, noFixTimeout = false, error = null) }
