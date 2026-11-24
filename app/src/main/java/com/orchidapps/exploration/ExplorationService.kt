@@ -20,6 +20,8 @@ import com.orchidapps.location.GeofenceTransition
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.RecommendationPrompt
+import com.orchidapps.recommendation.Recommender
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,6 +42,9 @@ class ExplorationService : Service() {
     private var trackingJob: Job? = null
     private var announceJob: Job? = null
     private var narrationJob: Job? = null
+    private var lastLocation: UserLocation? = null
+    /** POI yang rekomendasinya menunggu narasi kedatangan selesai. */
+    private var pendingRecommendFor: String? = null
     private val narration by lazy { NarrationPlayer.get(this) }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -94,11 +99,19 @@ class ExplorationService : Service() {
         }
         // Notifikasi sesi berubah menjadi kontrol media layar kunci selama narasi aktif (PB09).
         narrationJob = scope.launch {
-            narration.state.collect { updateSessionNotification() }
+            narration.state.collect { state ->
+                updateSessionNotification()
+                // F07 / skenario PRD langkah 4: rekomendasi muncul setelah narasi kedatangan selesai.
+                val pending = pendingRecommendFor
+                if (pending != null && state.item?.id == pending && state.status == NarrationStatus.ENDED) {
+                    recommendAfter(pending)
+                }
+            }
         }
     }
 
     private fun onLocation(location: UserLocation) {
+        lastLocation = location
         // Navigasi tetap mendapat posisi dan mengucapkan arahan saat layar mati (PB12, F04e).
         NavigationSession.onLocation(location)
         val events = geofence.update(location, pois)
@@ -112,6 +125,8 @@ class ExplorationService : Service() {
     /** Tiba di POI (PB07): getar 2x, notifikasi "Anda berada di …", dan nama lokasi disebutkan. */
     private fun onArrived(poi: Poi) {
         ExplorationSession.onArrived(poi)
+        NavigationSession.onGeofenceArrival(poi.id)
+        pendingRecommendFor = poi.id
         updateSessionNotification()
         Haptics.vibrateTwice(this)
         notify(ExplorationNotifications.NOTIFICATION_ARRIVAL, ExplorationNotifications.arrival(this, poi))
@@ -128,12 +143,28 @@ class ExplorationService : Service() {
         if (ExplorationSettings.get(this).autoPlay.value) {
             NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
             narration.play(AudioGuide.item(poi))
+        } else {
+            // Tanpa Auto-Play, rekomendasi langsung menyusul pengumuman kedatangan.
+            recommendAfter(poi.id)
         }
+    }
+
+    /** Rekomendasi 1-3 POI berikutnya, ditampilkan di aplikasi dan dibacakan (F07). */
+    private fun recommendAfter(poiId: String) {
+        pendingRecommendFor = null
+        val anchor = pois.firstOrNull { it.id == poiId } ?: return
+        val lat = lastLocation?.lat ?: anchor.lat
+        val lng = lastLocation?.lng ?: anchor.lng
+        val recs = Recommender.recommend(pois, ExplorationSession.visited.value, lat, lng, exclude = setOf(poiId))
+        RecommendationPrompt.show(poiId)
+        announceJob?.cancel()
+        announceJob = scope.launch { runCatching { narration.speech.speak(Recommender.spoken(recs)) } }
     }
 
     private fun listen(poi: Poi) {
         NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
         announceJob?.cancel()
+        pendingRecommendFor = poi.id
         narration.play(AudioGuide.item(poi))
     }
 
@@ -173,6 +204,7 @@ class ExplorationService : Service() {
         trackingJob = null
         narrationJob?.cancel()
         narrationJob = null
+        pendingRecommendFor = null
         announceJob?.cancel()
         narration.speech.stop()
         NotificationManagerCompat.from(this).cancel(ExplorationNotifications.NOTIFICATION_ARRIVAL)
