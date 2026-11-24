@@ -3,6 +3,7 @@ package com.orchidapps.navigation
 import android.content.Context
 import com.orchidapps.audio.NarrationPlayer
 import com.orchidapps.data.Poi
+import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +52,18 @@ object NavigationSession {
         handle(events)
     }
 
+    /**
+     * Geofence sesi jelajah sudah mengumumkan kedatangan di tujuan navigasi: tandai navigasi selesai
+     * tanpa mengucapkan "Anda telah tiba" untuk kedua kalinya.
+     */
+    fun onGeofenceArrival(poiId: String) {
+        val current = _state.value ?: return
+        if (current.arrived || current.target.id != poiId) return
+        _state.value = current.copy(arrived = true)
+        ExplorationSession.markVisited(poiId)
+        _arrivals.value = current.target
+    }
+
     fun stop() {
         engine.reset()
         speakJob?.cancel()
@@ -65,7 +78,10 @@ object NavigationSession {
         events.forEach { event ->
             when (event) {
                 is NavigationEvent.Announce -> speak(event.text)
-                is NavigationEvent.Arrived -> _arrivals.value = event.poi
+                is NavigationEvent.Arrived -> {
+                    ExplorationSession.markVisited(event.poi.id)
+                    _arrivals.value = event.poi
+                }
                 NavigationEvent.Rerouted -> Unit
             }
         }
