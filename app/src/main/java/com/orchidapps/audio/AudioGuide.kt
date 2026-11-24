@@ -39,9 +39,11 @@ object AudioGuide {
     )
 
     /** Narasi botani satu jenis anggrek (F08b); juga dibuka dari QR papan tanaman di PB14. */
-    fun speciesNarration(species: OrchidSpecies): String =
-        "${species.name}, nama ilmiahnya ${species.latinName}. " +
-            "Ciri-cirinya: ${species.characteristics} Asal: ${species.origin}"
+    fun speciesNarration(species: OrchidSpecies): String = species.narration
+        ?: ("${species.name}. Ciri-cirinya: ${species.characteristics.joinToString(". ")}. Asal: ${species.origin}")
+
+    /** Foto spesies dari naskah tim: `images/species/P04-S01.jpg`. */
+    fun speciesPhotoPath(poi: Poi, species: OrchidSpecies) = "images/species/${poi.id}-${species.id}.jpg"
 
     fun speciesItem(poi: Poi, species: OrchidSpecies) = NarrationItem(
         id = "${poi.id}-${species.id}",

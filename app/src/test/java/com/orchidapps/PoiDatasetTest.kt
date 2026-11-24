@@ -68,7 +68,7 @@ class PoiDatasetTest {
         val species = dataset.pois.first { it.id == "P04" }.species
         assertTrue(species.size >= 3)
         species.forEach {
-            assertTrue(it.id, it.characteristics.isNotBlank() && it.origin.isNotBlank() && it.source.isNotBlank())
+            assertTrue(it.id, it.characteristics.isNotEmpty() && it.origin.isNotBlank() && it.source.isNotBlank())
         }
     }
 

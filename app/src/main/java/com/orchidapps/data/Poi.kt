@@ -53,8 +53,13 @@ data class OrchidSpecies(
     val qrCode: String,
     val name: String,
     val latinName: String,
-    val characteristics: String,
+    /** Klasifikasi takson, mis. "Genus: Lycaste". */
+    val classification: List<String> = emptyList(),
+    /** Ciri-ciri, satu butir per elemen. */
+    val characteristics: List<String>,
     val origin: String,
+    /** Naskah audio tim untuk spesies ini (F08b). */
+    val narration: String? = null,
     val source: String,
     val checkedAt: String? = null,
 )

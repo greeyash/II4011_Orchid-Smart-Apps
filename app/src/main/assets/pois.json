@@ -114,41 +114,864 @@
         {
           "id": "S01",
           "qrCode": "ORCHID-P04-S01",
-          "name": "Anggrek Bulan",
-          "latinName": "Phalaenopsis amabilis",
-          "characteristics": "Kelopak bunga putih, lebar, dan membulat seperti ngengat yang sedang terbang. Daunnya tebal, lebar, dan tumbuh berpasangan di dekat pangkal batang. Bunganya bisa mekar cukup lama.",
-          "origin": "Indonesia dan Asia Tenggara hingga Papua dan Australia bagian utara. Anggrek bulan ditetapkan sebagai puspa pesona, salah satu bunga nasional Indonesia.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
+          "name": "Lycaste aromatica",
+          "latinName": "Lycaste aromatica",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Spindendrodeae",
+            "Genus: Lycaste",
+            "Species: L. Aromatica"
+          ],
+          "characteristics": [
+            "Bunga berwarna kuning keemasan",
+            "Umbi Semu berbentuk oval atau bulat telur yang gemuk",
+            "Daun berbentuk memanjang (lanceolate), lebar, tipis, dan memiliki lipatan memanjang yang khas (plicate)",
+            "Memiliki aroma kayu manis"
+          ],
+          "origin": "Meksiko, Belize, Guatemala, Amerika Tengah",
+          "narration": "Lycaste Aromatica menjadi salah satu keluarga yang mengeluarkan aroma wangi ketika sedang berbunga. Anggrek ini berasal dari Amerika Tengah yaitu di negara meksiko, Belize. Anggrek ini tumbuh secara epifit di batang batang pohon yang berlumut pada ketinggian 1000 - 2000 mdpl. Musim pembungaan biasanya terjadi ketika akhir musim semi hingga musim panas.",
+          "source": "Naskah tim (Writing Orchid App)",
           "checkedAt": null
         },
         {
           "id": "S02",
           "qrCode": "ORCHID-P04-S02",
-          "name": "Anggrek Vanda Tricolor",
-          "latinName": "Vanda tricolor",
-          "characteristics": "Daunnya berbentuk pita dan tersusun berseling di sepanjang batang. Bunganya berwarna putih kekuningan dengan bintik merah keunguan, bibir bunga ungu, dan beraroma harum.",
-          "origin": "Pulau Jawa dan Bali, tumbuh di lereng gunung yang sejuk.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
+          "name": "Dracula janetiae",
+          "latinName": "Dracula janetiae",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Traecheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparalges",
+            "Family: Orchidaceae",
+            "Subfamily: -",
+            "Genus: Dracula",
+            "Species: D. simia"
+          ],
+          "characteristics": [
+            "Bunganya memiliki diameter sekitar 7,5 cm dengan tampilan visual yang menyerupai wajah monyet berwarna putih pucat dan corak bintik ungu",
+            "Setiap batang memiliki satu daun ujung yang berbentuk elips sempit dan memanjang",
+            "Tangkai bunganya tumbuh menjuntai ke arah bawah",
+            "bagian bibir bunganya (epichile) yang berbentuk bulat datar dengan tekstur berbintil halus"
+          ],
+          "origin": "Ekuador - Peru, Amerika Selatan",
+          "narration": "D. simia memiliki bunga yang mirip dengan wajah monyet. Anggrek ini berasal dari Amerika Selatan tepatnya di Ekuador tersebar hingga Peru, di habitatnya anggrek hidup di ketinggian 1000 - 2000 mdpl tumbuh secara epifit di pohon pohon hutan dengan kelembaban 80 - 90% dan suhu sekitar 27 derajat celcius",
+          "source": "Naskah tim (Writing Orchid App)",
           "checkedAt": null
         },
         {
           "id": "S03",
           "qrCode": "ORCHID-P04-S03",
-          "name": "Anggrek Dendrobium",
-          "latinName": "Dendrobium sp.",
-          "characteristics": "Batangnya beruas dan menggembung seperti tebu. Dalam satu tangkai tumbuh banyak bunga sekaligus dengan warna beragam, misalnya ungu, putih, atau kuning.",
-          "origin": "Kawasan tropis Asia hingga Australia dan Kepulauan Pasifik. Banyak jenis hibridanya dibudidayakan di Indonesia.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
+          "name": "Epidendrum melanoporphyreum",
+          "latinName": "Epidendrum melanoporphyreum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocuts",
+            "Order: Asparalges",
+            "Family: Orchidaceae",
+            "Subfamily: Epindendroideae",
+            "Genus: Epindendrum",
+            "Species: E. Melanoporphyreum"
+          ],
+          "characteristics": [
+            "Bunga berukuran sekitar 3 cm (1,25 inci) dengan kelopak dan mahkota berwarna ungu tua pekat mendekati hitam",
+            "Tangkai bunga membentuk malai (panicle) sepanjang 15 hingga 25 cm",
+            "Tinggi tanaman  mencapai sekitar 30 hingga 70 cm",
+            "Batangnya berbentuk seperti tebu (cane-shaped), lurus, ramping, dan tidak bercabang"
+          ],
+          "origin": "Peru, Amerika Selatan",
+          "narration": "Epidendrum Melanoporphyreum memiliki bunga berwarna ungu hitam, berasal dari Amerika Selatan tepatnya di negara Peru dan ditemukan pada ketinggian 1300 mdpl, hidup secara epifit pegunungan.",
+          "source": "Naskah tim (Writing Orchid App)",
           "checkedAt": null
         },
         {
           "id": "S04",
           "qrCode": "ORCHID-P04-S04",
-          "name": "Anggrek Cattleya",
-          "latinName": "Cattleya sp.",
-          "characteristics": "Bunganya besar dan harum dengan bibir bunga lebar yang bergelombang, sehingga sering dijuluki ratu anggrek.",
-          "origin": "Hutan tropis Amerika Tengah dan Amerika Selatan.",
-          "source": "Literatur umum botani anggrek; keberadaan di Orchid House belum dikonfirmasi ke pengelola",
+          "name": "Dendrobium mutabile",
+          "latinName": "Dendrobium mutabile",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Dendrobium",
+            "Species: D. Mutabile"
+          ],
+          "characteristics": [
+            "Bunga berukuran relatif kecil hingga sedang, umumnya berwarna putih hingga krem kekuningan dengan bagian bibir (labellum) berpadu warna kuning atau jingga lembut",
+            "Tangkai perbungaan tumbuh dari ruas batang dengan beberapa kuntum bunga yang mekar bergerombol atau berurutan",
+            "Batang berbentuk ramping, beruas-ruas, dan tumbuh tegak atau agak melengkung dengan daun tersusun berselang-seling di sepanjang batang",
+            "Daun berbentuk memanjang hingga lanset dengan tekstur agak tebal dan ujung meruncing"
+          ],
+          "origin": "Indonesia",
+          "narration": "D. mutabile merupakan salah satu jenis anggrek yang berasal dari Indonesia, termasuk di kawasan Malesia dan Pulau Jawa seperti perbukitan yang teduh dan lembap. Habitat dan penyebarannya umumnya ditemukan di hutan hujan tropis pegunungan atau perbukitan yang sejuk dengan kelembapan udara yang cukup tinggi. Di habitat alaminya, anggrek ini banyak tumbuh secara epifit menempel pada batang atau cabang pohon yang berlumut, serta sesekali dapat ditemukan tumbuh sebagai litofit di permukaan bebatuan yang lembap.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S05",
+          "qrCode": "ORCHID-P04-S05",
+          "name": "Dendrobium trantuanii",
+          "latinName": "Dendrobium trantuanii",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Dendrobium",
+            "Species: D. trantuanii"
+          ],
+          "characteristics": [
+            "Bunga berukuran cukup besar untuk ukuran Dendrobium mini, berwarna putih bersih hingga putih semu merah muda (pink lembut) dengan bagian tengah atau labellum berpadu warna kuning kehijauan dan cokelat kemerahan",
+            "Kelopak dan mahkota bunga cukup lebar dengan ujung meruncing serta tekstur yang tampak berkilau halus",
+            "Batang pendek hingga sedang beruas-ruas dengan daun tersusun berselang-seling di bagian atas batang",
+            "Daun berbentuk memanjang hingga lonjong-lanset dengan permukaan hijau segar"
+          ],
+          "origin": "Vietnam (endemik di kawasan pegunungan Vietnam bagian tengah hingga selatan, seperti sekitar Dataran Tinggi Tengah / wilayah Lâm Đồng)",
+          "narration": "D. trantuanii merupakan spesies anggrek yang berasal dari Vietnam, khususnya di wilayah pegunungan tropis yang sejuk dan lembap. Habitat dan penyebarannya berada di hutan pegunungan berkabut dengan sirkulasi udara yang baik serta kelembapan yang terjaga sepanjang tahun. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit menempel pada batang atau cabang pohon yang teduh, dengan bunga putih semu merah muda yang mencolok di sela dedaunannya.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S06",
+          "qrCode": "ORCHID-P04-S06",
+          "name": "Dendrobium antennatum",
+          "latinName": "Dendrobium antennatum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Dendrobium",
+            "Species: D. antennatum"
+          ],
+          "characteristics": [
+            "Memiliki mahkota (petal) panjang, sempit, dan tegak ke atas menyerupai antena atau tanduk berwarna hijau kekuningan hingga cokelat kehijauan",
+            "Kelopak (sepal) berwarna putih atau krem pucat yang melengkung ke bawah, sedangkan bagian bibir (labellum) memiliki garis atau corak ungu kemerahan dengan aksen kuning",
+            "Batang berbentuk memanjang seperti tebu atau gelendong yang agak menebal dan beruas-ruas dengan daun tersusun di sepanjang bagian atas",
+            "Daun berbentuk memanjang hingga lonjong dengan tekstur agak kaku dan hijau segar"
+          ],
+          "origin": "Indonesia (kawasan timur Indonesia seperti Maluku dan Papua, serta meluas ke Papua Nugini dan bagian utara Queensland, Australia)",
+          "narration": "D. antennatum merupakan jenis anggrek yang berasal dari wilayah timur Indonesia, seperti Maluku dan Papua, serta kawasan sekitarnya di Papua Nugini dan Australia utara. Habitat dan penyebarannya banyak ditemukan di hutan dataran rendah hingga perbukitan tropis yang hangat dengan pencahayaan cukup terang dan kelembapan yang terjaga. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada batang atau cabang pohon yang terkena cahaya saring, dengan bentuk bunga menyerupai antena yang menjadi ciri khasnya.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S07",
+          "qrCode": "ORCHID-P04-S07",
+          "name": "Dendrobium anosmum",
+          "latinName": "Dendrobium anosmum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Dendrobium",
+            "Species: D. anosmum"
+          ],
+          "characteristics": [
+            "Bunga berukuran cukup besar dan mencolok, umumnya berwarna merah muda keunguan hingga ungu lembut dengan bagian bibir (labellum) berwarna ungu tua atau merah keunguan yang bertekstur agak berbulu halus",
+            "Kelopak dan mahkota bunga berbentuk lonjong memanjang hingga meruncing dengan tepi yang agak bergelombang serta memiliki aroma khas yang kuat",
+            "Batang panjang, ramping, beruas-ruas, dan cenderung menjuntai atau menggantung saat dewasa, dengan daun yang sering kali gugur sebelum bunga bermekaran penuh",
+            "Daun berbentuk memanjang hingga lanset dengan ujung meruncing tersusun berselang-seling di sepanjang batang"
+          ],
+          "origin": "Indonesia (tersebar di kawasan Asia Tenggara dan Malesia, termasuk Indonesia seperti Sumatra, Kalimantan, dan Sulawesi, serta Filipina, Indochina, dan Nugini)",
+          "narration": "D. anosmum merupakan jenis anggrek yang berasal dari wilayah Asia Tenggara dan Malesia, termasuk di Indonesia dan kawasan sekitarnya. Habitat dan penyebarannya banyak ditemukan di hutan tropis dataran rendah hingga perbukitan dengan musim kering yang cukup jelas dan kelembapan yang terjaga. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit menempel pada batang atau cabang pohon yang teduh hingga agak terbuka, dengan batang yang menjuntai indah saat bunganya bermekaran.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S08",
+          "qrCode": "ORCHID-P04-S08",
+          "name": "Coelogyne cristata var alba",
+          "latinName": "Coelogyne cristata var alba",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Tribe: Arethuseae",
+            "Genus: Coelogyne",
+            "Species: C. cristata"
+          ],
+          "characteristics": [
+            "Bunga berukuran cukup besar dan elegan, berwarna putih bersih (alba) secara keseluruhan tanpa semburat warna mencolok pada bagian bibir (labellum) seperti bentuk tipikalnya",
+            "Kelopak dan mahkota bunga berbentuk lonjong memanjang dengan ujung meruncing dan permukaan yang tampak halus berkilau",
+            "Memiliki pseudobulb (umbi semu) berbentuk agak bulat telur hingga lonjong yang tumbuh berdekatan dengan permukaan sedikit berkerut saat dewasa",
+            "Daun umumnya berjumlah sepasang pada tiap pseudobulb, berbentuk memanjang seperti pita atau lanset dengan ujung meruncing dan urat daun yang jelas"
+          ],
+          "origin": "Kawasan pegunungan Himalaya (seperti Nepal, India bagian utara/timur laut, dan wilayah pegunungan sekitarnya di Asia Selatan)",
+          "narration": "Coelogyne cristata var. alba merupakan varietas anggrek dengan warna bunga putih bersih yang berasal dari kawasan pegunungan Himalaya dan wilayah sekitarnya. Habitat dan penyebarannya berada di hutan pegunungan yang sejuk, berudara segar, serta memiliki kelembapan yang cukup tinggi. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada batang atau cabang pohon berlumut, maupun sesekali sebagai litofit di celah bebatuan yang teduh dan lembap.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S09",
+          "qrCode": "ORCHID-P04-S09",
+          "name": "Bulbophyllum lobbii",
+          "latinName": "Bulbophyllum lobbii",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Bulbophyllum",
+            "Species: B. lobbii"
+          ],
+          "characteristics": [
+            "Bunga berukuran cukup besar dan mencolok untuk marga Bulbophyllum, umumnya berwarna kuning keemasan hingga jingga kecokelatan dengan bintik atau garis halus kemerahan/kecokelatan",
+            "Memiliki bagian bibir (labellum) yang engsel atau mudah bergoyang saat tertiup angin maupun tersentuh serangga penyerbuk",
+            "Kelopak dan mahkota bunga berbentuk lonjong hingga meruncing dengan tepi yang agak melengkung atau berombak",
+            "Memiliki pseudobulb (umbi semu) berjarak di sepanjang rimpang yang merambat, masing-masing membawa satu helai daun berbentuk lonjong hingga lanset yang agak tebal"
+          ],
+          "origin": "Indonesia (tersebar di kawasan Asia Tenggara dan Malesia, termasuk Indonesia seperti Sumatra, Kalimantan, dan Jawa, serta Semenanjung Malaya, Indochina, dan Filipina)",
+          "narration": "B. lobbii merupakan jenis anggrek yang berasal dari wilayah Asia Tenggara dan Malesia, termasuk di Indonesia dan kawasan sekitarnya. Habitat dan penyebarannya banyak ditemukan di hutan hujan tropis dataran rendah hingga perbukitan yang teduh, sejuk, dan lembap dengan sirkulasi udara yang baik. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada batang atau cabang pohon yang berlumut maupun litofit di permukaan batu yang lembap, dengan ciri khas bibir bunga yang dapat bergerak lentur.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S10",
+          "qrCode": "ORCHID-P04-S10",
+          "name": "Liparis crenulata",
+          "latinName": "Liparis crenulata",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Subtribe: Malaxidinae",
+            "Genus: Liparis",
+            "Species: L. Crenulata"
+          ],
+          "characteristics": [
+            "Bunga berukuran relatif kecil hingga sedang yang tersusun berderet atau menggantung pada tangkai perbungaan, umumnya berwarna jingga kemerahan, merah bata, atau kuning kecokelatan",
+            "Bagian bibir (labellum) melengkung dengan tepi yang tampak berombak atau bergerigi halus (crenulate), selaras dengan nama spesifiknya",
+            "Memiliki pseudobulb (umbi semu) yang agak gemuk atau menebal di pangkal daun, tumbuh berdekatan atau berjejer",
+            "Daun berukuran cukup lebar dan memanjang berbentuk lonjong hingga lanset dengan tekstur agak tebal dan hijau segar"
+          ],
+          "origin": "Kawasan Asia Tenggara dan Himalaya (tersebar mulai dari Himalaya bagian timur, India timur laut, dan Tiongkok selatan hingga Asia Tenggara seperti Myanmar, Thailand, dan Vietnam)",
+          "narration": "L. crenulata merupakan jenis anggrek yang berasal dari kawasan Himalaya dan Asia Tenggara daratan, seperti wilayah India timur laut, Tiongkok selatan, Thailand, dan negara sekitarnya. Habitat dan penyebarannya banyak ditemukan di hutan pegunungan hingga perbukitan yang sejuk, teduh, serta memiliki kelembapan udara yang cukup tinggi. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada batang atau cabang pohon berlumut maupun litofit di permukaan batu yang lembap, dengan rangkaian bunga berwarna jingga kemerahan yang menarik perhatian.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S11",
+          "qrCode": "ORCHID-P04-S11",
+          "name": "Maxillaria tenuifolia",
+          "latinName": "Maxillaria tenuifolia",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Maxillaria",
+            "Species: M. tenuifolia"
+          ],
+          "characteristics": [
+            "Bunga berukuran sedang dengan warna merah marun hingga merah darah pekat yang mencolok, serta bagian tengah atau bibir (labellum) berwarna kuning atau krem dengan corak bintik merah kecokelatan",
+            "Kelopak dan mahkota bunga berbentuk lonjong hingga meruncing dan sering kali mengeluarkan aroma khas yang manis menyerupai kelapa (coconut orchid)",
+            "Memiliki pseudobulb (umbi semu) berbentuk bulat telur hingga lonjong berwarna hijau yang tumbuh berdekatan di sepanjang rimpang yang merambat atau memanjat",
+            "Daun berbentuk sangat sempit memanjang seperti pita atau rumput (tenuifolia berarti berdaun tipis/sempit), tumbuh tegak hingga agak melengkung dengan ujung meruncing"
+          ],
+          "origin": "Amerika Tengah dan Meksiko (tersebar di wilayah tropis mulai dari Meksiko bagian selatan, Belize, Guatemala, El Salvador, hingga Honduras dan Nikaragua)",
+          "narration": "M. tenuifolia merupakan jenis anggrek yang berasal dari kawasan Meksiko bagian selatan hingga Amerika Tengah, seperti Guatemala, Belize, dan Honduras. Habitat dan penyebarannya banyak ditemukan di hutan hujan tropis dataran rendah hingga perbukitan yang hangat dan lembap dengan pencahayaan teduh hingga cahaya saring. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada batang atau cabang pohon maupun terkadang sebagai litofit di permukaan batu yang lembap, dengan bunga merah marun dan aroma manis yang khas.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S12",
+          "qrCode": "ORCHID-P04-S12",
+          "name": "Cymbidium bicolor",
+          "latinName": "Cymbidium bicolor",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Cymbidium",
+            "Species: C. bicolor"
+          ],
+          "characteristics": [
+            "Bunga tersusun dalam tandan yang menjuntai atau melengkung dengan warna perpaduan kuning kehijauan atau krem berpadu garis tengah merah kecokelatan (bicolor) serta bagian bibir (labellum) berwarna ungu kemerahan atau merah marun dengan aksen kuning/putih",
+            "Kelopak dan mahkota bunga berbentuk memanjang hingga lanset dengan ujung meruncing dan tekstur yang cukup kokoh",
+            "Memiliki pseudobulb (umbi semu) berbentuk lonjong hingga bulat telur yang terbungkus pangkal daun dan tumbuh berdekatan",
+            "Daun berbentuk sangat panjang, sempit, dan kaku menyerupai pita atau pedang dengan ujung meruncing dan tersusun berjejer rapat"
+          ],
+          "origin": "Indonesia (tersebar luas di kawasan Asia Tenggara dan Malesia, termasuk Indonesia seperti Sumatra, Jawa, dan Kalimantan, serta kawasan Asia Selatan hingga Asia Tenggara daratan)",
+          "narration": "C. bicolor merupakan jenis anggrek yang tersebar luas di kawasan Asia Selatan, Asia Tenggara, dan Malesia, termasuk di Indonesia. Habitat dan penyebarannya banyak ditemukan di hutan tropis dataran rendah hingga pegunungan yang cukup terang atau memiliki naungan sedang dengan kelembapan udara yang terjaga. Di habitat aslinya, anggrek ini umumnya tumbuh secara epifit pada percabangan pohon besar yang kokoh maupun litofit di permukaan batu atau tebing yang lembap, dengan rangkaian bunga menjuntai berpadu warna kuning dan ungu kemerahan.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S13",
+          "qrCode": "ORCHID-P04-S13",
+          "name": "Oncidium 'Sharry Baby'",
+          "latinName": "Oncidium 'Sharry Baby'",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Oncidium",
+            "Species: O. sharry baby"
+          ],
+          "characteristics": [
+            "Bunga berukuran kecil hingga sedang yang muncul dalam tangkai bercabang banyak (paniculate) dengan warna cokelat kemerahan atau merah marun berpadu tepi/aksen krem kekuningan serta bagian bibir (labellum) berwarna putih bersih hingga krem",
+            "Memiliki aroma harum yang sangat khas dan manis menyerupai cokelat atau vanila (chocolate orchid), terutama saat terkena cahaya matahari pagi atau siang hari",
+            "Kelopak dan mahkota bunga berbentuk lonjong hingga sedikit bergelombang, tersusun rapat di sepanjang cabang tangkai bunga yang menjuntai anggun",
+            "Memiliki pseudobulb (umbi semu) berbentuk pipih lonjong berwarna hijau dengan daun memanjang seperti pita atau lanset yang tumbuh berpasangan maupun di pangkalnya"
+          ],
+          "origin": "Hibrida budidaya (merupakan anggrek hibrida buatan manusia dari persilangan marga Oncidium—yang induk alaminya berasal dari kawasan Amerika tropis/Neotropis—dan banyak dibudidayakan secara luas di berbagai negara beriklim tropis dan subtropis, termasuk Indonesia)",
+          "narration": "Oncidium 'Sharry Baby' merupakan anggrek hibrida populer yang dikembangkan melalui persilangan dalam kelompok Oncidium yang nenek moyang alaminya berasal dari wilayah Amerika tropis. Karena merupakan hasil pemuliaan hibrida, anggrek ini tidak berasal dari satu habitat liar tunggal, melainkan dibudidayakan secara luas di berbagai daerah dengan iklim tropis hingga hangat seperti Indonesia. Dalam budidayanya, anggrek ini tumbuh baik sebagai tanaman epifit pada media yang porous dan berdrainase baik dengan pencahayaan terang tersaring, kelembapan terjaga, serta sirkulasi udara yang lancar, sambil menghasilkan rangkaian bunga harum beraroma cokelat yang khas.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S14",
+          "qrCode": "ORCHID-P04-S14",
+          "name": "Oncidium goldiana",
+          "latinName": "Oncidium goldiana",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Tribe: Cymbidieae",
+            "Subtribe: Oncidiinae",
+            "Genus: Oncidium",
+            "Species: O. goldiana"
+          ],
+          "characteristics": [
+            "Bunga berukuran relatif kecil hingga sedang yang muncul sangat banyak pada tangkai panjang bercabang banyak (paniculate) menyerupai hujan emas (golden shower), didominasi warna kuning cerah dengan corak cokelat kemerahan pada bagian kelopak dan mahkota",
+            "Bagian bibir (labellum) melebar cerah berwarna kuning mencolok dengan bagian pangkal atau tengah yang memiliki tonjolan/corak cokelat kemerahan",
+            "Tangkai bunga tumbuh tinggi dan menjuntai anggun di ujungnya dengan puluhan hingga ratusan kuntum bunga yang mekar berangsur-angsur sehingga tahan cukup lama",
+            "Memiliki pseudobulb (umbi semu) berbentuk pipih lonjong hingga agak bulat telur dengan daun berbentuk memanjang seperti pita atau lanset berwarna hijau segar"
+          ],
+          "origin": "Hibrida budidaya (merupakan anggrek hibrida buatan manusia dari persilangan kelompok Oncidium yang induk alaminya berasal dari wilayah Amerika tropis/Neotropis, dan dibudidayakan secara luas di berbagai wilayah beriklim tropis seperti Indonesia)",
+          "narration": "Oncidium 'Goldiana' merupakan jenis anggrek hibrida populer yang dikembangkan melalui persilangan dalam kelompok Oncidium dengan nenek moyang alami dari kawasan Amerika tropis. Karena merupakan hasil budidaya hibrida, anggrek ini tidak berasal dari habitat liar tunggal, melainkan dibudidayakan secara luas di daerah beriklim tropis yang hangat seperti Indonesia, baik sebagai tanaman pot maupun bunga potong. Dalam budidayanya, anggrek ini tumbuh baik sebagai tanaman epifit pada media yang porous dan berdrainase baik dengan pencahayaan terang tersaring, kelembapan udara terjaga, serta sirkulasi udara yang baik sehingga menghasilkan rangkaian bunga kuning keemasan yang rimbun.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S15",
+          "qrCode": "ORCHID-P04-S15",
+          "name": "Cymbidium ensifolium",
+          "latinName": "Cymbidium ensifolium",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Cymbidium",
+            "Species: C. ensifolium"
+          ],
+          "characteristics": [
+            "Bunga muncul beberapa kuntum pada tangkai tegak atau agak melengkung, umumnya berwarna hijau kekuningan, krem, atau putih kehijauan dengan garis merah kecokelatan serta bagian bibir (labellum) berwarna putih/krem dengan bintik atau garis merah keunguan",
+            "Sering memiliki aroma harum yang lembut hingga cukup kuat dan menyegarkan",
+            "Kelopak dan mahkota bunga berbentuk lonjong memanjang hingga lanset dengan ujung meruncing",
+            "Daun berbentuk panjang, sempit, dan kaku menyerupai pedang atau pita (ensifolium berarti berdaun seperti pedang), tumbuh berjejer rapat dari pangkal tanaman"
+          ],
+          "origin": "Asia Timur, Asia Tenggara, dan Malesia (tersebar luas mulai dari Tiongkok, Taiwan, dan Jepang selatan hingga Asia Tenggara dan Indonesia)",
+          "narration": "C. ensifolium merupakan jenis anggrek yang tersebar luas di kawasan Asia Timur, Asia Tenggara, dan Malesia, termasuk di Indonesia. Habitat dan penyebarannya banyak ditemukan di hutan tropis hingga subtropis, lereng berbukit, dan kawasan berhutan yang cukup teduh dengan kelembapan yang terjaga. Di habitat aslinya, anggrek ini umumnya tumbuh secara terestrial di tanah yang subur dan berhumus atau serasah daun, maupun sesekali sebagai litofit di area berbatu yang lembap, dengan daun menyerupai pedang dan bunga beraroma harum yang khas.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S16",
+          "qrCode": "ORCHID-P04-S16",
+          "name": "Paphiopedilum glaucophyllum",
+          "latinName": "Paphiopedilum glaucophyllum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Cypripedioideae",
+            "Genus: Paphiopedilum",
+            "Species: P. glaucophyllum"
+          ],
+          "characteristics": [
+            "Memiliki bagian kantong (labellum berbentuk kantong atau \"sepatu\") khas marga Paphiopedilum berwarna merah muda keunguan hingga ungu lembut dengan bagian tepi atas berwarna krem atau kekuningan",
+            "Kelopak punggung (dorsal sepal) berbentuk membulat hingga lonjong berwarna hijau atau kehijauan dengan tepi putih/krem yang jelas, sementara mahkota samping (petal) menyempit memanjang berombak dengan bintik atau garis cokelat kemerahan dan bulu halus di tepinya",
+            "Tangkai bunga tumbuh tegak dengan beberapa kuntum bunga yang sering kali mekar bergantian dalam jangka waktu yang cukup panjang",
+            "Daun berbentuk memanjang hingga lonjong dengan permukaan hijau kebiruan/keabu-abuan (glaucophyllum merujuk pada warna daun yang agak kebiruan atau berlapis lilin halus) dan ujung yang tumpul hingga sedikit berlekuk"
+          ],
+          "origin": "Indonesia (endemik di Pulau Jawa bagian selatan, seperti kawasan perbukitan dan lereng selatan Jawa)",
+          "narration": "P. glaucophyllum merupakan jenis anggrek selop asli Indonesia yang berasal dari Pulau Jawa, khususnya wilayah perbukitan dan lereng yang teduh. Habitat dan penyebarannya banyak ditemukan di hutan tropis perbukitan hingga pegunungan rendah yang hangat sampai sejuk dengan kelembapan yang terjaga serta naungan yang cukup. Di habitat aslinya, anggrek ini umumnya tumbuh secara terestrial di tanah berhumus atau serasah daun maupun litofit di celah bebatuan yang lembap, dengan ciri khas kantong bunga merah muda keunguan dan daun berwarna kehijauan semu kebiruan.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S17",
+          "qrCode": "ORCHID-P04-S17",
+          "name": "Paphiopedilum gigantifolium",
+          "latinName": "Paphiopedilum gigantifolium",
+          "classification": [
+            "Domain: Eukaryota",
+            "Kingdom: Plantae",
+            "Division: Magnoliophyta",
+            "Class: Liliopsida",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Cypripedioideae",
+            "Genus: Paphiopedilum",
+            "Species: P. gigantifolium"
+          ],
+          "characteristics": [
+            "Memiliki bagian kantong (labellum berbentuk kantong atau \"sepatu\") khas marga Paphiopedilum berukuran cukup besar berwarna kemerahan hingga cokelat keunguan dengan aksen kekuningan pada bagian atas/dalamnya",
+            "Mahkota samping (petal) menyempit memanjang dan melengkung ke bawah dengan ujung sedikit terpilin, berwarna hijau kekuningan hingga kecokelatan dengan bintik atau garis gelap, sementara kelopak punggung (dorsal sepal) memiliki corak garis hijau dan cokelat keunguan",
+            "Tangkai bunga tumbuh tegak hingga agak melengkung dengan beberapa kuntum bunga yang berukuran mencolok",
+            "Daun berbentuk memanjang seperti pita atau lanset dengan ukuran relatif besar (gigantifolium merujuk pada ukuran daun dan tanaman yang tergolong besar untuk marga Paphiopedilum), berwarna hijau segar dan tersusun rapat"
+          ],
+          "origin": "Indonesia (endemik di kawasan Sulawesi, seperti wilayah hutan tropis di Sulawesi bagian utara/tengah)",
+          "narration": "P. gigantifolium merupakan jenis anggrek selop asli Indonesia yang berasal dari Pulau Sulawesi. Habitat dan penyebarannya banyak ditemukan di hutan hujan tropis dataran rendah hingga perbukitan yang hangat, teduh, serta memiliki kelembapan udara yang terjaga. Di habitat aslinya, anggrek ini umumnya tumbuh secara terestrial di tanah berhumus atau serasah daun maupun litofit di permukaan batu yang lembap, dengan ukuran daun yang besar serta bunga dengan kantong kemerahan dan petal melengkung yang khas.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S18",
+          "qrCode": "ORCHID-P04-S18",
+          "name": "Paphiopedilum javanicum",
+          "latinName": "Paphiopedilum javanicum",
+          "classification": [
+            "Clade: Tracheophytes",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Cypripedioideae",
+            "Genus: Paphiopedilum",
+            "Species: P. javanicum"
+          ],
+          "characteristics": [
+            "Memiliki bagian kantong (labellum berbentuk kantong atau \"sepatu\") khas marga Paphiopedilum berwarna hijau kekuningan hingga kecokelatan dengan permukaan mengilap halus",
+            "Kelopak punggung (dorsal sepal) berbentuk membulat hingga agak meruncing dengan garis-garis memanjang hijau/kecokelatan, sementara mahkota samping (petal) melebar memanjang ke samping dengan bintik atau corak gelap di bagian tepinya",
+            "Tangkai bunga tumbuh tegak berwarna cokelat kehijauan dengan tinggi sekitar 20–30 cm",
+            "Daun berbentuk memanjang hingga lanset dengan corak hijau bermotif lembut, ujung yang agak tumpul hingga berlekuk halus, dan tepi daun rata"
+          ],
+          "origin": "Indonesia (tersebar di kawasan Indonesia seperti Jawa, Sumatra, Bali, Kalimantan, dan Nusa Tenggara/Flores)",
+          "narration": "P. javanicum merupakan jenis anggrek selop yang berasal dari Indonesia, termasuk di Jawa, Sumatra, Bali, dan kawasan sekitarnya. Habitat dan penyebarannya banyak ditemukan di hutan hujan tropis perbukitan hingga pegunungan yang sejuk, teduh, dan lembap dengan lapisan serasah atau humus yang subur. Di habitat aslinya, anggrek ini umumnya tumbuh secara terestrial di lantai hutan yang lembap maupun terkadang sebagai litofit di permukaan batu yang berlumut dan teduh.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S19",
+          "qrCode": "ORCHID-P04-S19",
+          "name": "Paphiopedilum complex",
+          "latinName": "Paphiopedilum complex",
+          "classification": [
+            "Kingdom: Plantae",
+            "Class: Liliopsida",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Cypripedioideae",
+            "Genus: Paphiopedilum",
+            "Species: P. complex"
+          ],
+          "characteristics": [
+            "Memiliki bagian kantong (labellum berbentuk kantong atau \"sepatu\") yang cenderung bulat, padat, dan menonjol dengan variasi warna sangat beragam—mulai dari hijau kekuningan, krem, cokelat kemerahan, hingga ungu pekat—bergantung pada garis keturunan hibridanya",
+            "Kelopak punggung (dorsal sepal) umumnya lebar dan membulat dengan tepi putih/krem atau corak garis serta bintik yang kontras, sementara mahkota samping (petal) melebar agak membulat atau melengkung dengan tekstur tebal dan mengilap",
+            "Tangkai bunga tumbuh tegak dan kokoh menopang bunga berukuran cukup besar serta tahan mekar cukup lama",
+            "Daun berbentuk memanjang hingga lonjong dengan permukaan hijau polos maupun bermotif samar, tersusun berjejer rapat pada roset daun"
+          ],
+          "origin": "Hibrida budidaya (merupakan kelompok anggrek hibrida hasil persilangan berulang antarspesies dan hibrida Paphiopedilum—yang spesies induk alaminya berasal dari kawasan Asia tropis dan subtropis termasuk Indonesia, Asia Tenggara, Himalaya, dan Tiongkok—serta dibudidayakan luas di berbagai negara termasuk Indonesia)",
+          "narration": "Paphiopedilum complex merupakan sebutan untuk kelompok anggrek selop hibrida kompleks yang dihasilkan dari persilangan berulang berbagai jenis dan hibrida Paphiopedilum, dengan nenek moyang alami yang berasal dari kawasan Asia tropis dan subtropis termasuk Indonesia. Karena merupakan hibrida budidaya, kelompok ini tidak berasal dari satu habitat liar tunggal, melainkan dibudidayakan secara luas di berbagai daerah dengan suhu sejuk hingga cukup hangat dan kelembapan yang terjaga. Dalam budidayanya, Paphiopedilum complex tumbuh dengan baik pada media tanam yang lembap namun memiliki aerasi dan drainase baik serta pencahayaan teduh hingga cahaya saring, menghasilkan bunga berukuran besar dengan bentuk yang simetris dan tahan lama.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S20",
+          "qrCode": "ORCHID-P04-S20",
+          "name": "Bulbophyllum pahudii",
+          "latinName": "Bulbophyllum pahudii",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Bulbophyllum",
+            "Species: B. pahudii"
+          ],
+          "characteristics": [
+            "Epifit berukuran sedang. Tiap umbi semu (pseudobulb) hanya membawa satu helai daun, dengan pangkal daun bertangkai dan beralur seperti huruf V.",
+            "Bunga tersusun melingkar seperti payung (umbel) di ujung tangkai sepanjang ±10 cm. Satu tangkai berisi sekitar 12 kuntum.",
+            "Bunganya merah muda keunguan dengan sepal samping yang memanjang dan meruncing. Bunga selebar ±5 cm dan panjangnya bisa sampai ±10 cm.",
+            "Bibir bunga (labellum) berwarna gelap dan meneteskan cairan bening berbau busuk untuk memikat lalat penyerbuk."
+          ],
+          "origin": "Indonesia, endemik Pulau Jawa dan tersebar luas di Jawa Barat. Tumbuh di daerah sangat lembap pada ketinggian ±850–1.200 m dpl.",
+          "narration": "B. pahudii adalah anggrek endemik Pulau Jawa yang banyak dijumpai di Jawa Barat, pada ketinggian sekitar 850–1.200 meter di atas permukaan laut. Anggrek ini hidup menempel (epifit) di batang pohon besar dan menyukai tempat teduh, walaupun kadang juga tumbuh di tepi sungai yang terang. Bunganya merah muda keunguan dan tersusun melingkar seperti payung, dengan kelopak samping yang panjang menjuntai. Di balik bunganya yang cantik, anggrek ini mengeluarkan bau tidak sedap untuk menarik lalat yang membantu penyerbukannya.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S21",
+          "qrCode": "ORCHID-P04-S21",
+          "name": "Grammatophyllum stapeliiflorum",
+          "latinName": "Grammatophyllum stapeliiflorum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Tribe: Cymbidieae",
+            "Genus: Grammatophyllum",
+            "Species: G. stapeliiflorum"
+          ],
+          "characteristics": [
+            "Epifit berukuran sedang dengan umbi semu pipih berbentuk bulat telur, panjangnya hingga ±15 cm.",
+            "Tiap umbi semu membawa 2–3 daun berbentuk lanset yang tebal seperti kulit, berukuran hingga ±45 × 8 cm.",
+            "Memiliki akar penangkap yang tumbuh tegak ke atas untuk menampung serasah.",
+            "Tangkai bunga muncul dari pangkal umbi semu dan menjuntai sepanjang ±30–45 cm, dengan sekitar 10–12 kuntum.",
+            "Bunga ±5 cm, berlilin dan tahan lama. Warnanya krem kehijauan kusam dengan bagian dalam penuh bintik merah marun. Ujung petal berwarna marun pekat dan baunya menyengat."
+          ],
+          "origin": "Asia Tenggara hingga Papua Nugini, termasuk Semenanjung Malaysia, Sumatra, Kalimantan, Filipina, dan Papua.",
+          "narration": "G. stapeliiflorum adalah anggrek epifit yang tersebar di Malaysia, Filipina, dan Indonesia hingga Papua Nugini. Namanya berarti \"berbunga seperti Stapelia\", tanaman yang terkenal dengan bunga berbintik dan berbau menyengat. Bunganya krem kehijauan dengan bintik merah marun yang rapat sehingga tampak gelap, karena itu anggrek ini juga disebut anggrek hitam atau anggrek sendu. Rangkaian bunganya menjuntai dari pangkal umbi semu. Anggrek ini tumbuh baik di iklim tropis dengan pencahayaan hingga 70%.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S22",
+          "qrCode": "ORCHID-P04-S22",
+          "name": "Coelogyne pandurata",
+          "latinName": "Coelogyne pandurata",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Tribe: Arethuseae",
+            "Genus: Coelogyne",
+            "Species: C. pandurata"
+          ],
+          "characteristics": [
+            "Rimpang tebal yang merambat, dengan umbi semu hijau pipih berbentuk lonjong. Jarak antar-umbi semu ±4,5–10 cm.",
+            "Tiap umbi semu membawa dua daun lanset yang kaku dan berlipat, panjangnya hingga ±45 cm atau lebih.",
+            "Tangkai bunga keluar dari tunas baru, panjangnya ±15–30 cm, dan membawa 5–15 kuntum yang mekar bersamaan.",
+            "Bunga besar (±7–13 cm). Sepal dan petal hijau muda.",
+            "Labellum bercuping tiga. Cuping tengahnya berbentuk seperti biola (pandurata) dengan corak hitam seperti beludru dan tepi bergelombang.",
+            "Bunga sangat harum, tetapi tidak bertahan lama."
+          ],
+          "origin": "Indonesia (Kalimantan dan Sumatra), Semenanjung Malaysia, Sabah, Sarawak, Brunei, dan kemungkinan Filipina. Tumbuh di hutan dataran rendah hingga perbukitan pada ketinggian ±10–1.000 m dpl.",
+          "narration": "C. pandurata dikenal sebagai anggrek hitam yang berasal dari Kalimantan dan juga ditemukan di Sumatra serta Semenanjung Malaya. Disebut anggrek hitam karena bibir bunganya berwarna hitam alami, berpadu dengan garis hijau berbulu. Kelopak dan mahkotanya hijau muda, sedangkan bibirnya berbentuk seperti biola, sesuai dengan nama \"pandurata\". Bunganya besar, mekar bersamaan, dan harum. Anggrek ini hidup menempel di pohon besar, sering di dekat sungai.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S23",
+          "qrCode": "ORCHID-P04-S23",
+          "name": "Coelogyne rochussenii",
+          "latinName": "Coelogyne rochussenii",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Tribe: Arethuseae",
+            "Genus: Coelogyne",
+            "Species: C. rochussenii"
+          ],
+          "characteristics": [
+            "Anggrek simpodial yang membentuk rumpun besar, tingginya hingga ±60 cm.",
+            "Umbi semu ramping berbentuk silinder dengan alur yang dalam. Tiap umbi semu membawa dua daun lonjong yang berlipat.",
+            "Tangkai bunga keluar dari pangkal umbi semu yang sudah dewasa dan menjuntai panjang (lebih dari 45 cm) seperti untaian kalung atau tirai.",
+            "Satu tangkai bisa membawa puluhan kuntum yang mekar bersamaan.",
+            "Bunga ±6 cm, berwarna kuning kehijauan dengan corak cokelat pada labellum. Aromanya harum seperti lemon, dan bunga setengah menutup di malam hari."
+          ],
+          "origin": "Asia Tenggara, termasuk Thailand selatan, Semenanjung Malaysia, Singapura, Sumatra, Jawa, Kalimantan, Sulawesi, dan Filipina. Tumbuh hingga ±1.500 m dpl, sering di pohon yang menaungi sungai.",
+          "narration": "C. rochussenii tumbuh di berbagai negara Asia Tenggara, termasuk Indonesia. Anggrek ini menyukai daerah tropis yang cukup terkena sinar matahari dan bisa berbunga sepanjang tahun. Rangkaian bunganya menjuntai panjang seperti tirai atau kalung, sehingga di mancanegara dikenal sebagai necklace orchid. Bunganya kuning kehijauan dan berbau harum segar seperti lemon. Anggrek ini termasuk anggrek epifit simpodial.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S24",
+          "qrCode": "ORCHID-P04-S24",
+          "name": "Phalaenopsis parishii",
+          "latinName": "Phalaenopsis parishii",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Phalaenopsis",
+            "Species: P. parishii"
+          ],
+          "characteristics": [
+            "Anggrek bulan berukuran mini dengan batang sangat pendek.",
+            "Daunnya sedikit, berbentuk lonjong sampai bulat telur terbalik, lunak, dan menempel tanpa tangkai.",
+            "Bunganya kecil (kurang dari 2 cm), mekar bersamaan dalam satu tangkai, dan bertahan ±3–4 minggu.",
+            "Sepal dan petal putih. Labellum berwarna ungu violet dengan sedikit kuning di bagian tengah, dan bunganya harum."
+          ],
+          "origin": "Himalaya Timur (Assam) hingga Myanmar, Thailand, dan Indocina. Tumbuh di hutan yang lembap dan teduh.",
+          "narration": "P. parishii adalah anggrek bulan mungil yang tersebar di daratan Asia Tenggara dan pernah ditemukan di kawasan Himalaya Timur. Tanamannya kecil dengan daun lunak, tetapi bisa berbunga sepanjang tahun. Bunganya putih dengan bibir ungu yang mencolok dan beraroma harum. Anggrek ini hidup epifit dan menyukai tempat yang lembap dengan sedikit cahaya.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S25",
+          "qrCode": "ORCHID-P04-S25",
+          "name": "Phalaenopsis amabilis",
+          "latinName": "Phalaenopsis amabilis",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Thalaenopsis",
+            "Species: P. amabilis"
+          ],
+          "characteristics": [
+            "Batang pendek yang tertutup pelepah daun. Akarnya banyak, pipih, dan bisa memanjang lebih dari 1 m.",
+            "Daun 2–8 helai, tebal berdaging, berbentuk lonjong sampai bulat telur terbalik, hijau mengilap, panjangnya hingga ±30–50 cm.",
+            "Tangkai bunga melengkung hingga ±75 cm–1 m dan kadang bercabang.",
+            "Bunga putih bersih, lebarnya hingga ±10 cm. Petalnya lebar hampir bulat.",
+            "Labellum bercuping tiga dengan corak kuning dan merah di pangkal. Ujung labellum memiliki sepasang sulur kecil.",
+            "Bunganya harum dan tahan lama."
+          ],
+          "origin": "Indonesia (Sumatra, Jawa, Kalimantan, hingga Papua), Filipina, Malaysia, Papua Nugini, dan Australia (Queensland).",
+          "narration": "P. amabilis di Indonesia dikenal sebagai anggrek bulan atau Puspa Pesona, salah satu bunga nasional Indonesia. Anggrek ini hidup menempel di batang pohon yang lembap dengan sedikit cahaya matahari. Habitat aslinya tersebar luas dari Indonesia hingga Filipina, Malaysia, dan Australia. Bunganya putih bersih dengan bibir bercorak kuning-merah, tahan lama, dan beraroma harum. Karena keindahan dan ketahanannya, anggrek ini menjadi salah satu induk utama persilangan anggrek bulan di seluruh dunia.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S26",
+          "qrCode": "ORCHID-P04-S26",
+          "name": "Phalaenopsis bellina",
+          "latinName": "Phalaenopsis bellina",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Phalaenopsis",
+            "Species: P. bellina"
+          ],
+          "characteristics": [
+            "Anggrek monopodial berukuran kecil hingga ±30 cm.",
+            "Daunnya tebal dan sukulen, hijau muda mengilap, sedikit bergelombang, dan menggantung, dengan panjang hingga ±30 cm.",
+            "Tangkai bunga pendek muncul dari ketiak daun dan bisa terus berbunga dari ujungnya selama bertahun-tahun.",
+            "Bunga berbentuk bintang dengan sepal dan petal krem keputihan berujung hijau muda. Pangkalnya ungu dan labellum berwarna ungu.",
+            "Bunganya sangat harum dan sering dipakai sebagai induk silangan."
+          ],
+          "origin": "Indonesia, endemik Kalimantan (Borneo). Tumbuh di hutan dataran rendah dekat sungai yang panas dan lembap.",
+          "narration": "P. bellina adalah anggrek endemik Kalimantan. Anggrek epifit ini tumbuh di kanopi pepohonan dan tahan menghadapi musim kering maupun basah. Bunganya berbentuk bintang dengan perpaduan warna hijau, krem, dan ungu, serta mengeluarkan aroma yang sangat wangi. Anggrek ini bisa berbunga berulang sepanjang tahun selama tangkai bunganya masih hijau, dan berhenti berbunga ketika tangkai itu sudah mengering.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S27",
+          "qrCode": "ORCHID-P04-S27",
+          "name": "Phalaenopsis cornu-cervi",
+          "latinName": "Phalaenopsis cornu-cervi",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Phalaenopsis",
+            "Species: P. cornu-cervi"
+          ],
+          "characteristics": [
+            "Epifit (kadang litofit) berukuran kecil hingga sedang dengan batang pendek.",
+            "Daunnya lonjong, berdaging, dan hijau muda, berukuran hingga ±25 × 4 cm.",
+            "Tangkai bunga (rakhis) pipih dan bercabang, menyerupai tanduk rusa, sesuai dengan arti nama cornu-cervi. Panjangnya ±9–42 cm.",
+            "Bunga 7–12 kuntum yang mekar bergantian. Ukurannya ±3–5 cm, berbentuk bintang, dan berlilin.",
+            "Warna bunga kuning kehijauan dengan corak garis dan bercak cokelat kemerahan, sedangkan labellum berwarna putih. Bunganya harum dan tahan lama."
+          ],
+          "origin": "Asia Tenggara, termasuk Myanmar, Thailand, Laos, Vietnam, Semenanjung Malaysia, Singapura, Sumatra, Jawa, Kalimantan, dan Filipina. Tumbuh di hutan hujan primer dan di tepi sungai.",
+          "narration": "P. cornu-cervi tersebar di hutan-hutan Asia Tenggara, termasuk Sumatra, Jawa, dan Kalimantan. Namanya berarti \"tanduk rusa\", diambil dari bentuk tangkai bunganya yang pipih dan bercabang. Bunganya kuning kehijauan bercorak cokelat kemerahan, berlilin, dan harum. Anggrek ini dapat berbunga sepanjang tahun selama tangkai bunganya tetap hijau. Anggrek ini termasuk anggrek monopodial dan bisa diperbanyak secara vegetatif, karena ruas tangkai bunganya dapat menumbuhkan anakan berakar yang disebut keiki.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S28",
+          "qrCode": "ORCHID-P04-S28",
+          "name": "Ascocentrum miniatum",
+          "latinName": "Ascocentrum miniatum",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clase: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Vanda",
+            "Species: V. miniatum"
+          ],
+          "characteristics": [
+            "Bunga berukuran sekitar 1,2cm tersusun majemuk dalam satu tangkai",
+            "Bunga berwarna kuning hingga oranye kemerahan cerah",
+            "Daun berbentuk linier seperti pita, tebal, berdaging, dan tersusun berselang-seling"
+          ],
+          "origin": "Sumatra, Indonesia",
+          "narration": "Di Indonesia anggrek ini ditemukan di pulau Sumatra dan Jawa, ditemukan juga di negara Malaysia, Filiphina, Vietnam, Thailand. Anggrek ini disebut juga dengan anggrek kebutan.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S29",
+          "qrCode": "ORCHID-P04-S29",
+          "name": "Vanda tricolor var tenebrosa",
+          "latinName": "Vanda tricolor var tenebrosa",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheopythes",
+            "Clade: Angiosperms",
+            "Clade: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Vanda",
+            "Species: V. miniatum"
+          ],
+          "characteristics": [
+            "Bunga menonjolkan nuansa warna gelap kecoklatan",
+            "Bunga memiliki corak dasar putih atau krem bertotol merah keunguan",
+            "Bunga beraroma harum terutama di pagi dan siang hari"
+          ],
+          "origin": "Bali, Indonesia",
+          "narration": "Salah satu anggrek yang berbunga sepanjang tahun dengan aroma bunga yang wangi menyerupai aroma vanilla dan melati. Dan termasuk anggrek epifit monopodial. Anggrek ini di Indonesia dahulu umum ditemukan di pulau Jawa pada ketinggian 700 - 1600 mdpl di hutan hutan pada pohon yang lembab dan terkena sedikit sinar matahari. Anggrek ini juga ditemukan juga di Bali dan Filipina.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S30",
+          "qrCode": "ORCHID-P04-S30",
+          "name": "Rhynchostylis retusa",
+          "latinName": "Rhynchostylis retusa",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Angiosperms",
+            "Clade: Monocots",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Vandae",
+            "Species: R. retusa"
+          ],
+          "characteristics": [
+            "Bunga tersusun tandan menggantung atau merunduk",
+            "Warna bunga umumnya putih dengan bintik atau bercak ungu muda",
+            "Bunga bertekstur agak seperti lilin dan beraroma harum"
+          ],
+          "origin": "Sri Lanka, India, Asia Tenggara. Sedangkan di Indonesia tersebar di pulau Sumatra, Jawa dan Kalimantan",
+          "narration": "Anggrek ini banyak tumbuh di dataran rendah hingga dataran tinggi mulai dari 0 - 1000 mdpl. Menyukai habitat tumbuh yang sedikit terangi hidup secara epifit dan habitat penyebarannya meliputi kawasan Sri Lanka, India, Asia Tenggara. Sedangkan di Indonesia tersebar di pulau Sumatra, Jawa dan Kalimantan",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S31",
+          "qrCode": "ORCHID-P04-S31",
+          "name": "Vanda douglas",
+          "latinName": "Vanda douglas",
+          "classification": [
+            "Kingdom: Plantae",
+            "Clade: Tracheophytes",
+            "Clade: Monocots",
+            "Clade: Angiosperms",
+            "Order: Asparagales",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Vanda",
+            "Species: V. douglas"
+          ],
+          "characteristics": [
+            "Kelopak bunga berwarna ungu atau merah keunguan dan bagian lidah bernuansa kemerahan",
+            "Daun berbentuk bulat memanjang menyerupai pensil",
+            "Akar udara yang tumbuh di sepanjang batang"
+          ],
+          "origin": "Singapura, Kalimantan dan Sumatera",
+          "narration": "Anggrek hibrida ini berasal dari negara Singapura dan sudah banyak dibudidayakan di negara lain. Anggrek terestrial yang bisa ditanam dengan kebutuhan cahaya matahari penuh. Di Indonesia sendiri anggrek ini menyukai daerah tropis dikarenakan salah satu spesies awal anggrek hibrida ini yang berasal dari Indonesia yang tumbuh di Kalimantan dan Sumatera. Salah satu anggrek spesies dari Indonesia tersebut adalah anggrek vanda hookeriana.",
+          "source": "Naskah tim (Writing Orchid App)",
+          "checkedAt": null
+        },
+        {
+          "id": "S32",
+          "qrCode": "ORCHID-P04-S32",
+          "name": "Fdk after dark",
+          "latinName": "Fdk after dark",
+          "classification": [
+            "Kingdom: Plantae",
+            "Family: Orchidaceae",
+            "Subfamily: Epidendroideae",
+            "Genus: Fredelarkeara",
+            "Hybrid Epithet: Fdk. after dark",
+            "Binomial Name: Fredelarkeara after dark"
+          ],
+          "characteristics": [
+            "Warna bunga merah marun sangat gelap (deep burgundy) atau merah kehitaman hingga tampak hitam pekat",
+            "Kelopak dan bibir bunga bertekstur lilin atau agak beludru dengan bentuk agak menyelubungi",
+            "Terdapat corak bintik halus yang terlihat jelas di bawah cahaya terang"
+          ],
+          "origin": "California, Amerika Serikat",
+          "narration": "Fredclarkeara After Dark adalah anggrek hibrida populer yang terkenal karena bunganya berwarna merah marun sangat gelap hingga terlihat hitam pekat. Di Indonesia termasuk di daerah berhawa sejuk hingga hangat seperti Bandung dan sekitarnya, anggrek ini banyak dicari kolektor karena warna gelapnya yang kontras dibandingkan anggrek hitam Kalimantan (Coelogyne pandurata) yang umumnya berkelopak hijau dengan lidah hitam.",
+          "source": "Naskah tim (Writing Orchid App)",
           "checkedAt": null
         }
       ]
