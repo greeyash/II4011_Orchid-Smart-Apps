@@ -76,7 +76,7 @@ fun PoiDetailScreen(
             .verticalScroll(rememberScrollState()),
     ) {
         Box {
-            PoiImage(poi, Modifier.fillMaxWidth().height(260.dp))
+            PoiPhotoGallery(poi, Modifier.fillMaxWidth().height(280.dp))
             CircleIconButton(
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Kembali",

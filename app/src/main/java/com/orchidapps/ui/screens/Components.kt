@@ -309,3 +309,65 @@ fun rememberAssetBitmap(path: String): androidx.compose.ui.graphics.ImageBitmap?
     }
     return bitmap
 }
+
+/** Daftar foto POI di assets: `images/P01.jpg`, lalu `images/P01-2.jpg`, `P01-3.jpg`, … */
+@Composable
+fun rememberPoiPhotoPaths(poi: Poi): List<String> {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val paths by androidx.compose.runtime.produceState(emptyList<String>(), poi.id) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            val pattern = Regex("^${poi.id}(-(\\d+))?\\.jpg$")
+            (context.assets.list("images") ?: emptyArray())
+                .mapNotNull { name -> pattern.matchEntire(name)?.let { name to (it.groupValues[2].toIntOrNull() ?: 1) } }
+                .sortedBy { it.second }
+                .map { "images/${it.first}" }
+        }
+    }
+    return paths
+}
+
+/**
+ * Header halaman detail (PB06): galeri foto asli yang bisa digeser bila ada lebih dari satu foto,
+ * atau ilustrasi bila foto belum tersedia.
+ */
+@Composable
+fun PoiPhotoGallery(poi: Poi, modifier: Modifier = Modifier) {
+    val paths = rememberPoiPhotoPaths(poi)
+    if (paths.isEmpty()) {
+        SceneIllustration(sceneFor(poi), modifier)
+        return
+    }
+    val pager = androidx.compose.foundation.pager.rememberPagerState { paths.size }
+    Box(modifier) {
+        androidx.compose.foundation.pager.HorizontalPager(pager, Modifier.matchParentSize()) { page ->
+            val bitmap = rememberAssetBitmap(paths[page])
+            if (bitmap != null) {
+                androidx.compose.foundation.Image(
+                    bitmap,
+                    contentDescription = "Foto ${poi.name} ${page + 1}",
+                    modifier = Modifier.matchParentSize(),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                )
+            } else {
+                Box(Modifier.matchParentSize().background(OrchidColors.MapGreen))
+            }
+        }
+        if (paths.size > 1) {
+            Row(
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                repeat(paths.size) { i ->
+                    Box(
+                        Modifier
+                            .size(if (pager.currentPage == i) 9.dp else 7.dp)
+                            .clip(CircleShape)
+                            .background(if (pager.currentPage == i) OrchidColors.Paper else OrchidColors.Paper.copy(alpha = 0.55f)),
+                    )
+                }
+            }
+        }
+    }
+}
