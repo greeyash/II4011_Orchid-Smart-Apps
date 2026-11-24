@@ -194,7 +194,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun onNewLocation(loc: UserLocation) {
         _location.update { it.copy(location = loc, noFixTimeout = false, error = null) }
-        NavigationSession.onLocation(loc)
+        // Selama sesi jelajah, navigasi mendapat posisi dari ExplorationService; jangan dikirim dua kali.
+        if (!ExplorationSession.active.value) NavigationSession.onLocation(loc)
     }
 
     private companion object {
