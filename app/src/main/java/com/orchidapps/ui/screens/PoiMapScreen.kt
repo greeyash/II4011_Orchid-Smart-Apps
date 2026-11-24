@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Umbrella
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -128,6 +129,21 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
     var recenter by remember { mutableStateOf(0) }
     val startExploration = rememberStartExploration(vm)
+    val speechWarning by vm.speechWarning.collectAsStateWithLifecycle()
+    speechWarning?.let { message ->
+        AlertDialog(
+            onDismissRequest = vm::dismissSpeechWarning,
+            title = { Text("Suara belum siap") },
+            text = { Text("$message\n\nTanpa suara, getar dan notifikasi tetap berjalan, tetapi nama lokasi dan narasi tidak terdengar.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.dismissSpeechWarning()
+                    runCatching { context.startActivity(android.content.Intent("com.android.settings.TTS_SETTINGS")) }
+                }) { Text("Buka Pengaturan Suara") }
+            },
+            dismissButton = { TextButton(onClick = vm::dismissSpeechWarning) { Text("Nanti") } },
+        )
+    }
     val requestPermission = rememberLocationPermissionRequest(vm)
 
     Box(Modifier.fillMaxSize().background(OrchidColors.MapGreen)) {

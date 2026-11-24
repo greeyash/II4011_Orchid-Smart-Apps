@@ -3,6 +3,8 @@ package com.orchidapps.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.orchidapps.audio.NarrationPlayer
+import com.orchidapps.audio.SpeechUnavailableException
 import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
@@ -140,9 +142,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun dismissArrival() = ExplorationSession.dismissArrival()
 
+    /** Pesan bila suara Bahasa Indonesia belum siap, sehingga pengumuman dan narasi tidak terdengar. */
+    private val _speechWarning = MutableStateFlow<String?>(null)
+    val speechWarning: StateFlow<String?> = _speechWarning.asStateFlow()
+
+    fun dismissSpeechWarning() {
+        _speechWarning.value = null
+    }
+
     /** "Mulai Jelajah" (PB08): pelacakan dan geofence pindah ke Foreground Service. */
     fun startExploration() {
-        if (locationRepository.hasPermission()) ExplorationSession.start(getApplication())
+        if (!locationRepository.hasPermission()) return
+        ExplorationSession.start(getApplication())
+        // F04: sesi jelajah mengandalkan suara; beri tahu bila suara Bahasa Indonesia belum terpasang.
+        viewModelScope.launch {
+            try {
+                NarrationPlayer.get(getApplication()).speech.ensureReady()
+            } catch (e: SpeechUnavailableException) {
+                _speechWarning.value = e.message
+            }
+        }
     }
 
     /** "Akhiri Jelajah": pelacakan latar belakang dan notifikasi POI berhenti. */

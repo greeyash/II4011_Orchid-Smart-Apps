@@ -52,6 +52,11 @@ class Speech(context: Context) {
         }
     }
 
+    /** Memastikan mesin suara Bahasa Indonesia siap; melempar [SpeechUnavailableException] bila tidak. */
+    suspend fun ensureReady() {
+        engine()
+    }
+
     fun stop() {
         tts?.stop()
     }
