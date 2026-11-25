@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.orchidapps.audio.AudioGuide
 import com.orchidapps.data.Poi
+import com.orchidapps.data.PoiCategory
 import com.orchidapps.ui.illustration.SceneIllustration
 import com.orchidapps.ui.illustration.sceneFor
 import com.orchidapps.ui.theme.OrchidColors
@@ -264,14 +265,28 @@ fun ArrivalBanner(
     }
 }
 
-/** Titik bulat pink bernomor seperti penanda POI di peta desain. */
+/**
+ * Warna penanda per kategori POI (peta, daftar, dan legenda chip kategori):
+ * hijau = Wisata Alam, pink = Wisata Tempat, kuning = Tempat Makan.
+ */
+val PoiCategory.markerHex: String
+    get() = when (this) {
+        PoiCategory.WISATA_ALAM -> "#A8D5A2"
+        PoiCategory.WISATA_TEMPAT -> "#F6C2CF"
+        PoiCategory.TEMPAT_MAKAN -> "#F7CF7E"
+    }
+
+val PoiCategory.markerColor: Color
+    get() = Color(android.graphics.Color.parseColor(markerHex))
+
+/** Titik bulat bernomor seperti penanda POI di peta, berwarna sesuai kategori. */
 @Composable
-fun PoiNumberBadge(number: String, modifier: Modifier = Modifier) {
+fun PoiNumberBadge(number: String, modifier: Modifier = Modifier, color: Color = OrchidColors.Blush) {
     Box(
         modifier
             .size(28.dp)
             .clip(CircleShape)
-            .background(OrchidColors.Blush),
+            .background(color),
         contentAlignment = Alignment.Center,
     ) {
         Text(number, style = MaterialTheme.typography.labelSmall, color = OrchidColors.ForestDark)

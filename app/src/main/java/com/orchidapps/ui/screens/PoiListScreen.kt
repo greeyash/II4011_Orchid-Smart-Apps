@@ -192,7 +192,7 @@ private fun PoiRow(result: PoiSearchResult, visited: Boolean, onClick: () -> Uni
                     maxLines = 2,
                 )
             }
-            PoiNumberBadge(poi.number())
+            PoiNumberBadge(poi.number(), color = poi.category.markerColor)
         }
     }
 }

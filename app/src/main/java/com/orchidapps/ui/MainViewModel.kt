@@ -3,13 +3,17 @@ package com.orchidapps.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.orchidapps.audio.NarrationPlayer
+import com.orchidapps.audio.SpeechUnavailableException
 import com.orchidapps.data.Poi
 import com.orchidapps.data.PoiDataset
 import com.orchidapps.data.PoiRepository
 import com.orchidapps.exploration.ExplorationSession
 import com.orchidapps.map.OfflineMaps
 import com.orchidapps.navigation.NavigationSession
+import com.orchidapps.recommendation.Recommendation
 import com.orchidapps.recommendation.RecommendationPrompt
+import com.orchidapps.recommendation.Recommender
 import com.orchidapps.location.LocationRepository
 import com.orchidapps.location.UserLocation
 import kotlinx.coroutines.Job
@@ -35,8 +39,13 @@ data class LocationUiState(
     /** True bila belum ada posisi 10 detik setelah pelacakan dimulai (target F01). */
     val noFixTimeout: Boolean = false,
     val error: String? = null,
+    /** False bila pengguna hanya memberi izin lokasi perkiraan (Android 12+). */
+    val precise: Boolean = true,
 ) {
     val showWeakGps: Boolean get() = noFixTimeout || location?.isWeak == true
+
+    /** Izin ada tetapi hanya lokasi perkiraan: geofence dan navigasi tidak akan akurat. */
+    val approximateOnly: Boolean get() = permission == PermissionStatus.GRANTED && !precise
 }
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
@@ -89,13 +98,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             permanentlyDenied -> PermissionStatus.PERMANENTLY_DENIED
             else -> PermissionStatus.DENIED
         }
-        _location.update { it.copy(permission = status) }
+        _location.update { it.copy(permission = status, precise = locationRepository.hasPreciseLocation()) }
     }
 
     /** Dipanggil saat layar kembali aktif, mis. setelah pengguna mengubah izin di Pengaturan. */
     fun refreshPermission() {
         if (locationRepository.hasPermission()) {
-            _location.update { it.copy(permission = PermissionStatus.GRANTED) }
+            _location.update { it.copy(permission = PermissionStatus.GRANTED, precise = locationRepository.hasPreciseLocation()) }
         } else if (_location.value.permission == PermissionStatus.GRANTED) {
             _location.update { it.copy(permission = PermissionStatus.DENIED) }
         }
@@ -133,9 +142,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun dismissArrival() = ExplorationSession.dismissArrival()
 
+    /** Pesan bila suara Bahasa Indonesia belum siap, sehingga pengumuman dan narasi tidak terdengar. */
+    private val _speechWarning = MutableStateFlow<String?>(null)
+    val speechWarning: StateFlow<String?> = _speechWarning.asStateFlow()
+
+    fun dismissSpeechWarning() {
+        _speechWarning.value = null
+    }
+
     /** "Mulai Jelajah" (PB08): pelacakan dan geofence pindah ke Foreground Service. */
     fun startExploration() {
-        if (locationRepository.hasPermission()) ExplorationSession.start(getApplication())
+        if (!locationRepository.hasPermission()) return
+        ExplorationSession.start(getApplication())
+        // F04: sesi jelajah mengandalkan suara; beri tahu bila suara Bahasa Indonesia belum terpasang.
+        viewModelScope.launch {
+            try {
+                NarrationPlayer.get(getApplication()).speech.ensureReady()
+            } catch (e: SpeechUnavailableException) {
+                _speechWarning.value = e.message
+            }
+        }
     }
 
     /** "Akhiri Jelajah": pelacakan latar belakang dan notifikasi POI berhenti. */
@@ -153,9 +179,23 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun stopNavigation() = NavigationSession.stop()
 
+    /**
+     * Rekomendasi 1-3 POI berikutnya (F07) dari posisi pengunjung, atau dari POI [anchorId]
+     * bila posisi belum terbaca.
+     */
+    fun recommendationsAfter(anchorId: String?): List<Recommendation> {
+        val pois = (_dataset.value as? DatasetState.Loaded)?.dataset?.pois ?: return emptyList()
+        val anchor = pois.firstOrNull { it.id == anchorId }
+        val loc = _location.value.location
+        val lat = loc?.lat ?: anchor?.lat ?: return emptyList()
+        val lng = loc?.lng ?: anchor?.lng ?: return emptyList()
+        return Recommender.recommend(pois, ExplorationSession.visited.value, lat, lng, exclude = setOfNotNull(anchorId))
+    }
+
     private fun onNewLocation(loc: UserLocation) {
         _location.update { it.copy(location = loc, noFixTimeout = false, error = null) }
-        NavigationSession.onLocation(loc)
+        // Selama sesi jelajah, navigasi mendapat posisi dari ExplorationService; jangan dikirim dua kali.
+        if (!ExplorationSession.active.value) NavigationSession.onLocation(loc)
     }
 
     private companion object {

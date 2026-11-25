@@ -35,6 +35,11 @@ object ExplorationSession {
     private val _scanned = MutableStateFlow<Set<String>>(emptySet())
     val scanned: StateFlow<Set<String>> = _scanned.asStateFlow()
 
+    /** Tiba lewat navigasi: dihitung dikunjungi agar tidak direkomendasikan lagi (F07 AC2). */
+    fun markVisited(poiId: String) {
+        _visited.update { it + poiId }
+    }
+
     /** Scan QR di papan POI: dihitung dikunjungi dan tidak muncul lagi di rekomendasi (A02 AC3). */
     fun markScanned(poiId: String) {
         _visited.update { it + poiId }

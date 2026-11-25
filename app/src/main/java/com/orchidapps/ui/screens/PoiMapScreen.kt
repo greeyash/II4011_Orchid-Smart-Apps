@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Umbrella
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -117,14 +118,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     val recommendAfter by RecommendationPrompt.anchor.collectAsStateWithLifecycle()
     val rainMode by settings.rainMode.collectAsStateWithLifecycle()
     val offlineMap by OfflineMaps.state.collectAsStateWithLifecycle()
-    // Rekomendasi dihitung dari posisi pengunjung, atau dari POI yang baru ditutup bila posisi belum ada.
-    fun recommendationsFrom(anchorId: String?): List<Recommendation> {
-        val pois = dataset?.pois ?: return emptyList()
-        val anchor = pois.firstOrNull { it.id == anchorId }
-        val lat = locationState.location?.lat ?: anchor?.lat ?: return emptyList()
-        val lng = locationState.location?.lng ?: anchor?.lng ?: return emptyList()
-        return Recommender.recommend(pois, visited, lat, lng, exclude = setOfNotNull(anchorId))
-    }
+    fun recommendationsFrom(anchorId: String?): List<Recommendation> = vm.recommendationsAfter(anchorId)
     val startNavigation: (Poi) -> Unit = { poi ->
         if (!vm.startNavigation(poi)) {
             Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()
@@ -135,6 +129,21 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
     var recenter by remember { mutableStateOf(0) }
     val startExploration = rememberStartExploration(vm)
+    val speechWarning by vm.speechWarning.collectAsStateWithLifecycle()
+    speechWarning?.let { message ->
+        AlertDialog(
+            onDismissRequest = vm::dismissSpeechWarning,
+            title = { Text("Suara belum siap") },
+            text = { Text("$message\n\nTanpa suara, getar dan notifikasi tetap berjalan, tetapi nama lokasi dan narasi tidak terdengar.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.dismissSpeechWarning()
+                    runCatching { context.startActivity(android.content.Intent("com.android.settings.TTS_SETTINGS")) }
+                }) { Text("Buka Pengaturan Suara") }
+            },
+            dismissButton = { TextButton(onClick = vm::dismissSpeechWarning) { Text("Nanti") } },
+        )
+    }
     val requestPermission = rememberLocationPermissionRequest(vm)
 
     Box(Modifier.fillMaxSize().background(OrchidColors.MapGreen)) {
@@ -299,6 +308,7 @@ fun PoiMapScreen(vm: MainViewModel, onOpenSearch: () -> Unit, onOpenPoi: (String
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
+                locationState.approximateOnly && !demo -> ApproximateLocationCard(onFix = requestPermission)
                 else -> ReadyCard(
                     hasPermission = locationState.permission == PermissionStatus.GRANTED,
                     autoPlay = autoPlay,
@@ -345,6 +355,17 @@ fun CategoryChips(selected: PoiCategory?, onChange: (PoiCategory?) -> Unit, modi
                 selected = selected == c,
                 onClick = { onChange(if (selected == c) null else c) },
                 label = { Text(c?.label ?: "Semua") },
+                // Titik berwarna sekaligus menjadi legenda warna penanda di peta.
+                leadingIcon = c?.let { cat ->
+                    {
+                        Box(
+                            Modifier
+                                .size(10.dp)
+                                .clip(CircleShape)
+                                .background(cat.markerColor),
+                        )
+                    }
+                },
                 shape = CircleShape,
                 border = null,
                 colors = FilterChipDefaults.filterChipColors(
@@ -661,7 +682,8 @@ private fun poiPoints(pois: List<Poi>, visited: Set<String>, selectedId: String?
         Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)).apply {
             addStringProperty(PROP_ID, poi.id)
             addStringProperty(PROP_NUMBER, poi.number())
-            addStringProperty(PROP_FILL, if (highlighted) FOREST else BLUSH)
+            // Warna per kategori; hijau tua bila dipilih atau sudah dikunjungi.
+            addStringProperty(PROP_FILL, if (highlighted) FOREST else poi.category.markerHex)
             addStringProperty(PROP_TEXT, if (highlighted) "#FEFCF7" else FOREST)
             addNumberProperty(PROP_RADIUS, if (poi.id == selectedId) 15f else 12f)
         }
@@ -709,3 +731,22 @@ private const val PROP_NUMBER = "number"
 private const val PROP_FILL = "fill"
 private const val PROP_TEXT = "text"
 private const val PROP_RADIUS = "radius"
+
+/**
+ * Izin lokasi hanya "perkiraan" (Android 12+): akurasi 1-3 km membuat pemicu lokasi tidak berjalan,
+ * jadi pengunjung diminta mengganti ke lokasi akurat.
+ */
+@Composable
+private fun ApproximateLocationCard(onFix: () -> Unit) {
+    PaperCard(Modifier.fillMaxWidth(), elevated = true, color = OrchidColors.BlushLight) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Lokasi masih perkiraan", style = MaterialTheme.typography.titleLarge)
+            Text(
+                "Anda memberi izin lokasi perkiraan, jadi aplikasi tidak bisa tahu saat Anda tiba di " +
+                    "titik wisata. Pilih \"Lokasi akurat\" agar notifikasi dan navigasi berjalan.",
+                style = MaterialTheme.typography.bodySmall,
+            )
+            PrimaryButton("Izinkan Lokasi Akurat", onClick = onFix, modifier = Modifier.fillMaxWidth())
+        }
+    }
+}

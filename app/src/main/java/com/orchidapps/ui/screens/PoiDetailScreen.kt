@@ -41,7 +41,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.orchidapps.audio.AudioGuide
 import com.orchidapps.data.OrchidSpecies
 import com.orchidapps.data.Poi
+import com.orchidapps.location.Geo
 import com.orchidapps.ui.MainViewModel
+import com.orchidapps.ui.PermissionStatus
 import com.orchidapps.ui.illustration.OrchidIllustration
 import com.orchidapps.ui.theme.OrchidColors
 
@@ -63,6 +65,7 @@ fun PoiDetailScreen(
 ) {
     val dataset by vm.dataset.collectAsStateWithLifecycle()
     val visited by vm.visitedPoiIds.collectAsStateWithLifecycle()
+    val locationState by vm.location.collectAsStateWithLifecycle()
     val poi = remember(dataset, poiId) { vm.poiById(poiId) }
 
     if (poi == null) {
@@ -128,17 +131,30 @@ fun PoiDetailScreen(
             }
         }
     }
-    // F05/F06: mulai navigasi langsung dari halaman detail.
-    PrimaryButton(
-        "Mulai Navigasi",
-        onClick = { onNavigate(poi) },
-        icon = Icons.Filled.Directions,
-        modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(16.dp),
-    )
+    // F05/F06: mulai navigasi langsung dari halaman detail, bila posisi terbaca dan belum di lokasi.
+    val here = locationState.location?.let {
+        Geo.distanceMeters(it.lat, it.lng, poi.lat, poi.lng) <= poi.radiusMeters
+    } == true
+    val bottomModifier = Modifier
+        .align(Alignment.BottomCenter)
+        .fillMaxWidth()
+        .navigationBarsPadding()
+        .padding(16.dp)
+    when {
+        here -> Pill(
+            "Anda sedang berada di sini",
+            style = PillStyle.DARK,
+            leading = "📍",
+            modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(20.dp),
+        )
+        locationState.permission != PermissionStatus.GRANTED || locationState.location == null -> Unit
+        else -> PrimaryButton(
+            "Mulai Navigasi",
+            onClick = { onNavigate(poi) },
+            icon = Icons.Filled.Directions,
+            modifier = bottomModifier,
+        )
+    }
     }
 }
 
