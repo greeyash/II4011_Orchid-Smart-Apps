@@ -55,6 +55,7 @@ import com.orchidapps.ui.screens.PoiDetailScreen
 import com.orchidapps.ui.screens.PoiListScreen
 import com.orchidapps.ui.screens.PoiMapScreen
 import com.orchidapps.ui.screens.QrScannerScreen
+import com.orchidapps.ui.screens.SpeciesBoardScreen
 import com.orchidapps.ui.screens.RecommendationCard
 import com.orchidapps.ui.screens.SettingsScreen
 import com.orchidapps.ui.screens.SpeciesDetailScreen
@@ -67,9 +68,11 @@ private object Routes {
     const val MAIN = "main"
     const val POI_DETAIL = "poi/{id}"
     const val SPECIES = "poi/{id}/species/{speciesId}"
+    const val BOARD = "poi/{id}/board/{boardId}"
     const val SCAN = "scan"
     fun poiDetail(id: String) = "poi/$id"
     fun species(poiId: String, speciesId: String) = "poi/$poiId/species/$speciesId"
+    fun board(poiId: String, boardId: String) = "poi/$poiId/board/$boardId"
 }
 
 private enum class Tab(val label: String, val icon: ImageVector) {
@@ -114,6 +117,13 @@ fun OrchidApp() {
                 ExplorationSession.markScanned(result.poi.id)
                 if (settings.autoPlay.value) player.play(AudioGuide.item(result.poi))
                 navController.navigate(Routes.poiDetail(result.poi.id)) {
+                    popUpTo(Routes.MAIN)
+                }
+            }
+            // Satu QR per papan anggrek: tampilkan daftar jenis di papan itu, pengunjung memilih sendiri.
+            is QrResult.BoardCode -> {
+                ExplorationSession.markScanned(result.poi.id)
+                navController.navigate(Routes.board(result.poi.id, result.board.id)) {
                     popUpTo(Routes.MAIN)
                 }
             }
@@ -192,6 +202,24 @@ fun OrchidApp() {
                             Toast.makeText(context, "Posisi Anda belum terbaca. Coba lagi sebentar.", Toast.LENGTH_SHORT).show()
                         }
                     },
+                )
+            }
+            composable(
+                Routes.BOARD,
+                arguments = listOf(
+                    navArgument("id") { type = NavType.StringType },
+                    navArgument("boardId") { type = NavType.StringType },
+                ),
+            ) { entry ->
+                val id = entry.arguments?.getString("id").orEmpty()
+                SpeciesBoardScreen(
+                    vm = vm,
+                    poiId = id,
+                    boardId = entry.arguments?.getString("boardId").orEmpty(),
+                    onBack = { navController.popBackStack() },
+                    onOpenSpecies = { navController.navigate(Routes.species(id, it)) },
+                    onScanAgain = { navController.navigate(Routes.SCAN) { popUpTo(Routes.MAIN) } },
+                    onOpenPoi = { navController.navigate(Routes.poiDetail(id)) { popUpTo(Routes.MAIN) } },
                 )
             }
             composable(
