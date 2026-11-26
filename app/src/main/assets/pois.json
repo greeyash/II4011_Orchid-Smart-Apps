@@ -110,6 +110,16 @@
       "info": null,
       "source": "Naskah tim (Writing Orchid App)",
       "checkedAt": null,
+      "boards": [
+        { "id": "B1", "qrCode": "ORCHID-P04-B1", "name": "Anggrek Kantung (Paphiopedilum)", "speciesIds": ["S16", "S17", "S18", "S19"] },
+        { "id": "B2", "qrCode": "ORCHID-P04-B2", "name": "Anggrek dari Benua Amerika", "speciesIds": ["S01", "S02", "S32", "S03"] },
+        { "id": "B3", "qrCode": "ORCHID-P04-B3", "name": "Anggrek Bulan (Phalaenopsis)", "speciesIds": ["S24", "S25", "S26", "S27"] },
+        { "id": "B4", "qrCode": "ORCHID-P04-B4", "name": "Coelogyne dan Anggrek Hitam", "speciesIds": ["S22", "S20", "S23", "S21"] },
+        { "id": "B5", "qrCode": "ORCHID-P04-B5", "name": "Vanda dan Kerabatnya", "speciesIds": ["S28", "S30", "S29", "S31"] },
+        { "id": "B6", "qrCode": "ORCHID-P04-B6", "name": "Anggrek Campuran", "speciesIds": ["S08", "S09", "S10", "S11"] },
+        { "id": "B7", "qrCode": "ORCHID-P04-B7", "name": "Cymbidium dan Oncidium", "speciesIds": ["S12", "S13", "S14", "S15"] },
+        { "id": "B8", "qrCode": "ORCHID-P04-B8", "name": "Dendrobium", "speciesIds": ["S04", "S05", "S06", "S07"] }
+      ],
       "species": [
         {
           "id": "S01",

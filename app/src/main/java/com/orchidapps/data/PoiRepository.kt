@@ -31,7 +31,7 @@ class PoiRepository(private val context: Context) {
             require(dataset.pois.isNotEmpty()) { "Dataset POI kosong" }
             val duplicateIds = dataset.pois.groupBy { it.id }.filterValues { it.size > 1 }.keys
             require(duplicateIds.isEmpty()) { "ID POI duplikat: $duplicateIds" }
-            val qrCodes = dataset.pois.flatMap { poi -> listOf(poi.qrCode) + poi.species.map { it.qrCode } }
+            val qrCodes = dataset.pois.flatMap { poi -> listOf(poi.qrCode) + poi.species.map { it.qrCode } + poi.boards.map { it.qrCode } }
             val duplicateQr = qrCodes.groupBy { it }.filterValues { it.size > 1 }.keys
             require(duplicateQr.isEmpty()) { "Kode QR duplikat: $duplicateQr" }
             dataset.pois.forEach { poi ->
@@ -48,6 +48,13 @@ class PoiRepository(private val context: Context) {
                     }
                     require(s.source.isNotBlank()) { "Spesies ${poi.id}-${s.id} belum punya sumber" }
                 }
+                val speciesIds = poi.species.map { it.id }.toSet()
+                poi.boards.forEach { b ->
+                    val unknown = b.speciesIds - speciesIds
+                    require(unknown.isEmpty()) { "Papan ${poi.id}-${b.id} memuat spesies yang tidak ada: $unknown" }
+                }
+                val onTwoBoards = poi.boards.flatMap { it.speciesIds }.groupBy { it }.filterValues { it.size > 1 }.keys
+                require(onTwoBoards.isEmpty()) { "Spesies muncul di lebih dari satu papan: $onTwoBoards" }
             }
         }
     }
