@@ -72,6 +72,21 @@ class PoiDatasetTest {
         }
     }
 
+    @Test
+    fun orchidHouseHasEightBoardsOfFourCoveringEverySpecies() {
+        val p04 = dataset.pois.first { it.id == "P04" }
+        assertEquals(8, p04.boards.size)
+        p04.boards.forEach { assertEquals(it.id, 4, p04.speciesOn(it).size) }
+        assertEquals(p04.species.map { it.id }.toSet(), p04.boards.flatMap { it.speciesIds }.toSet())
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun speciesOnTwoBoardsIsRejected() {
+        val raw = File("src/main/assets/${PoiRepository.ASSET_FILE}").readText()
+            .replace("\"speciesIds\": [\"S04\"", "\"speciesIds\": [\"S16\"")
+        PoiRepository.parseDataset(raw)
+    }
+
     @Test(expected = IllegalArgumentException::class)
     fun duplicateSpeciesQrIsRejected() {
         val raw = File("src/main/assets/${PoiRepository.ASSET_FILE}").readText()
