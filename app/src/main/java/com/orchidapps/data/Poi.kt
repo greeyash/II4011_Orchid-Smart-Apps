@@ -43,7 +43,27 @@ data class Poi(
     val checkedAt: String? = null,
     /** Jenis anggrek/bunga di sekitar POI (F03, F08b); terisi untuk Orchid House (P04). */
     val species: List<OrchidSpecies> = emptyList(),
-)
+    /** Papan informasi anggrek di lokasi; tiap papan memuat beberapa jenis dan satu kode QR. */
+    val boards: List<SpeciesBoard> = emptyList(),
+) {
+    fun boardOf(speciesId: String): SpeciesBoard? = boards.firstOrNull { speciesId in it.speciesIds }
+
+    fun speciesOn(board: SpeciesBoard): List<OrchidSpecies> =
+        board.speciesIds.mapNotNull { id -> species.firstOrNull { it.id == id } }
+}
+
+/** Satu papan informasi berisi beberapa jenis anggrek (biasanya 4) dengan satu kode QR. */
+@Serializable
+data class SpeciesBoard(
+    val id: String,
+    val qrCode: String,
+    val name: String,
+    /** Urutan sesuai letak di papan: kiri-atas, kanan-atas, kiri-bawah, kanan-bawah. */
+    val speciesIds: List<String>,
+) {
+    /** Nomor papan untuk ditampilkan, mis. "B3" menjadi 3. */
+    val number: Int get() = id.filter(Char::isDigit).toIntOrNull() ?: 0
+}
 
 /** Satu jenis anggrek beserta kode QR papan tanamannya (PB11, F08). */
 @Serializable

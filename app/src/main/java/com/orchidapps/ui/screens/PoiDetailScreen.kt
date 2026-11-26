@@ -115,9 +115,9 @@ fun PoiDetailScreen(
 
             if (poi.species.isNotEmpty()) {
                 SpeciesSection(poi, onOpenSpecies)
-                // L05-B/F08c: pindai QR di papan anggrek untuk langsung mendengar info spesies.
+                // L05-B/F08c: pindai QR di papan anggrek untuk melihat 4 jenis di papan itu.
                 SecondaryButton(
-                    "Scan QR Spesies",
+                    "Scan QR Papan Anggrek",
                     onClick = onScan,
                     icon = Icons.Filled.QrCodeScanner,
                     modifier = Modifier.fillMaxWidth(),
@@ -168,7 +168,10 @@ private fun SafetyCard(text: String) {
     }
 }
 
-/** "Kenali Anggrek" (L05-B): kartu tiap jenis anggrek dengan fotonya, membuka halaman spesies. */
+/**
+ * "Kenali Anggrek" (L05-B): kartu tiap jenis anggrek dengan fotonya, dikelompokkan per papan
+ * informasi seperti di lokasi; kartu membuka halaman spesies.
+ */
 @Composable
 private fun SpeciesSection(poi: Poi, onOpenSpecies: (String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -177,11 +180,24 @@ private fun SpeciesSection(poi: Poi, onOpenSpecies: (String) -> Unit) {
             Text("Belum dicek pengelola", style = MaterialTheme.typography.labelSmall, color = Rose)
         }
     }
+    val groups = poi.boards.map { "Papan ${it.number} · ${it.name}" to poi.speciesOn(it) }
+    val loose = poi.species.filter { poi.boardOf(it.id) == null }
+    (if (loose.isEmpty()) groups else groups + ((if (groups.isEmpty()) "" else "Lainnya") to loose)).forEach { (label, list) ->
+        if (label.isNotEmpty()) {
+            Text(label, style = MaterialTheme.typography.titleSmall, color = OrchidColors.Muted)
+        }
+        SpeciesRow(poi, list, onOpenSpecies)
+    }
+}
+
+@Composable
+private fun SpeciesRow(poi: Poi, list: List<OrchidSpecies>, onOpenSpecies: (String) -> Unit) {
     Row(
         Modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        poi.species.forEachIndexed { index, species ->
+        list.forEach { species ->
+            val index = poi.species.indexOf(species)
             PaperCard(
                 Modifier
                     .width(132.dp)
@@ -208,7 +224,7 @@ private fun SpeciesSection(poi: Poi, onOpenSpecies: (String) -> Unit) {
 
 /** Foto spesies dari naskah tim; ilustrasi bila foto belum ada. */
 @Composable
-private fun SpeciesImage(poi: Poi, species: OrchidSpecies, index: Int, modifier: Modifier = Modifier) {
+internal fun SpeciesImage(poi: Poi, species: OrchidSpecies, index: Int, modifier: Modifier = Modifier) {
     val photo = rememberAssetBitmap(AudioGuide.speciesPhotoPath(poi, species))
     if (photo != null) {
         Image(photo, contentDescription = "Foto ${species.name}", modifier = modifier, contentScale = ContentScale.Crop)
@@ -250,7 +266,10 @@ fun SpeciesDetailScreen(vm: MainViewModel, poiId: String, speciesId: String, onB
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Pill("Spesies anggrek")
-                    Pill(poi.name, style = PillStyle.LIGHT)
+                    Pill(
+                        poi.boardOf(species.id)?.let { "${poi.name} · Papan ${it.number}" } ?: poi.name,
+                        style = PillStyle.LIGHT,
+                    )
                 }
                 Text(species.name, style = MaterialTheme.typography.headlineMedium, fontStyle = FontStyle.Italic)
 

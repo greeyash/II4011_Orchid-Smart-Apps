@@ -8,7 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
-/** PB14 / A02: kode QR papan POI dan papan anggrek dikenali; kode asing ditolak. */
+/** PB14 / A02: kode QR papan POI dan papan anggrek (4 jenis per papan) dikenali; kode asing ditolak. */
 class QrCodesTest {
 
     private val pois = PoiRepository.parseDataset(
@@ -29,6 +29,14 @@ class QrCodesTest {
         result as QrResult.SpeciesCode
         assertEquals("P04", result.poi.id)
         assertEquals("S01", result.species.id)
+    }
+
+    @Test
+    fun boardQrListsTheFourOrchidsOnThatBoard() {
+        val result = QrCodes.resolve("ORCHID-P04-B3", pois)
+        result as QrResult.BoardCode
+        assertEquals("P04", result.poi.id)
+        assertEquals(listOf("S24", "S25", "S26", "S27"), result.poi.speciesOn(result.board).map { it.id })
     }
 
     @Test
